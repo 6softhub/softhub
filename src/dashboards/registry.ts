@@ -8,6 +8,7 @@ import { CRM, SalesPipeline, Billing, Payments, Accounting, Subscriptions, Marke
 import { Support, Comms, VoiceAI, Gamification, CustomerSuccess, Onboarding } from "./customer";
 import { HR, Payroll } from "./people";
 import { Projects, Workflows, Knowledge, Files, SearchPalette, BrowserWS, DesignSystem, Broadcast } from "./workspace";
+import { Analytics, Reporting, AICopilot, DigitalTwin, WarRoom, MasterControl, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, KnowledgeGraph, Marketplace, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
