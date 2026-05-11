@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { DASHBOARDS } from "@/data/dashboards";
-import { DashboardView } from "@/components/DashboardView";
+import { resolveDashboard } from "@/dashboards/registry";
 
 export const Route = createFileRoute("/d/$slug")({
   component: DashRoute,
@@ -19,5 +19,7 @@ function DashRoute() {
   const { slug } = Route.useParams();
   const d = DASHBOARDS.find((x) => x.slug === slug);
   if (!d) throw notFound();
-  return <DashboardView d={d} />;
+  const View = resolveDashboard(slug);
+  return <View d={d} />;
 }
+
