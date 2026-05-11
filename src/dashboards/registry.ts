@@ -55,6 +55,17 @@ export const REGISTRY: Record<string, Comp> = {
   "browser": BrowserWS,
   "design-system": DesignSystem,
   "broadcast": Broadcast,
+  "analytics": Analytics, "reporting": Reporting, "ai-copilot": AICopilot,
+  "digital-twin": DigitalTwin, "war-room": WarRoom, "master-control": MasterControl,
+  "devops": DevOps, "repos": Repos, "api-hub": APIHub, "app-builder": AppBuilder,
+  "data-lake": DataLake, "governance": Governance, "knowledge-graph": KnowledgeGraph,
+  "marketplace": Marketplace, "franchise": Franchise, "inventory": Inventory,
+  "supply-chain": SupplyChain, "procurement": Procurement,
+  "social": Social, "marketing": Marketing, "seo": SEO,
+  "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
+  "satellite": Satellite, "robotics": Robotics,
+  "healthcare": Healthcare, "education": Education, "legal": Legal,
+  "research-quantum": Quantum, "sandbox": Sandbox, "metaverse": Metaverse, "blockchain": Blockchain,
 };
 
 export function resolveDashboard(slug: string): Comp {
