@@ -4,6 +4,7 @@ import {
 } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { AppSidebar } from "@/components/AppSidebar";
+import { CommandPalette } from "@/components/CommandPalette";
 
 function NotFoundComponent() {
   return (
@@ -62,6 +63,7 @@ function RootComponent() {
         <main className="flex-1 min-w-0">
           <Outlet />
         </main>
+        <CommandPalette />
       </div>
     </QueryClientProvider>
   );
