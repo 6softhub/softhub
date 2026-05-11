@@ -1,0 +1,61 @@
+import type { ComponentType } from "react";
+import type { DashSpec } from "@/data/dashboards";
+import { DashboardView } from "@/components/DashboardView";
+
+import { CommandCenter, Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, MDM, RemoteAccess, Infra, CloudOps, Printing, OSControl } from "./operations";
+import { IAM, UserRoles, SOC, Fraud, Forensics, Biometric } from "./security";
+import { CRM, SalesPipeline, Billing, Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
+import { Support, Comms, VoiceAI, Gamification, CustomerSuccess, Onboarding } from "./customer";
+import { HR, Payroll } from "./people";
+import { Projects, Workflows, Knowledge, Files, SearchPalette, BrowserWS, DesignSystem, Broadcast } from "./workspace";
+
+type Comp = ComponentType<{ d: DashSpec }>;
+
+export const REGISTRY: Record<string, Comp> = {
+  "command-center": CommandCenter,
+  "alerts": Alerts,
+  "observability": Observability,
+  "geo-monitoring": GeoMonitoring,
+  "noc": NOC,
+  "backup": Backup,
+  "licenses": Licenses,
+  "mdm": MDM,
+  "remote-access": RemoteAccess,
+  "infra": Infra,
+  "cloud": CloudOps,
+  "printing": Printing,
+  "os-control": OSControl,
+  "iam": IAM,
+  "user-roles": UserRoles,
+  "soc": SOC,
+  "fraud": Fraud,
+  "forensics": Forensics,
+  "biometric": Biometric,
+  "crm": CRM,
+  "sales-pipeline": SalesPipeline,
+  "billing": Billing,
+  "payments": Payments,
+  "accounting": Accounting,
+  "subscriptions": Subscriptions,
+  "market-intel": MarketIntel,
+  "support": Support,
+  "comms": Comms,
+  "voice-ai": VoiceAI,
+  "gamification": Gamification,
+  "customer-success": CustomerSuccess,
+  "onboarding": Onboarding,
+  "hr": HR,
+  "payroll": Payroll,
+  "projects": Projects,
+  "workflows": Workflows,
+  "knowledge": Knowledge,
+  "files": Files,
+  "search": SearchPalette,
+  "browser": BrowserWS,
+  "design-system": DesignSystem,
+  "broadcast": Broadcast,
+};
+
+export function resolveDashboard(slug: string): Comp {
+  return REGISTRY[slug] ?? DashboardView;
+}
