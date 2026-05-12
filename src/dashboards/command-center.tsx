@@ -678,7 +678,7 @@ function ExecReports() {
   );
 }
 
-const VIEWS: Record<SectionId, () => JSX.Element> = {
+const VIEWS: Record<SectionId, () => React.ReactElement> = {
   overview: GlobalOverview, infra: LiveInfra, servers: ServerHealth, api: ApiMonitoring,
   db: DbMonitoring, ai: AiMonitoring, users: UserActivity, geo: GeoView,
   incidents: Incidents, alerts: AlertCenter, logs: LogsViewer, metrics: RealtimeMetrics,
