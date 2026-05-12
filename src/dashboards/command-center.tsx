@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
 import { Spark, Bars, Donut, Heatmap, WorldMap, LineSeries, DataTable, ProgressBar, StatusDot, Terminal, Avatar } from "./_primitives";
