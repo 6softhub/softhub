@@ -2,7 +2,8 @@ import type { ComponentType } from "react";
 import type { DashSpec } from "@/data/dashboards";
 import { DashboardView } from "@/components/DashboardView";
 
-import { CommandCenter, Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, MDM, RemoteAccess, Infra, CloudOps, Printing, OSControl } from "./operations";
+import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, MDM, RemoteAccess, Infra, CloudOps, Printing, OSControl } from "./operations";
+import { CommandCenter } from "./command-center";
 import { IAM, UserRoles, SOC, Fraud, Forensics, Biometric } from "./security";
 import { CRM, SalesPipeline, Billing, Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
 import { Support, Comms, VoiceAI, Gamification, CustomerSuccess, Onboarding } from "./customer";
