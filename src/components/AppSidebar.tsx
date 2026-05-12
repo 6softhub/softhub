@@ -72,8 +72,13 @@ export function AppSidebar() {
           </div>
         ))}
       </nav>
-      <div className="p-3 border-t border-sidebar-border text-[10px] text-muted-foreground flex items-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" /> All systems nominal
+      <div className="p-3 border-t border-sidebar-border space-y-2">
+        <Link to="/login" className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs bg-primary/15 text-primary border border-primary/30 hover:bg-primary/25">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary" /> Sign in / Sign up
+        </Link>
+        <div className="text-[10px] text-muted-foreground flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" /> All systems nominal
+        </div>
       </div>
     </aside>
   );
