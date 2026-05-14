@@ -68,7 +68,7 @@ export function Spark({ seed = 1, color = "currentColor", height = 32, smooth = 
   const pts: [number, number][] = [];
   for (let i = 0; i < n; i++) {
     const y = height - (Math.sin(i / 3 + seed) * height * 0.3 + r() * height * 0.4 + height * 0.3);
-    pts.push([i * (120 / n), y]);
+    pts.push([+(i * (120 / n)).toFixed(2), +y.toFixed(2)]);
   }
   const path = smooth
     ? pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(" ")
@@ -257,7 +257,7 @@ export function LineSeries({ seed = 1, lines = 3, height = 180 }: { seed?: numbe
   const r = rng(seed);
   const colors = ["var(--color-primary)", "var(--color-accent)", "var(--color-success)", "var(--color-warning)"];
   const series = Array.from({ length: lines }, () =>
-    Array.from({ length: 40 }, (_, i) => height - (Math.sin(i / 4 + r() * 6) * height * 0.25 + r() * height * 0.35 + height * 0.25))
+    Array.from({ length: 40 }, (_, i) => +(height - (Math.sin(i / 4 + r() * 6) * height * 0.25 + r() * height * 0.35 + height * 0.25)).toFixed(2))
   );
   return (
     <svg viewBox={`0 0 400 ${height}`} className="w-full" style={{ height }}>
