@@ -257,7 +257,7 @@ export function LineSeries({ seed = 1, lines = 3, height = 180 }: { seed?: numbe
   const r = rng(seed);
   const colors = ["var(--color-primary)", "var(--color-accent)", "var(--color-success)", "var(--color-warning)"];
   const series = Array.from({ length: lines }, () =>
-    Array.from({ length: 40 }, (_, i) => height - (Math.sin(i / 4 + r() * 6) * height * 0.25 + r() * height * 0.35 + height * 0.25))
+    Array.from({ length: 40 }, (_, i) => +(height - (Math.sin(i / 4 + r() * 6) * height * 0.25 + r() * height * 0.35 + height * 0.25)).toFixed(2))
   );
   return (
     <svg viewBox={`0 0 400 ${height}`} className="w-full" style={{ height }}>
