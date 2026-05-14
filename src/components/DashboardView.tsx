@@ -262,22 +262,33 @@ export function DashboardView({ d }: { d: DashSpec }) {
           <Activity accent={d.accent} />
         </div>
 
-        <div className="glass rounded-xl p-4 col-span-12">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold">{d.sections[2] ?? "Records"}</h2>
-            <div className="flex items-center gap-2">
-              <input
+        <div className="col-span-12">
+          <ChartCard
+            title={d.sections[2] ?? "Records"}
+            toolbar={
+              <FilterBar
                 value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                placeholder="Filter…"
-                className="bg-muted text-xs rounded px-2 py-1 border border-border outline-none focus:border-primary w-32 sm:w-44"
+                onChange={setFilter}
+                actions={
+                  <button className="text-xs px-2 py-1 rounded bg-muted border border-border inline-flex items-center gap-1 hover:bg-muted/70 focus-ring">
+                    <Icons.Plus className="w-3 h-3" /> New
+                  </button>
+                }
               />
-              <button className="text-xs px-2 py-1 rounded bg-muted border border-border inline-flex items-center gap-1 hover:bg-muted/70">
-                <Icons.Plus className="w-3 h-3" /> New
-              </button>
-            </div>
-          </div>
-          <Table section={d.sections[2] ?? "Item"} filter={filter} />
+            }
+          >
+            <Table section={d.sections[2] ?? "Item"} filter={filter} />
+          </ChartCard>
+        </div>
+
+        <div className="col-span-12 md:col-span-6">
+          <AIInsights
+            items={[
+              { title: `Forecast: ${d.metrics[0]?.label ?? "primary metric"} trending up`, body: `Model projects sustained gain over the next ${range} window based on current ${d.category.toLowerCase()} signals.`, tone: "success", confidence: 92 },
+              { title: "Anomaly cluster detected", body: `Three correlated outliers in ${d.sections[1] ?? "live stream"} — recommend investigation before next deploy.`, tone: "warning", confidence: 78 },
+              { title: "Optimization opportunity", body: `Reallocating capacity in ${d.sections[0] ?? "primary section"} could lift throughput by ~14%.`, tone: "info", confidence: 84 },
+            ]}
+          />
         </div>
 
         {d.sections[3] && (
