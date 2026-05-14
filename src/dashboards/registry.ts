@@ -2,9 +2,10 @@ import type { ComponentType } from "react";
 import type { DashSpec } from "@/data/dashboards";
 import { DashboardView } from "@/components/DashboardView";
 
-import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, MDM, RemoteAccess, Infra, CloudOps, Printing } from "./operations";
+import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, Infra, CloudOps, Printing } from "./operations";
 import { CommandCenter } from "./command-center";
-import { IAM, UserRoles, SOC, Fraud, Forensics, Biometric } from "./security";
+import { SOC, Fraud, Forensics } from "./security";
+import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-identity";
 import { CRM, SalesPipeline, Billing, Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
 import { Support, Comms, VoiceAI, Gamification, CustomerSuccess, Onboarding } from "./customer";
 import { HR, Payroll } from "./people";
