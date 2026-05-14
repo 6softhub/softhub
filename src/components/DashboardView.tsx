@@ -1,3 +1,4 @@
+import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
 
@@ -110,27 +111,42 @@ function Activity({ accent }: { accent: string }) {
   );
 }
 
-function Table({ section }: { section: string }) {
+function Table({ section, filter = "" }: { section: string; filter?: string }) {
   const cols = ["ID", "Name", "Owner", "Status", "Updated"];
   const statuses = ["Active", "Pending", "Healthy", "Warn", "Closed"];
+  const rows = Array.from({ length: 8 }).map((_, i) => ({
+    id: `#${(4128 + i).toString(16).toUpperCase()}`,
+    name: `${section} item ${i + 1}`,
+    owner: `user${i + 1}@nexus.io`,
+    status: statuses[i % statuses.length],
+    updated: `${i + 1}h ago`,
+  }));
+  const needle = filter.trim().toLowerCase();
+  const filtered = needle
+    ? rows.filter((r) =>
+        [r.id, r.name, r.owner, r.status].some((v) => v.toLowerCase().includes(needle)),
+      )
+    : rows;
   return (
-    <div className="overflow-hidden rounded-md border border-border">
-      <table className="w-full text-xs">
+    <div className="overflow-x-auto rounded-md border border-border">
+      <table className="w-full text-xs min-w-[560px]">
         <thead className="bg-muted/40">
           <tr>{cols.map((c) => <th key={c} className="text-left px-3 py-2 font-medium text-muted-foreground">{c}</th>)}</tr>
         </thead>
         <tbody>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <tr key={i} className="border-t border-border hover:bg-muted/30">
-              <td className="px-3 py-2 font-mono text-[11px]">#{(4128 + i).toString(16).toUpperCase()}</td>
-              <td className="px-3 py-2">{section} item {i + 1}</td>
-              <td className="px-3 py-2 text-muted-foreground">user{i+1}@nexus.io</td>
+          {filtered.length === 0 ? (
+            <tr><td colSpan={cols.length} className="px-3 py-8 text-center text-muted-foreground">No records match “{filter}”.</td></tr>
+          ) : filtered.map((r) => (
+            <tr key={r.id} className="border-t border-border hover:bg-muted/30">
+              <td className="px-3 py-2 font-mono text-[11px]">{r.id}</td>
+              <td className="px-3 py-2">{r.name}</td>
+              <td className="px-3 py-2 text-muted-foreground">{r.owner}</td>
               <td className="px-3 py-2">
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-[10px]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success" /> {statuses[i % statuses.length]}
+                  <span className="w-1.5 h-1.5 rounded-full bg-success" /> {r.status}
                 </span>
               </td>
-              <td className="px-3 py-2 text-muted-foreground">{i + 1}h ago</td>
+              <td className="px-3 py-2 text-muted-foreground">{r.updated}</td>
             </tr>
           ))}
         </tbody>
@@ -142,9 +158,12 @@ function Table({ section }: { section: string }) {
 export function DashboardView({ d }: { d: DashSpec }) {
   const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[d.icon] || Icons.LayoutDashboard;
   const accent = accentClass(d.accent);
+  const [range, setRange] = useState<"1h" | "24h" | "7d" | "30d">("24h");
+  const [filter, setFilter] = useState("");
+  const [live, setLive] = useState(true);
 
   return (
-    <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
+    <div className="p-4 sm:p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -158,12 +177,21 @@ export function DashboardView({ d }: { d: DashSpec }) {
             <h1 className="text-2xl font-semibold tracking-tight">{d.title}</h1>
           </div>
         </div>
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex items-center gap-2 text-xs flex-wrap">
           {d.tags.map((t) => (
             <span key={t} className="px-2 py-1 rounded-md bg-muted border border-border">{t}</span>
           ))}
-          <button className="px-3 py-1.5 rounded-md bg-primary text-primary-foreground font-medium hover:opacity-90 inline-flex items-center gap-1.5">
-            <Icons.Zap className="w-3.5 h-3.5" /> Live
+          <button
+            onClick={() => setLive((v) => !v)}
+            aria-pressed={live}
+            className={`px-3 py-1.5 rounded-md font-medium inline-flex items-center gap-1.5 transition-colors border ${
+              live
+                ? "bg-primary text-primary-foreground border-primary/40 hover:opacity-90"
+                : "bg-muted text-muted-foreground border-border hover:text-foreground"
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${live ? "bg-success animate-pulse" : "bg-muted-foreground"}`} />
+            {live ? "Live" : "Paused"}
           </button>
         </div>
       </header>
@@ -192,9 +220,16 @@ export function DashboardView({ d }: { d: DashSpec }) {
         <div className="glass rounded-xl p-4 col-span-12 lg:col-span-8">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold">{d.sections[0]}</h2>
-            <div className="flex gap-1 text-[11px]">
-              {["1h","24h","7d","30d"].map((s,i)=>(
-                <button key={s} className={`px-2 py-1 rounded ${i===1?"bg-muted":""} text-muted-foreground hover:text-foreground`}>{s}</button>
+            <div className="flex gap-1 text-[11px]" role="tablist" aria-label="Time range">
+              {(["1h","24h","7d","30d"] as const).map((s)=>(
+                <button
+                  key={s}
+                  onClick={() => setRange(s)}
+                  aria-pressed={range === s}
+                  className={`px-2 py-1 rounded transition-colors ${
+                    range === s ? "bg-primary/20 text-primary border border-primary/30" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >{s}</button>
               ))}
             </div>
           </div>
@@ -223,13 +258,18 @@ export function DashboardView({ d }: { d: DashSpec }) {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold">{d.sections[2] ?? "Records"}</h2>
             <div className="flex items-center gap-2">
-              <input placeholder="Filter…" className="bg-muted text-xs rounded px-2 py-1 border border-border outline-none" />
-              <button className="text-xs px-2 py-1 rounded bg-muted border border-border inline-flex items-center gap-1">
+              <input
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Filter…"
+                className="bg-muted text-xs rounded px-2 py-1 border border-border outline-none focus:border-primary w-32 sm:w-44"
+              />
+              <button className="text-xs px-2 py-1 rounded bg-muted border border-border inline-flex items-center gap-1 hover:bg-muted/70">
                 <Icons.Plus className="w-3 h-3" /> New
               </button>
             </div>
           </div>
-          <Table section={d.sections[2] ?? "Item"} />
+          <Table section={d.sections[2] ?? "Item"} filter={filter} />
         </div>
 
         {d.sections[3] && (
