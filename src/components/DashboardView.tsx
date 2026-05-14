@@ -1,6 +1,8 @@
-import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
+import {
+  ChartCard, FilterBar, AIInsights, QuickActions, DashboardToolbar, useDashboardState,
+} from "@/dashboards/_universal";
 
 const accentClass = (a: string) => {
   switch (a) {
