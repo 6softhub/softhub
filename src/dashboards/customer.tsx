@@ -92,8 +92,10 @@ export function VoiceAI({ d }: { d: DashSpec }) {
         <Card title="IVR Flow" className="col-span-12">
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
             {["Greeting","Auth","Intent Detect","Skill Route","Agent","Survey"].map((s,i)=>(
-              <><div key={s} className="px-3 py-2 rounded-md border border-border bg-muted/30 text-xs whitespace-nowrap">{s}</div>
-              {i<5&&<Icons.ChevronRight key={`a${i}`} className="w-4 h-4 text-muted-foreground shrink-0"/>}</>
+              <div key={s} className="flex items-center gap-2 shrink-0">
+                <div className="px-3 py-2 rounded-md border border-border bg-muted/30 text-xs whitespace-nowrap">{s}</div>
+                {i<5 && <Icons.ChevronRight className="w-4 h-4 text-muted-foreground"/>}
+              </div>
             ))}
           </div>
         </Card>
@@ -168,9 +170,11 @@ export function Onboarding({ d }: { d: DashSpec }) {
         <Card title="Activation Funnel" className="col-span-12 lg:col-span-7">
           {[["Signup",4128,100],["Verified",3812,92],["Workspace",2401,58],["First Action",1812,44],["Week-2 Active",1248,30],["Activated",812,20]].map(([n,v,w],i)=>(
             <div key={i} className="flex items-center gap-3 py-1.5">
-              <div className="text-xs w-28">{n}</div>
-              <div className="flex-1 h-5 rounded" style={{ width:`${w}%`, background:`linear-gradient(90deg,var(--color-info),var(--color-accent))` }}/>
-              <div className="text-xs w-12 text-right text-muted-foreground">{v}</div>
+              <div className="text-xs w-28 shrink-0">{n}</div>
+              <div className="flex-1 bg-muted/40 rounded h-5 overflow-hidden">
+                <div className="h-full rounded" style={{ width:`${w}%`, background:`linear-gradient(90deg,var(--color-info),var(--color-accent))` }}/>
+              </div>
+              <div className="text-xs w-12 text-right text-muted-foreground shrink-0">{v}</div>
             </div>
           ))}
         </Card>
