@@ -1,6 +1,8 @@
-import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
+import {
+  ChartCard, FilterBar, AIInsights, QuickActions, DashboardToolbar, useDashboardState,
+} from "@/dashboards/_universal";
 
 const accentClass = (a: string) => {
   switch (a) {
@@ -166,14 +168,13 @@ function Table({ section, filter = "" }: { section: string; filter?: string }) {
 export function DashboardView({ d }: { d: DashSpec }) {
   const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[d.icon] || Icons.LayoutDashboard;
   const accent = accentClass(d.accent);
-  const [range, setRange] = useState<"1h" | "24h" | "7d" | "30d">("24h");
-  const [filter, setFilter] = useState("");
-  const [live, setLive] = useState(true);
+  const { range, setRange, filter, setFilter, live, setLive } = useDashboardState("24h");
+  void range;
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
-      <header className="flex flex-wrap items-center justify-between gap-4">
+      <header className="flex flex-wrap items-center justify-between gap-4 animate-fade-up">
         <div className="flex items-center gap-4">
           <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${accent} border grid place-items-center`}>
             <Icon className="w-6 h-6" />
@@ -189,20 +190,19 @@ export function DashboardView({ d }: { d: DashSpec }) {
           {d.tags.map((t) => (
             <span key={t} className="px-2 py-1 rounded-md bg-muted border border-border">{t}</span>
           ))}
-          <button
-            onClick={() => setLive((v) => !v)}
-            aria-pressed={live}
-            className={`px-3 py-1.5 rounded-md font-medium inline-flex items-center gap-1.5 transition-colors border ${
-              live
-                ? "bg-primary text-primary-foreground border-primary/40 hover:opacity-90"
-                : "bg-muted text-muted-foreground border-border hover:text-foreground"
-            }`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${live ? "bg-success animate-pulse" : "bg-muted-foreground"}`} />
-            {live ? "Live" : "Paused"}
-          </button>
+          <DashboardToolbar range={range} onRangeChange={setRange} live={live} onLiveToggle={setLive} />
         </div>
       </header>
+
+      {/* Quick Actions */}
+      <QuickActions
+        items={[
+          { label: "New " + (d.sections[2] ?? "Record"), icon: "Plus", tone: "primary" },
+          { label: "Export", icon: "Download", tone: "info" },
+          { label: "Share", icon: "Share2", tone: "accent" },
+          { label: "Configure", icon: "Settings2", tone: "muted" },
+        ]}
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -262,22 +262,33 @@ export function DashboardView({ d }: { d: DashSpec }) {
           <Activity accent={d.accent} />
         </div>
 
-        <div className="glass rounded-xl p-4 col-span-12">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold">{d.sections[2] ?? "Records"}</h2>
-            <div className="flex items-center gap-2">
-              <input
+        <div className="col-span-12">
+          <ChartCard
+            title={d.sections[2] ?? "Records"}
+            toolbar={
+              <FilterBar
                 value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                placeholder="Filter…"
-                className="bg-muted text-xs rounded px-2 py-1 border border-border outline-none focus:border-primary w-32 sm:w-44"
+                onChange={setFilter}
+                actions={
+                  <button className="text-xs px-2 py-1 rounded bg-muted border border-border inline-flex items-center gap-1 hover:bg-muted/70 focus-ring">
+                    <Icons.Plus className="w-3 h-3" /> New
+                  </button>
+                }
               />
-              <button className="text-xs px-2 py-1 rounded bg-muted border border-border inline-flex items-center gap-1 hover:bg-muted/70">
-                <Icons.Plus className="w-3 h-3" /> New
-              </button>
-            </div>
-          </div>
-          <Table section={d.sections[2] ?? "Item"} filter={filter} />
+            }
+          >
+            <Table section={d.sections[2] ?? "Item"} filter={filter} />
+          </ChartCard>
+        </div>
+
+        <div className="col-span-12 md:col-span-6">
+          <AIInsights
+            items={[
+              { title: `Forecast: ${d.metrics[0]?.label ?? "primary metric"} trending up`, body: `Model projects sustained gain over the next ${range} window based on current ${d.category.toLowerCase()} signals.`, tone: "success", confidence: 92 },
+              { title: "Anomaly cluster detected", body: `Three correlated outliers in ${d.sections[1] ?? "live stream"} — recommend investigation before next deploy.`, tone: "warning", confidence: 78 },
+              { title: "Optimization opportunity", body: `Reallocating capacity in ${d.sections[0] ?? "primary section"} could lift throughput by ~14%.`, tone: "info", confidence: 84 },
+            ]}
+          />
         </div>
 
         {d.sections[3] && (
