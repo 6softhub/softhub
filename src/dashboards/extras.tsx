@@ -111,7 +111,7 @@ export function DataLake({ d }: { d: DashSpec }) {
 export function Governance({ d }: { d: DashSpec }) {
   return <Shell d={d}><div className={grid}>
     <Card title="Data Quality Score" className="col-span-12 lg:col-span-4 grid place-items-center"><Donut value={94} label="DQ" color="var(--color-success)"/></Card>
-    <Card title="Lineage · order_facts" className="col-span-12 lg:col-span-8"><div className="flex items-center gap-2 overflow-x-auto">{["Stripe","raw.payments","stage.payments","mart.order_facts","Tableau"].map((n,i)=>(<><div key={n} className="px-3 py-2 rounded border border-border bg-muted/30 text-xs whitespace-nowrap">{n}</div>{i<4&&<Icons.ArrowRight key={`a${i}`} className="w-4 h-4 text-muted-foreground shrink-0"/>}</>))}</div></Card>
+    <Card title="Lineage · order_facts" className="col-span-12 lg:col-span-8"><div className="flex items-center gap-2 overflow-x-auto">{["Stripe","raw.payments","stage.payments","mart.order_facts","Tableau"].map((n,i)=>(<div key={n} className="flex items-center gap-2 shrink-0"><div className="px-3 py-2 rounded border border-border bg-muted/30 text-xs whitespace-nowrap">{n}</div>{i<4&&<Icons.ArrowRight className="w-4 h-4 text-muted-foreground"/>}</div>))}</div></Card>
     <Card title="Policies" className="col-span-12"><DataTable columns={["Policy","Domain","Steward","Status"]} rows={[["PII Mask","Customer","p.singh",<Pill key="a" tone="success">Active</Pill>],["GDPR Retention","All","a.kapoor",<Pill key="b" tone="success">Active</Pill>],["HIPAA","Health","m.silva",<Pill key="c" tone="warning">Review</Pill>]]}/></Card>
   </div></Shell>;
 }
