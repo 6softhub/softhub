@@ -2,14 +2,15 @@ import type { ComponentType } from "react";
 import type { DashSpec } from "@/data/dashboards";
 import { DashboardView } from "@/components/DashboardView";
 
-import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, MDM, RemoteAccess, Infra, CloudOps, Printing, OSControl } from "./operations";
+import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, MDM, RemoteAccess, Infra, CloudOps, Printing } from "./operations";
 import { CommandCenter } from "./command-center";
 import { IAM, UserRoles, SOC, Fraud, Forensics, Biometric } from "./security";
 import { CRM, SalesPipeline, Billing, Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
 import { Support, Comms, VoiceAI, Gamification, CustomerSuccess, Onboarding } from "./customer";
 import { HR, Payroll } from "./people";
-import { Projects, Workflows, Knowledge, Files, SearchPalette, BrowserWS, DesignSystem, Broadcast } from "./workspace";
-import { Analytics, Reporting, AICopilot, DigitalTwin, WarRoom, MasterControl, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, KnowledgeGraph, Marketplace, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
+import { Projects, Workflows, Knowledge, Files, BrowserWS, DesignSystem, Broadcast } from "./workspace";
+import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Marketplace, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
+import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwin, KnowledgeGraph } from "./category-01-core";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
