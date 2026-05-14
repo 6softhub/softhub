@@ -122,7 +122,13 @@ export function Observability({ d }: { d: DashSpec }) {
         <Card title="Trace Flame · /checkout" className="col-span-12 lg:col-span-5">
           <div className="space-y-1.5">
             {[["api-gateway",100],["auth.verify",18],["cart.fetch",24],["pricing.calc",12],["payment.charge",42],["receipt.send",8]].map(([n,w],i)=>(
-              <div key={i} className="flex items-center gap-2"><div className="text-[10px] w-28 text-muted-foreground font-mono">{n}</div><div className="flex-1 h-3 rounded" style={{ width:`${w}%`, background:`linear-gradient(90deg,var(--color-primary),var(--color-accent))` }}/><div className="text-[10px] text-muted-foreground w-10 text-right">{w}ms</div></div>
+              <div key={i} className="flex items-center gap-2">
+                <div className="text-[10px] w-28 shrink-0 text-muted-foreground font-mono">{n}</div>
+                <div className="flex-1 bg-muted/40 rounded h-3 overflow-hidden">
+                  <div className="h-full rounded" style={{ width:`${w}%`, background:`linear-gradient(90deg,var(--color-primary),var(--color-accent))` }}/>
+                </div>
+                <div className="text-[10px] text-muted-foreground w-10 shrink-0 text-right">{w}ms</div>
+              </div>
             ))}
           </div>
         </Card>

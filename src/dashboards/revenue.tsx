@@ -39,9 +39,11 @@ export function SalesPipeline({ d }: { d: DashSpec }) {
         <Card title="Deal Velocity Funnel" className="col-span-12 lg:col-span-7">
           {[["Visits",12482,100],["MQL",4128,42],["SQL",812,18],["Demos",312,9],["Won",148,4]].map(([n,v,w],i)=>(
             <div key={i} className="flex items-center gap-3 py-1.5">
-              <div className="text-xs w-20">{n}</div>
-              <div className="flex-1 h-6 rounded" style={{ width:`${w}%`, background:`linear-gradient(90deg,var(--color-success),var(--color-primary))` }}/>
-              <div className="text-xs w-16 text-right text-muted-foreground">{v}</div>
+              <div className="text-xs w-20 shrink-0">{n}</div>
+              <div className="flex-1 bg-muted/40 rounded h-6 overflow-hidden">
+                <div className="h-full rounded" style={{ width:`${w}%`, background:`linear-gradient(90deg,var(--color-success),var(--color-primary))` }}/>
+              </div>
+              <div className="text-xs w-16 shrink-0 text-right text-muted-foreground">{v}</div>
             </div>
           ))}
         </Card>
