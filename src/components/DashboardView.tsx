@@ -1,3 +1,4 @@
+import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
 
@@ -142,9 +143,12 @@ function Table({ section }: { section: string }) {
 export function DashboardView({ d }: { d: DashSpec }) {
   const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[d.icon] || Icons.LayoutDashboard;
   const accent = accentClass(d.accent);
+  const [range, setRange] = useState<"1h" | "24h" | "7d" | "30d">("24h");
+  const [filter, setFilter] = useState("");
+  const [live, setLive] = useState(true);
 
   return (
-    <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
+    <div className="p-4 sm:p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">

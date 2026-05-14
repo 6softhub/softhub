@@ -1,7 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  Outlet, Link, createRootRouteWithContext, useRouter, HeadContent, Scripts,
+  Outlet, Link, createRootRouteWithContext, useRouter, useRouterState, HeadContent, Scripts,
 } from "@tanstack/react-router";
+import { useState } from "react";
+import * as Icons from "lucide-react";
 import appCss from "../styles.css?url";
 import { AppSidebar } from "@/components/AppSidebar";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -54,15 +56,72 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function Topbar({ onMenu }: { onMenu: () => void }) {
+  const path = useRouterState({ select: (r) => r.location.pathname });
+  const crumb = path === "/" ? "Master Grid" : path.startsWith("/d/") ? "Module" : path.slice(1);
+  return (
+    <header className="sticky top-0 z-30 h-14 flex items-center gap-3 px-4 border-b border-border bg-background/80 backdrop-blur-md">
+      <button
+        onClick={onMenu}
+        aria-label="Open menu"
+        className="lg:hidden w-9 h-9 grid place-items-center rounded-md hover:bg-muted border border-border"
+      >
+        <Icons.Menu className="w-4 h-4" />
+      </button>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground min-w-0">
+        <Link to="/" className="hover:text-foreground">Nexus</Link>
+        <Icons.ChevronRight className="w-3 h-3" />
+        <span className="text-foreground truncate capitalize">{crumb}</span>
+      </div>
+      <div className="ml-auto flex items-center gap-2">
+        <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] text-muted-foreground px-2 py-1 rounded-md bg-muted border border-border">
+          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" /> Live
+        </span>
+        <button
+          aria-label="Notifications"
+          className="w-9 h-9 grid place-items-center rounded-md hover:bg-muted border border-border relative"
+        >
+          <Icons.Bell className="w-4 h-4" />
+          <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-destructive" />
+        </button>
+        <Link
+          to="/login"
+          className="w-9 h-9 grid place-items-center rounded-md bg-gradient-to-br from-primary to-accent text-primary-foreground"
+          aria-label="Account"
+        >
+          <Icons.User className="w-4 h-4" />
+        </Link>
+      </div>
+    </header>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const path = useRouterState({ select: (r) => r.location.pathname });
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Auth-style routes render full-bleed (no chrome)
+  const isFullBleed = path === "/login";
+
+  if (isFullBleed) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <Outlet />
+      </QueryClientProvider>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen w-full">
-        <AppSidebar />
-        <main className="flex-1 min-w-0">
-          <Outlet />
-        </main>
+        <AppSidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+        <div className="flex-1 min-w-0 flex flex-col">
+          <Topbar onMenu={() => setMobileOpen(true)} />
+          <main className="flex-1 min-w-0">
+            <Outlet />
+          </main>
+        </div>
         <CommandPalette />
       </div>
     </QueryClientProvider>
