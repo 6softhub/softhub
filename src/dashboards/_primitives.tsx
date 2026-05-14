@@ -68,7 +68,7 @@ export function Spark({ seed = 1, color = "currentColor", height = 32, smooth = 
   const pts: [number, number][] = [];
   for (let i = 0; i < n; i++) {
     const y = height - (Math.sin(i / 3 + seed) * height * 0.3 + r() * height * 0.4 + height * 0.3);
-    pts.push([i * (120 / n), y]);
+    pts.push([+(i * (120 / n)).toFixed(2), +y.toFixed(2)]);
   }
   const path = smooth
     ? pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(" ")
