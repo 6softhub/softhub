@@ -168,14 +168,13 @@ function Table({ section, filter = "" }: { section: string; filter?: string }) {
 export function DashboardView({ d }: { d: DashSpec }) {
   const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[d.icon] || Icons.LayoutDashboard;
   const accent = accentClass(d.accent);
-  const [range, setRange] = useState<"1h" | "24h" | "7d" | "30d">("24h");
-  const [filter, setFilter] = useState("");
-  const [live, setLive] = useState(true);
+  const { range, setRange, filter, setFilter, live, setLive } = useDashboardState("24h");
+  void range;
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Header */}
-      <header className="flex flex-wrap items-center justify-between gap-4">
+      <header className="flex flex-wrap items-center justify-between gap-4 animate-fade-up">
         <div className="flex items-center gap-4">
           <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${accent} border grid place-items-center`}>
             <Icon className="w-6 h-6" />
@@ -191,20 +190,19 @@ export function DashboardView({ d }: { d: DashSpec }) {
           {d.tags.map((t) => (
             <span key={t} className="px-2 py-1 rounded-md bg-muted border border-border">{t}</span>
           ))}
-          <button
-            onClick={() => setLive((v) => !v)}
-            aria-pressed={live}
-            className={`px-3 py-1.5 rounded-md font-medium inline-flex items-center gap-1.5 transition-colors border ${
-              live
-                ? "bg-primary text-primary-foreground border-primary/40 hover:opacity-90"
-                : "bg-muted text-muted-foreground border-border hover:text-foreground"
-            }`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${live ? "bg-success animate-pulse" : "bg-muted-foreground"}`} />
-            {live ? "Live" : "Paused"}
-          </button>
+          <DashboardToolbar range={range} onRangeChange={setRange} live={live} onLiveToggle={setLive} />
         </div>
       </header>
+
+      {/* Quick Actions */}
+      <QuickActions
+        items={[
+          { label: "New " + (d.sections[2] ?? "Record"), icon: "Plus", tone: "primary" },
+          { label: "Export", icon: "Download", tone: "info" },
+          { label: "Share", icon: "Share2", tone: "accent" },
+          { label: "Configure", icon: "Settings2", tone: "muted" },
+        ]}
+      />
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
