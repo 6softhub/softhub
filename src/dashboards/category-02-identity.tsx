@@ -73,6 +73,20 @@ function Tabs({ tabs, value, onChange }: { tabs: string[]; value: string; onChan
   );
 }
 
+
+function FilterPills({ pills, value, onChange }: { pills: string[]; value: string; onChange: (s: string) => void }) {
+  return (
+    <div className="flex flex-wrap gap-1.5 text-[11px]">
+      {pills.map((p) => (
+        <button key={p} onClick={() => onChange(p === "All" ? "" : p)}
+          className={`px-2.5 py-1 rounded-md border transition-colors focus-ring ${(value === "" && p === "All") || value === p ? "bg-primary/15 text-primary border-primary/30" : "bg-muted text-muted-foreground border-border hover:text-foreground"}`}>
+          {p}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 /* ============================================================
    1. Identity & Access Management
    ============================================================ */
@@ -162,7 +176,7 @@ export function IAM({ d }: { d: DashSpec }) {
 
       {tab === "Identities" && (
         <ChartCard title="Identity Directory">
-          <FilterBar filters={["All", "Employees", "Contractors", "Service Accounts", "Privileged"]} active={s.filter} onChange={s.setFilter} />
+          <FilterPills pills={["All", "Employees", "Contractors", "Service Accounts", "Privileged"]} value={s.filter} onChange={s.setFilter} />
           <div className="mt-3">
             <DataTable
               columns={["User", "Role", "MFA", "Last Login", "Risk"]}
@@ -316,7 +330,7 @@ export function UserRoles({ d }: { d: DashSpec }) {
 
       {tab === "Users" && (
         <ChartCard title="Users">
-          <FilterBar filters={["All", "Active", "Suspended", "Invited"]} active={s.filter} onChange={s.setFilter} />
+          <FilterPills pills={["All", "Active", "Suspended", "Invited"]} value={s.filter} onChange={s.setFilter} />
           <div className="mt-3">
             <DataTable
               columns={["User", "Email", "Roles", "Groups", "Status"]}
@@ -541,7 +555,7 @@ export function MDM({ d }: { d: DashSpec }) {
           </ChartCard>
 
           <ChartCard title="Device Inventory" span={12}>
-            <FilterBar filters={["All", "Workstation", "Mobile", "Server", "Kiosk"]} active={s.filter} onChange={s.setFilter} />
+            <FilterPills pills={["All", "Workstation", "Mobile", "Server", "Kiosk"]} value={s.filter} onChange={s.setFilter} />
             <div className="mt-3">
               <DataTable
                 columns={["Device", "User", "OS", "Last Seen", "Compliance"]}
