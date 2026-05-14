@@ -15,9 +15,15 @@ const accentClass = (a: string) => {
   }
 };
 
-function Sparkline({ color = "currentColor" }: { color?: string }) {
+const seeded = (seed: number) => {
+  let s = seed || 1;
+  return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+};
+
+function Sparkline({ color = "currentColor", seed = 7 }: { color?: string; seed?: number }) {
+  const r = seeded(seed);
   const pts = Array.from({ length: 24 }, (_, i) => {
-    const y = 30 - (Math.sin(i / 2) * 10 + Math.random() * 8);
+    const y = 30 - (Math.sin(i / 2 + seed) * 10 + r() * 8);
     return `${i * 6},${y.toFixed(1)}`;
   }).join(" ");
   return (
@@ -27,11 +33,12 @@ function Sparkline({ color = "currentColor" }: { color?: string }) {
   );
 }
 
-function Bars({ n = 12 }: { n?: number }) {
+function Bars({ n = 12, seed = 11 }: { n?: number; seed?: number }) {
+  const r = seeded(seed);
   return (
     <div className="flex items-end gap-1 h-24">
       {Array.from({ length: n }).map((_, i) => {
-        const h = 20 + Math.round(Math.abs(Math.sin(i * 1.3)) * 70 + Math.random() * 20);
+        const h = 20 + Math.round(Math.abs(Math.sin(i * 1.3 + seed)) * 70 + r() * 20);
         return (
           <div
             key={i}
@@ -66,11 +73,12 @@ function Donut({ value = 76, label = "" }: { value?: number; label?: string }) {
   );
 }
 
-function WorldDots() {
+function WorldDots({ seed = 23 }: { seed?: number }) {
+  const r = seeded(seed);
   const dots = Array.from({ length: 80 }, () => ({
-    x: Math.random() * 100,
-    y: Math.random() * 50 + 10,
-    s: Math.random() > 0.85,
+    x: r() * 100,
+    y: r() * 50 + 10,
+    s: r() > 0.85,
   }));
   return (
     <div className="relative w-full h-48 rounded-md grid-bg overflow-hidden border border-border">
@@ -237,7 +245,7 @@ export function DashboardView({ d }: { d: DashSpec }) {
         </div>
         <div className="glass rounded-xl p-4 col-span-12 lg:col-span-4 flex flex-col items-center justify-center gap-3">
           <h2 className="text-sm font-semibold self-start">Health Score</h2>
-          <Donut value={Math.floor(70 + Math.random() * 28)} label="overall" />
+          <Donut value={70 + ((d.title.length * 7) % 28)} label="overall" />
           <div className="grid grid-cols-3 gap-2 w-full text-center text-[10px] text-muted-foreground">
             <div><div className="text-foreground text-sm">98</div>Avail</div>
             <div><div className="text-foreground text-sm">82</div>Perf</div>
@@ -283,7 +291,7 @@ export function DashboardView({ d }: { d: DashSpec }) {
                   </div>
                   <div className="flex-1">
                     <div className="text-xs font-medium">{d.sections[3]} #{i+1}</div>
-                    <div className="text-[10px] text-muted-foreground">last sync {i+2}m ago · throughput {(Math.random()*100).toFixed(1)}%</div>
+                    <div className="text-[10px] text-muted-foreground">last sync {i+2}m ago · throughput {(60 + i * 7).toFixed(1)}%</div>
                   </div>
                   <div className="text-[11px] text-muted-foreground">v2.{i+1}.0</div>
                 </div>
