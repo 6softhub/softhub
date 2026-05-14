@@ -103,8 +103,8 @@ export function IAM({ d }: { d: DashSpec }) {
       <Header d={d} right={<button onClick={() => setReviewOpen(true)} className="px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5"><Icons.UserCheck className="w-3.5 h-3.5" /> Access Review</button>} />
       <DashboardToolbar
         range={s.range} onRangeChange={s.setRange}
-        live={s.live} onLiveChange={s.setLive}
-        right={<Tabs tabs={["Overview", "Identities", "Policies", "Audit"]} value={tab} onChange={setTab} />}
+        live={s.live} onLiveToggle={s.setLive}
+        extra={<Tabs tabs={["Overview", "Identities", "Policies", "Audit"]} value={tab} onChange={setTab} />}
       />
       <Kpis items={kpis} />
 
@@ -141,11 +141,11 @@ export function IAM({ d }: { d: DashSpec }) {
             />
           </ChartCard>
           <ChartCard title="Global Sign-in Map" span={6}>
-            <WorldMap seed={d.id} />
+            <WorldMap seed={d.slug.length} />
           </ChartCard>
 
           <ChartCard title="Risk Signals" span={4}>
-            <Heatmap rows={6} cols={20} seed={d.id + 4} />
+            <Heatmap rows={6} cols={20} seed={d.slug.length + 4} />
             <div className="mt-2 text-[11px] text-muted-foreground">Impossible travel · TOR exits · velocity</div>
           </ChartCard>
           <ChartCard title="Recent Auth Events" span={8}>
@@ -167,7 +167,7 @@ export function IAM({ d }: { d: DashSpec }) {
             <DataTable
               columns={["User", "Role", "MFA", "Last Login", "Risk"]}
               rows={Array.from({ length: 8 }).map((_, i) => {
-                const r = rng(i + d.id)();
+                const r = rng(i + d.slug.length)();
                 const risk = r > 0.8 ? "high" : r > 0.5 ? "med" : "low";
                 return [
                   <span className="font-medium">user{i + 1}@acme.io</span>,
@@ -216,17 +216,13 @@ export function IAM({ d }: { d: DashSpec }) {
         </ChartCard>
       )}
 
-      <QuickActions actions={[
-        { label: "New Policy", icon: Icons.FilePlus2 },
-        { label: "Bulk MFA Enroll", icon: Icons.KeyRound },
-        { label: "Run Access Review", icon: Icons.UserCheck, onClick: () => setReviewOpen(true) },
-        { label: "Export Audit", icon: Icons.Download },
+      <QuickActions items={[
+        { label: "New Policy", icon: "FilePlus2" },
+        { label: "Bulk MFA Enroll", icon: "KeyRound" },
+        { label: "Run Access Review", icon: "UserCheck", onClick: () => setReviewOpen(true) },
+        { label: "Export Audit", icon: "Download" },
       ]} />
-      <AIInsights items={[
-        "37 dormant privileged accounts — recommend revoke",
-        "MFA gap detected in Finance OU (3 users)",
-        "Geo anomaly cluster from APAC → trigger step-up policy",
-      ]} />
+      <AIInsights items={[{ title: '37 dormant privileged accounts', body: '37 dormant privileged accounts — recommend revoke' }, { title: 'MFA gap detected in Finance OU (3 users)', body: 'MFA gap detected in Finance OU (3 users)' }, { title: 'Geo anomaly cluster from APAC → trigger step-up policy', body: 'Geo anomaly cluster from APAC → trigger step-up policy' }]} />
 
       <Modal open={reviewOpen} onClose={() => setReviewOpen(false)} title="Access Review — Q2"
         footer={<><button onClick={() => setReviewOpen(false)} className="px-3 py-1.5 rounded-md text-xs bg-muted border border-border">Cancel</button><button className="px-3 py-1.5 rounded-md text-xs bg-primary text-primary-foreground">Start Review</button></>}>
@@ -270,8 +266,8 @@ export function UserRoles({ d }: { d: DashSpec }) {
   return (
     <div className="space-y-5">
       <Header d={d} />
-      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveChange={s.setLive}
-        right={<Tabs tabs={["Roles", "Users", "Groups", "Requests"]} value={tab} onChange={setTab} />} />
+      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
+        extra={<Tabs tabs={["Roles", "Users", "Groups", "Requests"]} value={tab} onChange={setTab} />} />
       <Kpis items={kpis} />
 
       {tab === "Roles" && (
@@ -309,7 +305,7 @@ export function UserRoles({ d }: { d: DashSpec }) {
             />
           </ChartCard>
           <ChartCard title="Permission Distribution" span={8}>
-            <Bars seed={d.id + 2} n={28} color="var(--color-primary)" height={140} />
+            <Bars seed={d.slug.length + 2} n={28} color="var(--color-primary)" height={140} />
           </ChartCard>
           <ChartCard title="Separation of Duties" span={4}>
             <div className="grid place-items-center py-2"><Donut value={94} label="Compliant" color="var(--color-success)" /></div>
@@ -351,7 +347,7 @@ export function UserRoles({ d }: { d: DashSpec }) {
             />
           </ChartCard>
           <ChartCard title="Membership Heatmap" span={5}>
-            <Heatmap rows={6} cols={18} seed={d.id + 9} />
+            <Heatmap rows={6} cols={18} seed={d.slug.length + 9} />
           </ChartCard>
         </div>
       )}
@@ -371,17 +367,13 @@ export function UserRoles({ d }: { d: DashSpec }) {
         </ChartCard>
       )}
 
-      <QuickActions actions={[
-        { label: "Create Role", icon: Icons.ShieldPlus },
-        { label: "Invite User", icon: Icons.UserPlus },
-        { label: "Sync SCIM", icon: Icons.RefreshCw },
-        { label: "Bulk Import", icon: Icons.Upload },
+      <QuickActions items={[
+        { label: "Create Role", icon: "ShieldPlus" },
+        { label: "Invite User", icon: "UserPlus" },
+        { label: "Sync SCIM", icon: "RefreshCw" },
+        { label: "Bulk Import", icon: "Upload" },
       ]} />
-      <AIInsights items={[
-        "Role 'platform-admin' grants 3 redundant permissions — recommend split",
-        "8 users idle 90+ days hold privileged roles — recommend deprovision",
-        "Group 'contractors-2026' has 4 expiring memberships this week",
-      ]} />
+      <AIInsights items={[{ title: "Role 'platform-admin' grants 3 redundant permissions", body: "Role 'platform-admin' grants 3 redundant permissions — recommend split" }, { title: '8 users idle 90+ days hold privileged roles', body: '8 users idle 90+ days hold privileged roles — recommend deprovision' }, { title: "Group 'contractors-2026' has 4 expiring memberships this week", body: "Group 'contractors-2026' has 4 expiring memberships this week" }]} />
     </div>
   );
 }
@@ -407,8 +399,8 @@ export function Biometric({ d }: { d: DashSpec }) {
   return (
     <div className="space-y-5">
       <Header d={d} right={<Pill tone="success">live</Pill>} />
-      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveChange={s.setLive}
-        right={<Tabs tabs={["Live", "Doors", "Enrollments", "Incidents"]} value={tab} onChange={setTab} />} />
+      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
+        extra={<Tabs tabs={["Live", "Doors", "Enrollments", "Incidents"]} value={tab} onChange={setTab} />} />
       <Kpis items={kpis} />
 
       {tab === "Live" && (
@@ -440,10 +432,10 @@ export function Biometric({ d }: { d: DashSpec }) {
           </ChartCard>
 
           <ChartCard title="Access Trend" span={8}>
-            <LineSeries seed={d.id + 5} lines={2} height={180} />
+            <LineSeries seed={d.slug.length + 5} lines={2} height={180} />
           </ChartCard>
           <ChartCard title="Zone Activity" span={4}>
-            <Heatmap rows={6} cols={14} seed={d.id + 17} color="var(--color-accent)" />
+            <Heatmap rows={6} cols={14} seed={d.slug.length + 17} color="var(--color-accent)" />
           </ChartCard>
         </div>
       )}
@@ -466,7 +458,7 @@ export function Biometric({ d }: { d: DashSpec }) {
       {tab === "Enrollments" && (
         <div className={grid}>
           <ChartCard title="Enrollment Pipeline" span={8}>
-            <Bars seed={d.id + 3} n={20} color="var(--color-primary)" height={140} />
+            <Bars seed={d.slug.length + 3} n={20} color="var(--color-primary)" height={140} />
           </ChartCard>
           <ChartCard title="Pending" span={4}>
             <Timeline items={[
@@ -489,17 +481,13 @@ export function Biometric({ d }: { d: DashSpec }) {
         </ChartCard>
       )}
 
-      <QuickActions actions={[
-        { label: "Lockdown", icon: Icons.Lock, tone: "destructive" },
-        { label: "Enroll Person", icon: Icons.UserPlus },
-        { label: "Export Logs", icon: Icons.Download },
-        { label: "Dispatch Guard", icon: Icons.Siren, tone: "warning" },
+      <QuickActions items={[
+        { label: "Lockdown", icon: "Lock", tone: "destructive" },
+        { label: "Enroll Person", icon: "UserPlus" },
+        { label: "Export Logs", icon: "Download" },
+        { label: "Dispatch Guard", icon: "Siren", tone: "warning" },
       ]} />
-      <AIInsights items={[
-        "Tailgate hotspot: HQ-NY lobby between 09:00-10:00",
-        "False rejects spike at D-118 — recommend recalibrate",
-        "After-hours access to Vault zone increased 18% WoW",
-      ]} />
+      <AIInsights items={[{ title: 'Tailgate hotspot: HQ-NY lobby between 09:00-10:00', body: 'Tailgate hotspot: HQ-NY lobby between 09:00-10:00' }, { title: 'False rejects spike at D-118', body: 'False rejects spike at D-118 — recommend recalibrate' }, { title: 'After-hours access to Vault zone increased 18% WoW', body: 'After-hours access to Vault zone increased 18% WoW' }]} />
     </div>
   );
 }
@@ -532,8 +520,8 @@ export function MDM({ d }: { d: DashSpec }) {
   return (
     <div className="space-y-5">
       <Header d={d} right={<button onClick={() => setPushOpen(true)} className="px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-xs font-medium inline-flex items-center gap-1.5"><Icons.Send className="w-3.5 h-3.5" /> Push Policy</button>} />
-      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveChange={s.setLive}
-        right={<Tabs tabs={["Fleet", "Compliance", "Apps", "Policies"]} value={tab} onChange={setTab} />} />
+      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
+        extra={<Tabs tabs={["Fleet", "Compliance", "Apps", "Policies"]} value={tab} onChange={setTab} />} />
       <Kpis items={kpis} />
 
       {tab === "Fleet" && (
@@ -549,7 +537,7 @@ export function MDM({ d }: { d: DashSpec }) {
             </div>
           </ChartCard>
           <ChartCard title="Check-ins (24h)" span={8}>
-            <LineSeries seed={d.id + 12} lines={3} height={200} />
+            <LineSeries seed={d.slug.length + 12} lines={3} height={200} />
           </ChartCard>
 
           <ChartCard title="Device Inventory" span={12}>
@@ -621,22 +609,18 @@ export function MDM({ d }: { d: DashSpec }) {
             />
           </ChartCard>
           <ChartCard title="Rollout Health" span={5}>
-            <Bars seed={d.id + 8} n={16} color="var(--color-accent)" height={140} />
+            <Bars seed={d.slug.length + 8} n={16} color="var(--color-accent)" height={140} />
           </ChartCard>
         </div>
       )}
 
-      <QuickActions actions={[
-        { label: "Push Policy", icon: Icons.Send, onClick: () => setPushOpen(true) },
-        { label: "Wipe Device", icon: Icons.Trash2, tone: "destructive" },
-        { label: "Lock Device", icon: Icons.Lock },
-        { label: "Locate", icon: Icons.MapPin },
+      <QuickActions items={[
+        { label: "Push Policy", icon: "Send", onClick: () => setPushOpen(true) },
+        { label: "Wipe Device", icon: "Trash2", tone: "destructive" },
+        { label: "Lock Device", icon: "Lock" },
+        { label: "Locate", icon: "MapPin" },
       ]} />
-      <AIInsights items={[
-        "1,842 devices behind on OS patches — schedule maintenance window",
-        "Docker CVE-2024-XXX impacts 3,210 devices — push update",
-        "12 devices marked stolen still emitting telemetry — auto-wipe candidate",
-      ]} />
+      <AIInsights items={[{ title: '1,842 devices behind on OS patches', body: '1,842 devices behind on OS patches — schedule maintenance window' }, { title: 'Docker CVE-2024-XXX impacts 3,210 devices', body: 'Docker CVE-2024-XXX impacts 3,210 devices — push update' }, { title: '12 devices marked stolen still emitting telemetry', body: '12 devices marked stolen still emitting telemetry — auto-wipe candidate' }]} />
 
       <Modal open={pushOpen} onClose={() => setPushOpen(false)} title="Push Policy"
         footer={<><button onClick={() => setPushOpen(false)} className="px-3 py-1.5 rounded-md text-xs bg-muted border border-border">Cancel</button><button className="px-3 py-1.5 rounded-md text-xs bg-primary text-primary-foreground">Push to 18,420 devices</button></>}>
@@ -688,8 +672,8 @@ export function RemoteAccess({ d }: { d: DashSpec }) {
   return (
     <div className="space-y-5">
       <Header d={d} right={<Pill tone="success">tunnel healthy</Pill>} />
-      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveChange={s.setLive}
-        right={<Tabs tabs={["Sessions", "Devices", "Recordings", "Anomalies"]} value={tab} onChange={setTab} />} />
+      <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
+        extra={<Tabs tabs={["Sessions", "Devices", "Recordings", "Anomalies"]} value={tab} onChange={setTab} />} />
       <Kpis items={kpis} />
 
       {tab === "Sessions" && (
@@ -726,10 +710,10 @@ export function RemoteAccess({ d }: { d: DashSpec }) {
           </ChartCard>
 
           <ChartCard title="Concurrent Sessions" span={8}>
-            <LineSeries seed={d.id + 6} lines={2} height={180} />
+            <LineSeries seed={d.slug.length + 6} lines={2} height={180} />
           </ChartCard>
           <ChartCard title="Geo Distribution" span={4}>
-            <WorldMap seed={d.id + 9} />
+            <WorldMap seed={d.slug.length + 9} />
           </ChartCard>
         </div>
       )}
@@ -781,17 +765,13 @@ export function RemoteAccess({ d }: { d: DashSpec }) {
         </ChartCard>
       )}
 
-      <QuickActions actions={[
-        { label: "Open Session", icon: Icons.Terminal },
-        { label: "Kill All Idle", icon: Icons.PowerOff, tone: "warning" },
-        { label: "Export Recording", icon: Icons.Download },
-        { label: "Rotate Keys", icon: Icons.KeyRound },
+      <QuickActions items={[
+        { label: "Open Session", icon: "Terminal" },
+        { label: "Kill All Idle", icon: "PowerOff", tone: "warning" },
+        { label: "Export Recording", icon: "Download" },
+        { label: "Rotate Keys", icon: "KeyRound" },
       ]} />
-      <AIInsights items={[
-        "engineer4 active on prod-db at 02:00 local — flag for review",
-        "12 idle sessions >30min — auto-disconnect recommended",
-        "RDP latency from ap-south-1 elevated 18% — investigate edge node",
-      ]} />
+      <AIInsights items={[{ title: 'engineer4 active on prod-db at 02:00 local', body: 'engineer4 active on prod-db at 02:00 local — flag for review' }, { title: '12 idle sessions >30min', body: '12 idle sessions >30min — auto-disconnect recommended' }, { title: 'RDP latency from ap-south-1 elevated 18%', body: 'RDP latency from ap-south-1 elevated 18% — investigate edge node' }]} />
     </div>
   );
 }
