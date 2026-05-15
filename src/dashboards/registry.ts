@@ -6,8 +6,9 @@ import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, Infra, Clo
 import { CommandCenter } from "./command-center";
 import { SOC, Fraud, Forensics } from "./security";
 import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-identity";
-import { CRM, SalesPipeline, Billing, Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
-import { Support, Comms, VoiceAI, Gamification, CustomerSuccess, Onboarding } from "./customer";
+import { Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
+import { Comms, VoiceAI, Gamification } from "./customer";
+import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue";
 import { HR, Payroll } from "./people";
 import { Projects, Workflows, Knowledge, Files, BrowserWS, DesignSystem, Broadcast } from "./workspace";
 import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Marketplace, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
