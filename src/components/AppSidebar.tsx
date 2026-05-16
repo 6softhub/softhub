@@ -71,9 +71,9 @@ export function AppSidebar({
           <Icons.Cpu className="w-4 h-4 text-primary-foreground" />
         </div>
         <div className="min-w-0">
-          <div className="text-sm font-semibold tracking-tight truncate">NEXUS / 75</div>
+          <div className="text-sm font-semibold tracking-tight truncate">NEXUS / OS</div>
           <div className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">
-            Master Control
+            Enterprise Operating System
           </div>
         </div>
       </Link>
