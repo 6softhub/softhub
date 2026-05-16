@@ -84,7 +84,7 @@ export function AppSidebar({
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search 75 modules…"
+            placeholder={`Search ${DASHBOARDS.length} modules…`}
             className="w-full bg-sidebar-accent text-sm rounded-md pl-8 pr-7 py-2 outline-none focus:ring-1 focus:ring-ring"
           />
           {q && (
