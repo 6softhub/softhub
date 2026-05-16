@@ -13,6 +13,7 @@ import { HR, Payroll } from "./people";
 import { Projects, Workflows, Knowledge, Files, BrowserWS, DesignSystem, Broadcast } from "./workspace";
 import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Marketplace, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
 import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwin, KnowledgeGraph } from "./category-01-core";
+import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
@@ -60,6 +61,7 @@ export const REGISTRY: Record<string, Comp> = {
   "design-system": DesignSystem,
   "broadcast": Broadcast,
   "analytics": Analytics, "reporting": Reporting, "ai-copilot": AICopilot,
+  "vala-ai": ValaAI, "ai-api": AIApi, "ai-recovery": AIRecovery, "ai-intelligence": AIIntelligence,
   "digital-twin": DigitalTwin, "war-room": WarRoom, "master-control": MasterControl,
   "devops": DevOps, "repos": Repos, "api-hub": APIHub, "app-builder": AppBuilder,
   "data-lake": DataLake, "governance": Governance, "knowledge-graph": KnowledgeGraph,
