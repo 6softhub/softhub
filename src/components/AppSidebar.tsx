@@ -28,12 +28,17 @@ export function AppSidebar({
         d.clone.toLowerCase().includes(needle) ||
         d.category.toLowerCase().includes(needle),
     );
-    const map = new Map<string, typeof DASHBOARDS>();
-    for (const d of filtered) {
-      if (!map.has(d.category)) map.set(d.category, [] as never);
-      (map.get(d.category) as typeof DASHBOARDS).push(d);
+    const bySlug = new Map(filtered.map((d) => [d.slug, d] as const));
+    const result: Array<[string, typeof DASHBOARDS]> = [];
+    for (const [groupName, slugs] of MASTER_GROUPS) {
+      const list = slugs.map((s) => bySlug.get(s)).filter(Boolean) as typeof DASHBOARDS;
+      if (list.length) {
+        result.push([groupName, list]);
+        list.forEach((d) => bySlug.delete(d.slug));
+      }
     }
-    return Array.from(map.entries());
+    if (bySlug.size) result.push(["Extras", Array.from(bySlug.values()) as typeof DASHBOARDS]);
+    return result;
   }, [q]);
 
   const total = useMemo(
