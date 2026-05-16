@@ -3,6 +3,21 @@ import { useEffect, useMemo, useState } from "react";
 import * as Icons from "lucide-react";
 import { DASHBOARDS } from "@/data/dashboards";
 
+const MASTER_GROUPS: ReadonlyArray<readonly [string, readonly string[]]> = [
+  ["01 · Command Core", ["command-center", "war-room", "master-control", "os-control"]],
+  ["02 · AI Systems", ["vala-ai", "ai-copilot", "ai-api", "ai-recovery", "ai-intelligence"]],
+  ["03 · User + Access", ["iam", "user-roles", "mdm", "remote-access", "licenses", "biometric"]],
+  ["04 · CRM + Sales", ["crm", "leads", "sales-pipeline", "customer-success", "support", "voice-ai", "onboarding"]],
+  ["05 · Product + Marketplace", ["marketplace", "product-manager", "gallery", "reviews", "subscriptions", "subscriptions-system", "downloads", "activation"]],
+  ["06 · Reseller + Franchise", ["reseller", "franchise", "affiliate", "influencer"]],
+  ["07 · Development + DevOps", ["app-builder", "repos", "git-mgmt", "deployment", "cicd", "devops", "api-hub", "infra", "observability", "geo-monitoring", "noc", "sandbox"]],
+  ["08 · Analytics + SEO", ["analytics", "reporting", "exec-reports", "seo", "marketing", "social", "market-intel"]],
+  ["09 · Security + Risk", ["soc", "fraud", "forensics", "audit-logs", "compliance", "governance", "backup", "disaster-recovery"]],
+  ["10 · Finance + Billing", ["revenue", "billing", "payments", "accounting", "financial-ops"]],
+  ["11 · Assets + Storage", ["asset-manager", "files", "document-factory", "procurement", "inventory", "supply-chain", "knowledge", "knowledge-graph", "data-lake", "design-system", "broadcast", "projects", "workflows", "browser", "search", "hr", "payroll", "comms", "gamification", "digital-twin", "alerts", "printing"]],
+  ["12 · Future Tech", ["iot-control", "iot-drones", "smart-city", "robotics", "satellite", "research-quantum", "metaverse", "blockchain", "energy", "healthcare", "education", "legal", "cloud"]],
+];
+
 export function AppSidebar({
   mobileOpen,
   onMobileClose,
