@@ -67,6 +67,8 @@ export const REGISTRY: Record<string, Comp> = {
   "devops": DevOps, "repos": Repos, "api-hub": APIHub, "app-builder": AppBuilder,
   "data-lake": DataLake, "governance": Governance, "knowledge-graph": KnowledgeGraph,
   "marketplace": Marketplace, "franchise": Franchise, "inventory": Inventory,
+  "product-manager": ProductManager, "gallery": Gallery, "reviews": Reviews,
+  "subscriptions-system": SubscriptionsSystem, "downloads": Downloads, "activation": Activation,
   "supply-chain": SupplyChain, "procurement": Procurement,
   "social": Social, "marketing": Marketing, "seo": SEO,
   "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
