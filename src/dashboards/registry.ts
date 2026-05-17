@@ -11,9 +11,10 @@ import { Comms, VoiceAI, Gamification } from "./customer";
 import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue";
 import { HR, Payroll } from "./people";
 import { Projects, Workflows, Knowledge, Files, BrowserWS, DesignSystem, Broadcast } from "./workspace";
-import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Marketplace, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
+import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
 import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwin, KnowledgeGraph } from "./category-01-core";
 import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai";
+import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
@@ -66,6 +67,8 @@ export const REGISTRY: Record<string, Comp> = {
   "devops": DevOps, "repos": Repos, "api-hub": APIHub, "app-builder": AppBuilder,
   "data-lake": DataLake, "governance": Governance, "knowledge-graph": KnowledgeGraph,
   "marketplace": Marketplace, "franchise": Franchise, "inventory": Inventory,
+  "product-manager": ProductManager, "gallery": Gallery, "reviews": Reviews,
+  "subscriptions-system": SubscriptionsSystem, "downloads": Downloads, "activation": Activation,
   "supply-chain": SupplyChain, "procurement": Procurement,
   "social": Social, "marketing": Marketing, "seo": SEO,
   "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
