@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
 import {
-  Shell, Card, DataTable, Pill, Donut, Bars, LineSeries, ProgressBar,
+  Shell, DataTable, Pill, Donut, Bars, LineSeries, ProgressBar,
   Spark, StatusDot, Heatmap, Timeline, Avatar, Kanban,
 } from "./_primitives";
 import {
