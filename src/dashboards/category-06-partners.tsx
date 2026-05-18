@@ -81,7 +81,7 @@ export function Reseller({ d }: { d: DashSpec }) {
           <Kanban columns={[
             { title: "Registered", tone: "info",    items: [{title:"Acme Cloud Migration",meta:"Northwind · $284k",tag:"Platinum"},{title:"Globex Renewal",meta:"Helix · $128k",tag:"Gold"}] },
             { title: "Qualified",  tone: "warning", items: [{title:"Wayne Ent. Expansion",meta:"Bolt · $612k",tag:"Platinum"},{title:"Initech Upgrade",meta:"Arc · $84k",tag:"Silver"}] },
-            { title: "Co-sell",    tone: "accent",  items: [{title:"Stark Industries",meta:"Pixel · $1.2M",tag:"Co-sell"}] },
+            { title: "Co-sell",    tone: "info",    items: [{title:"Stark Industries",meta:"Pixel · $1.2M",tag:"Co-sell"}] },
             { title: "Closed Won", tone: "success", items: [{title:"Hooli SaaS",meta:"Tundra · $412k",tag:"Won"}] },
           ]}/>
         </ChartCard>
@@ -201,7 +201,7 @@ export function FranchiseMgr({ d }: { d: DashSpec }) {
           <Kanban columns={[
             { title: "Lead",        tone: "info",    items: [{title:"Mumbai · BKC",meta:"Investor · $480k",tag:"LOI"},{title:"Madrid · Salamanca",meta:"Group · $320k",tag:"Lead"}] },
             { title: "Site Survey", tone: "warning", items: [{title:"Austin · East 6th",meta:"Owner · $280k",tag:"Survey"}] },
-            { title: "Build-out",   tone: "accent",  items: [{title:"Singapore · Orchard",meta:"GC active",tag:"Wk 6/12"}] },
+            { title: "Build-out",   tone: "info",    items: [{title:"Singapore · Orchard",meta:"GC active",tag:"Wk 6/12"}] },
             { title: "Open",        tone: "success", items: [{title:"Mexico City · Roma",meta:"Soft open",tag:"Live"}] },
           ]}/>
         </ChartCard>
@@ -387,7 +387,7 @@ export function Influencer({ d }: { d: DashSpec }) {
           <Kanban columns={[
             { title: "Brief",     tone: "info",    items: [{title:"SS26 Launch · LuxByJade",meta:"TikTok · 4 posts",tag:"Draft"},{title:"Pro Tools v4",meta:"YouTube · 1 review",tag:"Brief"}] },
             { title: "Content",   tone: "warning", items: [{title:"Hydrate Campaign",meta:"@nova.fit · 6 reels",tag:"Editing"}] },
-            { title: "Approved",  tone: "accent",  items: [{title:"Game Night",meta:"@quietgamer · stream",tag:"Scheduled"}] },
+            { title: "Approved",  tone: "info",    items: [{title:"Game Night",meta:"@quietgamer · stream",tag:"Scheduled"}] },
             { title: "Published", tone: "success", items: [{title:"Studio Tour · @studio.hana",meta:"Reach 4.2M",tag:"Live"},{title:"Knife Skills · Chef Marco",meta:"EMV $84k",tag:"Live"}] },
           ]}/>
         </ChartCard>
