@@ -15,6 +15,7 @@ import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Gove
 import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwin, KnowledgeGraph } from "./category-01-core";
 import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai";
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
+import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
@@ -66,7 +67,8 @@ export const REGISTRY: Record<string, Comp> = {
   "digital-twin": DigitalTwin, "war-room": WarRoom, "master-control": MasterControl,
   "devops": DevOps, "repos": Repos, "api-hub": APIHub, "app-builder": AppBuilder,
   "data-lake": DataLake, "governance": Governance, "knowledge-graph": KnowledgeGraph,
-  "marketplace": Marketplace, "franchise": Franchise, "inventory": Inventory,
+  "marketplace": Marketplace, "franchise": FranchiseMgr, "inventory": Inventory,
+  "reseller": Reseller, "affiliate": Affiliate, "influencer": Influencer,
   "product-manager": ProductManager, "gallery": Gallery, "reviews": Reviews,
   "subscriptions-system": SubscriptionsSystem, "downloads": Downloads, "activation": Activation,
   "supply-chain": SupplyChain, "procurement": Procurement,
