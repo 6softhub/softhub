@@ -23,7 +23,7 @@ type Comp = ComponentType<{ d: DashSpec }>;
 export const REGISTRY: Record<string, Comp> = {
   "command-center": CommandCenter,
   "alerts": Alerts,
-  "observability": Observability,
+  "observability": ObservabilityPremium,
   "geo-monitoring": GeoMonitoring,
   "noc": NOC,
   "backup": Backup,
