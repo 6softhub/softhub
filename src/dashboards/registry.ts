@@ -30,7 +30,7 @@ export const REGISTRY: Record<string, Comp> = {
   "licenses": Licenses,
   "mdm": MDM,
   "remote-access": RemoteAccess,
-  "infra": Infra,
+  "infra": InfraPremium,
   "cloud": CloudOps,
   "printing": Printing,
   "os-control": OSControl,
