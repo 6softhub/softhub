@@ -16,6 +16,7 @@ import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwi
 import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai";
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
+import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
