@@ -133,7 +133,7 @@ export function Reseller({ d }: { d: DashSpec }) {
         <div className="mt-4">
           <div className="text-xs font-medium mb-2">Activity</div>
           <Timeline items={[
-            { time: "2h", title: "Deal #DR-48218 advanced to Co-sell", tone: "accent" },
+            { time: "2h", title: "Deal #DR-48218 advanced to Co-sell", tone: "info" },
             { time: "1d", title: "Engineer cert renewed · 4 SEs", tone: "success" },
             { time: "3d", title: "MDF request approved · $48k", tone: "info" },
             { time: "1w", title: "QBR completed", tone: "muted" },
