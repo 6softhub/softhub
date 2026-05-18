@@ -16,20 +16,21 @@ import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwi
 import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai";
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
+import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
 export const REGISTRY: Record<string, Comp> = {
   "command-center": CommandCenter,
   "alerts": Alerts,
-  "observability": Observability,
+  "observability": ObservabilityPremium,
   "geo-monitoring": GeoMonitoring,
   "noc": NOC,
   "backup": Backup,
   "licenses": Licenses,
   "mdm": MDM,
   "remote-access": RemoteAccess,
-  "infra": Infra,
+  "infra": InfraPremium,
   "cloud": CloudOps,
   "printing": Printing,
   "os-control": OSControl,
@@ -65,7 +66,8 @@ export const REGISTRY: Record<string, Comp> = {
   "analytics": Analytics, "reporting": Reporting, "ai-copilot": AICopilot,
   "vala-ai": ValaAI, "ai-api": AIApi, "ai-recovery": AIRecovery, "ai-intelligence": AIIntelligence,
   "digital-twin": DigitalTwin, "war-room": WarRoom, "master-control": MasterControl,
-  "devops": DevOps, "repos": Repos, "api-hub": APIHub, "app-builder": AppBuilder,
+  "devops": DevOpsPremium, "repos": ReposDev, "api-hub": ApiHubPremium, "app-builder": AppBuilder,
+  "git-mgmt": GitMgmt, "deployment": Deployment, "cicd": Cicd,
   "data-lake": DataLake, "governance": Governance, "knowledge-graph": KnowledgeGraph,
   "marketplace": Marketplace, "franchise": FranchiseMgr, "inventory": Inventory,
   "reseller": Reseller, "affiliate": Affiliate, "influencer": Influencer,
