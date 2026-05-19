@@ -76,7 +76,7 @@ export const REGISTRY: Record<string, Comp> = {
   "subscriptions-system": SubscriptionsSystem, "downloads": Downloads, "activation": Activation,
   "supply-chain": SupplyChain, "procurement": Procurement,
   "social": SocialPremium, "marketing": MarketingPremium, "seo": SEOPremium,
-  "market-intel": MarketIntelPremium,
+  "analytics": AnalyticsPremium, "reporting": ReportingPremium,
   "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
   "satellite": Satellite, "robotics": Robotics,
   "healthcare": Healthcare, "education": Education, "legal": Legal,
