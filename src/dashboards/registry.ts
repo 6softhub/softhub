@@ -4,8 +4,9 @@ import { DashboardView } from "@/components/DashboardView";
 
 import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, Infra, CloudOps, Printing } from "./operations";
 import { CommandCenter } from "./command-center";
-import { SOC, Fraud, Forensics } from "./security";
-import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-identity";
+import { IAM as _IAM, UserRoles as _UserRoles, Biometric as _Biometric, MDM as _MDM, RemoteAccess as _RemoteAccess } from "./category-02-identity";
+import { SOC as _SOC, Fraud as _Fraud, Forensics as _Forensics } from "./security";
+void [_IAM, _UserRoles, _Biometric, _MDM, _RemoteAccess, _SOC, _Fraud, _Forensics];
 import { Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
 import { Comms, VoiceAI, Gamification } from "./customer";
 import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue";
@@ -41,9 +42,6 @@ export const REGISTRY: Record<string, Comp> = {
   "os-control": OSControl,
   "iam": IAMPremium,
   "user-roles": UserRolesPremium,
-  "soc": SOC,
-  "fraud": Fraud,
-  "forensics": Forensics,
   "biometric": BiometricPremium,
   "crm": CRM,
   "sales-pipeline": SalesPipeline,
