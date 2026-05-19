@@ -17,6 +17,7 @@ import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai";
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
+import { AnalyticsPremium, ReportingPremium, SEOPremium, SocialPremium, MarketingPremium, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
@@ -46,7 +47,7 @@ export const REGISTRY: Record<string, Comp> = {
   "payments": Payments,
   "accounting": Accounting,
   "subscriptions": Subscriptions,
-  "market-intel": MarketIntel,
+  "market-intel": MarketIntelPremium,
   "support": Support,
   "comms": Comms,
   "voice-ai": VoiceAI,
@@ -63,18 +64,19 @@ export const REGISTRY: Record<string, Comp> = {
   "browser": BrowserWS,
   "design-system": DesignSystem,
   "broadcast": Broadcast,
-  "analytics": Analytics, "reporting": Reporting, "ai-copilot": AICopilot,
+  "ai-copilot": AICopilot,
   "vala-ai": ValaAI, "ai-api": AIApi, "ai-recovery": AIRecovery, "ai-intelligence": AIIntelligence,
   "digital-twin": DigitalTwin, "war-room": WarRoom, "master-control": MasterControl,
   "devops": DevOpsPremium, "repos": ReposDev, "api-hub": ApiHubPremium, "app-builder": AppBuilder,
   "git-mgmt": GitMgmt, "deployment": Deployment, "cicd": Cicd,
-  "data-lake": DataLake, "governance": Governance, "knowledge-graph": KnowledgeGraph,
+  "data-lake": DataLakePremium, "governance": GovernancePremium, "knowledge-graph": KnowledgeGraph,
   "marketplace": Marketplace, "franchise": FranchiseMgr, "inventory": Inventory,
   "reseller": Reseller, "affiliate": Affiliate, "influencer": Influencer,
   "product-manager": ProductManager, "gallery": Gallery, "reviews": Reviews,
   "subscriptions-system": SubscriptionsSystem, "downloads": Downloads, "activation": Activation,
   "supply-chain": SupplyChain, "procurement": Procurement,
-  "social": Social, "marketing": Marketing, "seo": SEO,
+  "social": SocialPremium, "marketing": MarketingPremium, "seo": SEOPremium,
+  "analytics": AnalyticsPremium, "reporting": ReportingPremium,
   "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
   "satellite": Satellite, "robotics": Robotics,
   "healthcare": Healthcare, "education": Education, "legal": Legal,
