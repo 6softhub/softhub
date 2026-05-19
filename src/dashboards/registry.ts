@@ -47,7 +47,7 @@ export const REGISTRY: Record<string, Comp> = {
   "payments": Payments,
   "accounting": Accounting,
   "subscriptions": Subscriptions,
-  "market-intel": MarketIntel,
+  "market-intel": MarketIntelPremium,
   "support": Support,
   "comms": Comms,
   "voice-ai": VoiceAI,
