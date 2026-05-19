@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { DashSpec } from "@/data/dashboards";
-import { Shell, Pill, Spark, Bars, Donut, Heatmap, WorldMap, DataTable, Kanban, Timeline, ProgressBar, LineSeries, Avatar, Terminal } from "./_primitives";
+import { Shell, Pill, Bars, Donut, Heatmap, WorldMap, DataTable, Timeline, LineSeries, Terminal } from "./_primitives";
 import { ChartCard, AIInsights, DashboardToolbar, FilterBar, QuickActions, Modal, useDashboardState } from "./_universal";
 
 /* ============================================================
@@ -9,6 +9,19 @@ import { ChartCard, AIInsights, DashboardToolbar, FilterBar, QuickActions, Modal
    ============================================================ */
 
 const useS = () => useDashboardState("24h");
+
+function DonutRow({ items }: { items: { label: string; value: number; color: string }[] }) {
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      {items.map((it, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <Donut value={it.value} label={`${it.value}%`} color={it.color} size={68} />
+          <div className="text-[11px] text-muted-foreground truncate">{it.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 /* ---------------- SOC ---------------- */
 export function SOCPremium({ d }: { d: DashSpec }) {
@@ -25,7 +38,7 @@ export function SOCPremium({ d }: { d: DashSpec }) {
           <LineSeries seed={91} lines={4} height={220} />
         </ChartCard>
         <ChartCard span={4} title="MITRE ATT&CK Coverage">
-          <Donut segments={[{label:"Covered",value:74,color:"var(--color-success)"},{label:"Partial",value:18,color:"var(--color-warning)"},{label:"Gap",value:8,color:"var(--color-destructive)"}]} />
+          <DonutRow items={[{label:"Covered",value:74,color:"var(--color-success)"},{label:"Partial",value:18,color:"var(--color-warning)"},{label:"Gap",value:8,color:"var(--color-destructive)"},{label:"TTPs Tuned",value:62,color:"var(--color-info)"}]} />
         </ChartCard>
         <ChartCard span={6} title="Threat Origin · Live" toolbar={<Pill tone="info">248 sources</Pill>}>
           <WorldMap seed={13} />
@@ -43,7 +56,7 @@ export function SOCPremium({ d }: { d: DashSpec }) {
           ]} />
         </ChartCard>
         <AIInsights items={[
-          {title:"Lateral movement pattern",body:"Kerberoasting attempt + SMB enum from host laptop-128 — quarantine recommended.",tone:"destructive",confidence:94},
+          {title:"Lateral movement pattern",body:"Kerberoasting + SMB enum from laptop-128 — quarantine recommended.",tone:"destructive",confidence:94},
           {title:"Phishing wave",body:"24 mailboxes received OAuth consent lure in last 30m. Auto-revoke applied.",tone:"warning",confidence:88},
         ]} />
       </div>
@@ -66,10 +79,10 @@ export function FraudPremium({ d }: { d: DashSpec }) {
       <div className="grid grid-cols-12 gap-4">
         <ChartCard span={8} title="Anomaly Stream · 60s window"><LineSeries seed={31} lines={3} height={220} /></ChartCard>
         <ChartCard span={4} title="Decisions">
-          <Donut segments={[{label:"Approve",value:88,color:"var(--color-success)"},{label:"Review",value:9,color:"var(--color-warning)"},{label:"Block",value:3,color:"var(--color-destructive)"}]} />
+          <DonutRow items={[{label:"Approve",value:88,color:"var(--color-success)"},{label:"Review",value:9,color:"var(--color-warning)"},{label:"Block",value:3,color:"var(--color-destructive)"},{label:"Step-up",value:14,color:"var(--color-info)"}]} />
         </ChartCard>
         <ChartCard span={6} title="Model Performance" toolbar={<Pill tone="success">AUC 0.97</Pill>}>
-          <Bars values={[0.94,0.92,0.96,0.91,0.97,0.93,0.95]} color="var(--color-accent)" />
+          <Bars seed={17} color="var(--color-accent)" />
         </ChartCard>
         <ChartCard span={6} title="Risk Surface · Heatmap"><Heatmap rows={6} cols={24} seed={4} color="var(--color-warning)" /></ChartCard>
         <ChartCard span={8} title="High-risk Transactions">
@@ -100,9 +113,9 @@ export function ForensicsPremium({ d }: { d: DashSpec }) {
       </div>
       <div className="grid grid-cols-12 gap-4">
         <ChartCard span={4} title="Case Status">
-          <Donut segments={[{label:"Active",value:42,color:"var(--color-warning)"},{label:"Review",value:28,color:"var(--color-info)"},{label:"Closed",value:30,color:"var(--color-success)"}]} />
+          <DonutRow items={[{label:"Active",value:42,color:"var(--color-warning)"},{label:"Review",value:28,color:"var(--color-info)"},{label:"Closed",value:30,color:"var(--color-success)"},{label:"On Hold",value:8,color:"var(--color-muted-foreground)"}]} />
         </ChartCard>
-        <ChartCard span={8} title="Evidence Acquired (GB / week)"><Bars values={[1.2,1.8,2.4,3.1,2.8,3.6,4.2,3.9,4.5,5.1,4.8,5.6]} color="var(--color-primary)" /></ChartCard>
+        <ChartCard span={8} title="Evidence Acquired (GB / week)"><Bars seed={23} color="var(--color-primary)" /></ChartCard>
         <ChartCard span={7} title="Active Cases">
           <DataTable columns={["Case","Custodian","Devices","Evidence","Examiner"]} rows={[
             ["FC-2048","J. Carter","4 devices","124 GB","M. Lin"],
@@ -112,9 +125,9 @@ export function ForensicsPremium({ d }: { d: DashSpec }) {
         </ChartCard>
         <ChartCard span={5} title="Chain-of-custody Timeline">
           <Timeline items={[
-            {time:"09:14",label:"FC-2048",detail:"Hash verified on UFED export",tone:"success"},
-            {time:"08:42",label:"FC-2047",detail:"Cloud acquisition started",tone:"info"},
-            {time:"07:30",label:"FC-2045",detail:"Pathfinder timeline rebuilt",tone:"warning"},
+            {time:"09:14",title:"FC-2048 · Hash verified on UFED export",tone:"success"},
+            {time:"08:42",title:"FC-2047 · Cloud acquisition started",tone:"info"},
+            {time:"07:30",title:"FC-2045 · Pathfinder timeline rebuilt",tone:"warning"},
           ]} />
         </ChartCard>
         <AIInsights items={[
@@ -137,7 +150,7 @@ export function IAMPremium({ d }: { d: DashSpec }) {
       <div className="grid grid-cols-12 gap-4">
         <ChartCard span={8} title="Sign-in Activity · Success vs Risk"><LineSeries seed={22} lines={2} height={220} /></ChartCard>
         <ChartCard span={4} title="MFA Coverage">
-          <Donut segments={[{label:"WebAuthn",value:46,color:"var(--color-success)"},{label:"TOTP",value:36,color:"var(--color-info)"},{label:"SMS",value:14,color:"var(--color-warning)"},{label:"None",value:4,color:"var(--color-destructive)"}]} />
+          <DonutRow items={[{label:"WebAuthn",value:46,color:"var(--color-success)"},{label:"TOTP",value:36,color:"var(--color-info)"},{label:"SMS",value:14,color:"var(--color-warning)"},{label:"None",value:4,color:"var(--color-destructive)"}]} />
         </ChartCard>
         <ChartCard span={6} title="Sign-ins by Region"><WorldMap seed={61} /></ChartCard>
         <ChartCard span={6} title="App Access Heatmap"><Heatmap rows={8} cols={24} seed={2} color="var(--color-info)" /></ChartCard>
@@ -168,9 +181,9 @@ export function UserRolesPremium({ d }: { d: DashSpec }) {
       </div>
       <div className="grid grid-cols-12 gap-4">
         <ChartCard span={4} title="Roles Distribution">
-          <Donut segments={[{label:"Member",value:62,color:"var(--color-primary)"},{label:"Editor",value:22,color:"var(--color-accent)"},{label:"Admin",value:11,color:"var(--color-warning)"},{label:"Owner",value:5,color:"var(--color-destructive)"}]} />
+          <DonutRow items={[{label:"Member",value:62,color:"var(--color-primary)"},{label:"Editor",value:22,color:"var(--color-accent)"},{label:"Admin",value:11,color:"var(--color-warning)"},{label:"Owner",value:5,color:"var(--color-destructive)"}]} />
         </ChartCard>
-        <ChartCard span={8} title="Permission Drift (per tenant)"><Bars values={[2,4,1,6,3,5,2,8,4,3,7,2]} color="var(--color-warning)" /></ChartCard>
+        <ChartCard span={8} title="Permission Drift (per tenant)"><Bars seed={48} color="var(--color-warning)" /></ChartCard>
         <ChartCard span={8} title="Roles & Permissions">
           <DataTable columns={["Tenant","Role","Members","Perms","Updated"]} rows={[
             ["acme","admin","18","248","2h ago"],
@@ -181,9 +194,9 @@ export function UserRolesPremium({ d }: { d: DashSpec }) {
         </ChartCard>
         <ChartCard span={4} title="Recent Role Changes">
           <Timeline items={[
-            {time:"now",label:"acme",detail:"Granted billing.read to finance-team",tone:"info"},
-            {time:"22m",label:"stark",detail:"Revoked owner from j.doe",tone:"warning"},
-            {time:"1h",label:"initech",detail:"New custom role 'auditor'",tone:"success"},
+            {time:"now",title:"acme · Granted billing.read to finance",tone:"info"},
+            {time:"22m",title:"stark · Revoked owner from j.doe",tone:"warning"},
+            {time:"1h",title:"initech · New custom role 'auditor'",tone:"success"},
           ]} />
         </ChartCard>
         <AIInsights items={[
@@ -206,7 +219,7 @@ export function BiometricPremium({ d }: { d: DashSpec }) {
       <div className="grid grid-cols-12 gap-4">
         <ChartCard span={8} title="Access Events · Live"><LineSeries seed={55} lines={2} height={220} /></ChartCard>
         <ChartCard span={4} title="Auth Methods">
-          <Donut segments={[{label:"Face",value:48,color:"var(--color-primary)"},{label:"Fingerprint",value:28,color:"var(--color-accent)"},{label:"Mobile ID",value:18,color:"var(--color-info)"},{label:"NFC",value:6,color:"var(--color-warning)"}]} />
+          <DonutRow items={[{label:"Face",value:48,color:"var(--color-primary)"},{label:"Fingerprint",value:28,color:"var(--color-accent)"},{label:"Mobile ID",value:18,color:"var(--color-info)"},{label:"NFC",value:6,color:"var(--color-warning)"}]} />
         </ChartCard>
         <ChartCard span={12} title="Door Activity · Day × Hour"><Heatmap rows={7} cols={24} seed={3} color="var(--color-primary)" /></ChartCard>
         <ChartCard span={8} title="Doors">
@@ -219,9 +232,9 @@ export function BiometricPremium({ d }: { d: DashSpec }) {
         </ChartCard>
         <ChartCard span={4} title="Security Events">
           <Timeline items={[
-            {time:"now",label:"D-309",detail:"Tailgate attempt detected",tone:"destructive"},
-            {time:"14m",label:"D-101",detail:"Badge cloning alert resolved",tone:"warning"},
-            {time:"1h",label:"D-204",detail:"After-hours access granted",tone:"info"},
+            {time:"now",title:"D-309 · Tailgate attempt detected",tone:"destructive"},
+            {time:"14m",title:"D-101 · Badge cloning alert resolved",tone:"warning"},
+            {time:"1h",title:"D-204 · After-hours access granted",tone:"info"},
           ]} />
         </ChartCard>
         <AIInsights items={[
@@ -243,10 +256,10 @@ export function MDMPremium({ d }: { d: DashSpec }) {
       </div>
       <div className="grid grid-cols-12 gap-4">
         <ChartCard span={4} title="Platforms">
-          <Donut segments={[{label:"Windows",value:38,color:"var(--color-info)"},{label:"macOS",value:22,color:"var(--color-primary)"},{label:"iOS",value:24,color:"var(--color-accent)"},{label:"Android",value:16,color:"var(--color-success)"}]} />
+          <DonutRow items={[{label:"Windows",value:38,color:"var(--color-info)"},{label:"macOS",value:22,color:"var(--color-primary)"},{label:"iOS",value:24,color:"var(--color-accent)"},{label:"Android",value:16,color:"var(--color-success)"}]} />
         </ChartCard>
         <ChartCard span={8} title="Compliance Trend · 30d"><LineSeries seed={77} lines={2} height={220} /></ChartCard>
-        <ChartCard span={6} title="Patch Adoption (per app)"><Bars values={[92,87,96,78,94,82,98,90,85,93,88,91]} color="var(--color-success)" /></ChartCard>
+        <ChartCard span={6} title="Patch Adoption (per app)"><Bars seed={64} color="var(--color-success)" /></ChartCard>
         <ChartCard span={6} title="Enrollments · Day × Hour"><Heatmap rows={7} cols={24} seed={6} color="var(--color-info)" /></ChartCard>
         <ChartCard span={12} title="Non-compliant Devices">
           <DataTable columns={["Device","User","Platform","Issue","Last seen"]} rows={[
@@ -277,7 +290,7 @@ export function RemoteAccessPremium({ d }: { d: DashSpec }) {
       <div className="grid grid-cols-12 gap-4">
         <ChartCard span={8} title="Active Sessions · Latency"><LineSeries seed={8} lines={3} height={220} /></ChartCard>
         <ChartCard span={4} title="Session Types">
-          <Donut segments={[{label:"Attended",value:54,color:"var(--color-primary)"},{label:"Unattended",value:32,color:"var(--color-accent)"},{label:"M2M",value:14,color:"var(--color-info)"}]} />
+          <DonutRow items={[{label:"Attended",value:54,color:"var(--color-primary)"},{label:"Unattended",value:32,color:"var(--color-accent)"},{label:"M2M",value:14,color:"var(--color-info)"},{label:"Recorded",value:78,color:"var(--color-success)"}]} />
         </ChartCard>
         <ChartCard span={6} title="Endpoints Online by Region"><WorldMap seed={29} /></ChartCard>
         <ChartCard span={6} title="Session Heatmap"><Heatmap rows={7} cols={24} seed={5} color="var(--color-primary)" /></ChartCard>
@@ -294,7 +307,14 @@ export function RemoteAccessPremium({ d }: { d: DashSpec }) {
         ]} />
       </div>
       <Modal open={term} onClose={()=>setTerm(false)} title="Remote console · srv-prd-04" size="lg">
-        <Terminal lines={["$ ssh ops@srv-prd-04","Welcome to Ubuntu 22.04.4 LTS","ops@srv-prd-04:~$ systemctl status nginx","● nginx.service - A high performance web server","   Active: active (running) since Mon 2026-05-18 09:14:22 UTC","ops@srv-prd-04:~$ tail -f /var/log/nginx/access.log","10.0.4.18 - - [19/May/2026:11:42:08] \"GET / HTTP/2\" 200 1842"]} />
+        <Terminal lines={[
+          {t:"$ ssh ops@srv-prd-04"},
+          {t:"Welcome to Ubuntu 22.04.4 LTS",tone:"muted"},
+          {t:"ops@srv-prd-04:~$ systemctl status nginx"},
+          {t:"● nginx.service — active (running)",tone:"success"},
+          {t:"ops@srv-prd-04:~$ tail -f /var/log/nginx/access.log"},
+          {t:"10.0.4.18 - - [19/May/2026:11:42:08] \"GET / HTTP/2\" 200 1842",tone:"info"},
+        ]} />
       </Modal>
     </Shell>
   );

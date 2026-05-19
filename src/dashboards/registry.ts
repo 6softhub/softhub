@@ -18,6 +18,7 @@ import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Dow
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
 import { AnalyticsPremium, ReportingPremium, SEOPremium, SocialPremium, MarketingPremium, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
+import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium, UserRolesPremium, BiometricPremium, MDMPremium, RemoteAccessPremium } from "./category-09-security";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
