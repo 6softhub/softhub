@@ -4,8 +4,9 @@ import { DashboardView } from "@/components/DashboardView";
 
 import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, Infra, CloudOps, Printing } from "./operations";
 import { CommandCenter } from "./command-center";
-import { SOC, Fraud, Forensics } from "./security";
-import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-identity";
+import { IAM as _IAM, UserRoles as _UserRoles, Biometric as _Biometric, MDM as _MDM, RemoteAccess as _RemoteAccess } from "./category-02-identity";
+import { SOC as _SOC, Fraud as _Fraud, Forensics as _Forensics } from "./security";
+void [_IAM, _UserRoles, _Biometric, _MDM, _RemoteAccess, _SOC, _Fraud, _Forensics];
 import { Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
 import { Comms, VoiceAI, Gamification } from "./customer";
 import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue";
@@ -18,6 +19,7 @@ import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Dow
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
 import { AnalyticsPremium, ReportingPremium, SEOPremium, SocialPremium, MarketingPremium, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
+import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium, UserRolesPremium, BiometricPremium, MDMPremium, RemoteAccessPremium } from "./category-09-security";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
@@ -25,22 +27,22 @@ export const REGISTRY: Record<string, Comp> = {
   "command-center": CommandCenter,
   "alerts": Alerts,
   "observability": ObservabilityPremium,
+  "soc": SOCPremium,
+  "fraud": FraudPremium,
+  "forensics": ForensicsPremium,
   "geo-monitoring": GeoMonitoring,
   "noc": NOC,
   "backup": Backup,
   "licenses": Licenses,
-  "mdm": MDM,
-  "remote-access": RemoteAccess,
+  "mdm": MDMPremium,
+  "remote-access": RemoteAccessPremium,
   "infra": InfraPremium,
   "cloud": CloudOps,
   "printing": Printing,
   "os-control": OSControl,
-  "iam": IAM,
-  "user-roles": UserRoles,
-  "soc": SOC,
-  "fraud": Fraud,
-  "forensics": Forensics,
-  "biometric": Biometric,
+  "iam": IAMPremium,
+  "user-roles": UserRolesPremium,
+  "biometric": BiometricPremium,
   "crm": CRM,
   "sales-pipeline": SalesPipeline,
   "billing": Billing,
