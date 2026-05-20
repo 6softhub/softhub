@@ -82,8 +82,14 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
       </button>
       <div className="flex items-center gap-2 text-xs text-muted-foreground min-w-0">
         <Link to="/" className="hover:text-foreground">Nexus</Link>
+        {groupCrumb && (
+          <>
+            <Icons.ChevronRight className="w-3 h-3" />
+            <span className="truncate hidden sm:inline">{groupCrumb}</span>
+          </>
+        )}
         <Icons.ChevronRight className="w-3 h-3" />
-        <span className="text-foreground truncate capitalize">{crumb}</span>
+        <span className="text-foreground truncate font-medium">{crumb}</span>
       </div>
       <div className="ml-auto flex items-center gap-2">
         <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] text-muted-foreground px-2 py-1 rounded-md bg-muted border border-border">
