@@ -7,6 +7,7 @@ import * as Icons from "lucide-react";
 import appCss from "../styles.css?url";
 import { AppSidebar } from "@/components/AppSidebar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { DASHBOARDS } from "@/data/dashboards";
 
 function NotFoundComponent() {
   return (
