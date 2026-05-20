@@ -7,6 +7,7 @@ import * as Icons from "lucide-react";
 import appCss from "../styles.css?url";
 import { AppSidebar } from "@/components/AppSidebar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { DASHBOARDS } from "@/data/dashboards";
 
 function NotFoundComponent() {
   return (
@@ -58,7 +59,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function Topbar({ onMenu }: { onMenu: () => void }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
-  const crumb = path === "/" ? "Master Grid" : path.startsWith("/d/") ? "Module" : path.slice(1);
+  let crumb: string;
+  let groupCrumb: string | null = null;
+  if (path === "/") {
+    crumb = "Master Grid";
+  } else if (path.startsWith("/d/")) {
+    const slug = path.slice(3);
+    const d = DASHBOARDS.find((x) => x.slug === slug);
+    crumb = d?.title ?? "Module";
+    groupCrumb = d?.category ?? null;
+  } else {
+    crumb = path.slice(1);
+  }
   return (
     <header className="sticky top-0 z-30 h-14 flex items-center gap-3 px-4 border-b border-border bg-background/80 backdrop-blur-md">
       <button
@@ -70,8 +82,14 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
       </button>
       <div className="flex items-center gap-2 text-xs text-muted-foreground min-w-0">
         <Link to="/" className="hover:text-foreground">Nexus</Link>
+        {groupCrumb && (
+          <>
+            <Icons.ChevronRight className="w-3 h-3" />
+            <span className="truncate hidden sm:inline">{groupCrumb}</span>
+          </>
+        )}
         <Icons.ChevronRight className="w-3 h-3" />
-        <span className="text-foreground truncate capitalize">{crumb}</span>
+        <span className="text-foreground truncate font-medium">{crumb}</span>
       </div>
       <div className="ml-auto flex items-center gap-2">
         <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] text-muted-foreground px-2 py-1 rounded-md bg-muted border border-border">
