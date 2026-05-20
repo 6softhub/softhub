@@ -58,7 +58,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function Topbar({ onMenu }: { onMenu: () => void }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
-  const crumb = path === "/" ? "Master Grid" : path.startsWith("/d/") ? "Module" : path.slice(1);
+  let crumb: string;
+  let groupCrumb: string | null = null;
+  if (path === "/") {
+    crumb = "Master Grid";
+  } else if (path.startsWith("/d/")) {
+    const slug = path.slice(3);
+    const d = DASHBOARDS.find((x) => x.slug === slug);
+    crumb = d?.title ?? "Module";
+    groupCrumb = d?.category ?? null;
+  } else {
+    crumb = path.slice(1);
+  }
   return (
     <header className="sticky top-0 z-30 h-14 flex items-center gap-3 px-4 border-b border-border bg-background/80 backdrop-blur-md">
       <button
