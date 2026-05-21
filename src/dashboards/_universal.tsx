@@ -27,7 +27,7 @@ export function ChartCard({
   title?: ReactNode; subtitle?: ReactNode; toolbar?: ReactNode;
   children: ReactNode; className?: string; span?: number;
 }) {
-  const colSpan = span ? `col-span-12 lg:col-span-${span}` : "";
+  const colSpan = span ? `col-span-12 lg:col-span-${span}` : "col-span-12";
   return (
     <section className={`glass rounded-xl p-4 card-hover animate-fade-up ${colSpan} ${className}`}>
       {(title || toolbar) && (
