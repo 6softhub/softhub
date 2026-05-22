@@ -67,7 +67,11 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
     const slug = path.slice(3);
     const d = DASHBOARDS.find((x) => x.slug === slug);
     crumb = d?.title ?? "Module";
-    groupCrumb = d?.category ?? null;
+    const group09 = new Set([
+      "soc", "fraud", "forensics", "iam",
+      "user-roles", "biometric", "mdm", "remote-access",
+    ]);
+    groupCrumb = group09.has(slug) ? "09 · Security + Risk" : (d?.category ?? null);
   } else {
     crumb = path.slice(1);
   }
