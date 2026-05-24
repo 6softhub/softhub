@@ -24,7 +24,6 @@ export function Leads({ d }: { d: DashSpec }) {
   const { tab, setTab } = useTabs<"inbox" | "sequences" | "enrichment" | "scoring" | "abm">("inbox");
   return (
     <Shell d={d}>
-      <KpiRow d={d} />
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <FilterBar value={s.filter} onChange={s.setFilter} placeholder="Search leads, accounts, domains…" />
         <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
@@ -156,7 +155,6 @@ export function DocumentFactory({ d }: { d: DashSpec }) {
   const { tab, setTab } = useTabs<"templates" | "generate" | "sign" | "archive" | "workflows">("templates");
   return (
     <Shell d={d}>
-      <KpiRow d={d} />
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <FilterBar value={s.filter} onChange={s.setFilter} placeholder="Search templates, envelopes, signers…" />
         <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
@@ -254,7 +252,6 @@ export function DisasterRecovery({ d }: { d: DashSpec }) {
   const { tab, setTab } = useTabs<"sites" | "failovers" | "tests" | "runbooks" | "replication">("sites");
   return (
     <Shell d={d}>
-      <KpiRow d={d} />
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <FilterBar value={s.filter} onChange={s.setFilter} placeholder="Filter sites, regions, workloads…" />
         <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
@@ -344,7 +341,6 @@ export function Compliance({ d }: { d: DashSpec }) {
   const { tab, setTab } = useTabs<"frameworks" | "controls" | "evidence" | "audits" | "vendors">("frameworks");
   return (
     <Shell d={d}>
-      <KpiRow d={d} />
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <FilterBar value={s.filter} onChange={s.setFilter} placeholder="Search controls, evidence, vendors…" />
         <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
@@ -441,7 +437,6 @@ export function Revenue({ d }: { d: DashSpec }) {
   const { tab, setTab } = useTabs<"revenue" | "cohorts" | "forecast" | "recognition" | "expansion">("revenue");
   return (
     <Shell d={d}>
-      <KpiRow d={d} />
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <FilterBar value={s.filter} onChange={s.setFilter} placeholder="Filter segment, plan, region…" />
         <DashboardToolbar range={s.range} onRangeChange={s.setRange} live={s.live} onLiveToggle={s.setLive}
