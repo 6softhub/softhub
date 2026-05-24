@@ -229,10 +229,57 @@ export function DashboardToolbar({
   );
 }
 
+/* ---------- TabBar: horizontal pill tabs, scrollable on mobile ---------- */
+export function TabBar<T extends string>({
+  tabs, value, onChange, right,
+}: {
+  tabs: { id: T; label: string; icon?: keyof typeof Icons; badge?: string | number }[];
+  value: T;
+  onChange: (id: T) => void;
+  right?: ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-2 border-b border-border -mx-1 px-1 overflow-x-auto">
+      <div role="tablist" className="flex items-center gap-1 min-w-0">
+        {tabs.map((t) => {
+          const Icon = t.icon ? (Icons as never as Record<string, Icons.LucideIcon>)[t.icon] : null;
+          const active = value === t.id;
+          return (
+            <button
+              key={t.id}
+              role="tab"
+              aria-selected={active}
+              onClick={() => onChange(t.id)}
+              className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors focus-ring ${
+                active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {Icon && <Icon className="w-3.5 h-3.5" />}
+              {t.label}
+              {t.badge !== undefined && (
+                <span className={`ml-1 px-1.5 rounded-full text-[10px] tabular-nums ${active ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}>
+                  {t.badge}
+                </span>
+              )}
+              {active && <span className="absolute left-2 right-2 -bottom-px h-0.5 bg-primary rounded-full" />}
+            </button>
+          );
+        })}
+      </div>
+      {right && <div className="ml-auto shrink-0">{right}</div>}
+    </div>
+  );
+}
+
 /* ---------- useToggle helper ---------- */
 export function useDashboardState(defaultRange: Range = "24h") {
   const [range, setRange] = useState<Range>(defaultRange);
   const [filter, setFilter] = useState("");
   const [live, setLive] = useState(true);
   return { range, setRange, filter, setFilter, live, setLive };
+}
+
+export function useTabs<T extends string>(initial: T) {
+  const [tab, setTab] = useState<T>(initial);
+  return { tab, setTab };
 }
