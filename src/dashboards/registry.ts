@@ -80,6 +80,8 @@ export const REGISTRY: Record<string, Comp> = {
   "supply-chain": SupplyChain, "procurement": Procurement,
   "social": SocialPremium, "marketing": MarketingPremium, "seo": SEOPremium,
   "analytics": AnalyticsPremium, "reporting": ReportingPremium,
+  "leads": Leads, "document-factory": DocumentFactory,
+  "disaster-recovery": DisasterRecovery, "compliance": Compliance, "revenue": Revenue,
   "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
   "satellite": Satellite, "robotics": Robotics,
   "healthcare": Healthcare, "education": Education, "legal": Legal,
