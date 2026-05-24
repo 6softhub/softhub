@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { DashSpec } from "@/data/dashboards";
-import { Shell, KpiRow, Pill, Bars, Donut, Heatmap, DataTable, Timeline, LineSeries, Terminal, Spark } from "./_primitives";
+import { Shell, Pill, Bars, Donut, Heatmap, DataTable, Timeline, LineSeries, Terminal, Spark } from "./_primitives";
 import {
   ChartCard, AIInsights, DashboardToolbar, FilterBar, QuickActions, TabBar,
   useDashboardState, useTabs, EmptyState,
