@@ -20,6 +20,7 @@ import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-par
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
 import { AnalyticsPremium, ReportingPremium, SEOPremium, SocialPremium, MarketingPremium, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
 import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium, UserRolesPremium, BiometricPremium, MDMPremium, RemoteAccessPremium } from "./category-09-security";
+import { Leads, DocumentFactory, DisasterRecovery, Compliance, Revenue } from "./category-missing";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
@@ -79,6 +80,8 @@ export const REGISTRY: Record<string, Comp> = {
   "supply-chain": SupplyChain, "procurement": Procurement,
   "social": SocialPremium, "marketing": MarketingPremium, "seo": SEOPremium,
   "analytics": AnalyticsPremium, "reporting": ReportingPremium,
+  "leads": Leads, "document-factory": DocumentFactory,
+  "disaster-recovery": DisasterRecovery, "compliance": Compliance, "revenue": Revenue,
   "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
   "satellite": Satellite, "robotics": Robotics,
   "healthcare": Healthcare, "education": Education, "legal": Legal,
