@@ -83,11 +83,12 @@ export function Spark({ seed = 1, color = "currentColor", height = 32, smooth = 
 
 export function Bars({ seed = 1, n = 24, color = "currentColor", height = 96 }: { seed?: number; n?: number; color?: string; height?: number }) {
   const r = rng(seed);
+  const fade = `color-mix(in oklab, ${color} 33%, transparent)`;
   return (
     <div className="flex items-end gap-1" style={{ height }}>
       {Array.from({ length: n }).map((_, i) => {
         const h = 20 + r() * 80;
-        return <div key={i} className="flex-1 rounded-t" style={{ height: `${h}%`, background: `linear-gradient(to top, ${color}55, ${color})` }} />;
+        return <div key={i} className="flex-1 rounded-t" style={{ height: `${h}%`, background: `linear-gradient(to top, ${fade}, ${color})` }} />;
       })}
     </div>
   );
