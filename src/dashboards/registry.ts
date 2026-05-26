@@ -20,7 +20,8 @@ import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Dow
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
 import { AnalyticsPremium, ReportingPremium, SEOPremium, SocialPremium, MarketingPremium, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
-import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium, UserRolesPremium, BiometricPremium, MDMPremium, RemoteAccessPremium } from "./category-09-security";
+import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium as _IP, UserRolesPremium as _URP, BiometricPremium as _BP, MDMPremium as _MP, RemoteAccessPremium as _RAP } from "./category-09-security";
+void [_IP, _URP, _BP, _MP, _RAP];
 import { Leads, DocumentFactory, DisasterRecovery, Compliance, Revenue } from "./category-missing";
 
 type Comp = ComponentType<{ d: DashSpec }>;
