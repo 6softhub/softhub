@@ -4,9 +4,10 @@ import { DashboardView } from "@/components/DashboardView";
 
 import { Alerts, Observability, GeoMonitoring, NOC, Backup, Licenses, Infra, CloudOps, Printing } from "./operations";
 import { CommandCenter } from "./command-center";
-import { IAM as _IAM, UserRoles as _UserRoles, Biometric as _Biometric, MDM as _MDM, RemoteAccess as _RemoteAccess } from "./category-02-identity";
+import { IAM as _IAMlegacy, UserRoles as _URlegacy, Biometric as _Biolegacy, MDM as _MDMlegacy, RemoteAccess as _RAlegacy } from "./category-02-identity";
 import { SOC as _SOC, Fraud as _Fraud, Forensics as _Forensics } from "./security";
-void [_IAM, _UserRoles, _Biometric, _MDM, _RemoteAccess, _SOC, _Fraud, _Forensics];
+import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-identity-premium";
+void [_IAMlegacy, _URlegacy, _Biolegacy, _MDMlegacy, _RAlegacy, _SOC, _Fraud, _Forensics];
 import { Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
 import { Comms, VoiceAI, Gamification } from "./customer";
 import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue";
