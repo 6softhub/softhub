@@ -10,7 +10,9 @@ import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-iden
 void [_IAMlegacy, _URlegacy, _Biolegacy, _MDMlegacy, _RAlegacy, _SOC, _Fraud, _Forensics];
 import { Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
 import { Comms, VoiceAI, Gamification } from "./customer";
-import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue";
+import { CRM as _CRMlegacy, SalesPipeline as _SPlegacy, Billing as _Blegacy, Support as _Suplegacy, CustomerSuccess as _CSlegacy, Onboarding as _Onblegacy } from "./category-03-revenue";
+import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue-premium";
+void [_CRMlegacy, _SPlegacy, _Blegacy, _Suplegacy, _CSlegacy, _Onblegacy];
 import { HR, Payroll } from "./people";
 import { Projects, Workflows, Knowledge, Files, BrowserWS, DesignSystem, Broadcast } from "./workspace";
 import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
