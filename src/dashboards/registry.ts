@@ -19,7 +19,11 @@ import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Gove
 import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwin, KnowledgeGraph } from "./category-01-core";
 import { ValaAI as _ValaLegacy, AIApi as _ApiLegacy, AIRecovery as _RecLegacy, AIIntelligence as _IntelLegacy } from "./category-04-ai";
 import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai-premium";
-void [_ValaLegacy, _ApiLegacy, _RecLegacy, _IntelLegacy];
+import { Comms as _CommsLegacy } from "./customer";
+import { Alerts as _AlertsLegacy } from "./operations";
+import { Knowledge as _KnowLegacy, Files as _FilesLegacy, Broadcast as _BcastLegacy } from "./workspace";
+import { Comms, Alerts, Knowledge, Files, Broadcast } from "./category-04-comms-premium";
+void [_ValaLegacy, _ApiLegacy, _RecLegacy, _IntelLegacy, _CommsLegacy, _AlertsLegacy, _KnowLegacy, _FilesLegacy, _BcastLegacy];
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
