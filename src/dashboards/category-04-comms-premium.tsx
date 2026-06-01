@@ -677,7 +677,7 @@ export function Broadcast({ d }: { d: DashSpec }) {
           </ChartCard>
           <div className="col-span-12 lg:col-span-4 space-y-4">
             <ChartCard title="Status Page">
-              {[["API","success"],["Web App","success"],["Webhooks","warning"],["Analytics","success"],["Search","info"]].map(([s,t],i)=>(
+              {([["API","success"],["Web App","success"],["Webhooks","warning"],["Analytics","success"],["Search","info"]] as const).map(([s,t],i)=>(
                 <div key={i} className="flex items-center justify-between py-1.5 border-b border-border last:border-0">
                   <div className="flex items-center gap-2"><StatusDot tone={t as never}/><span className="text-xs">{s}</span></div>
                   <span className="text-[10px] text-muted-foreground">{t==="success"?"operational":t==="warning"?"degraded":"investigating"}</span>
