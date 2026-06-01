@@ -419,7 +419,7 @@ export function Knowledge({ d }: { d: DashSpec }) {
           {spaces.map((sp,i)=>(
             <div key={i} className="col-span-12 md:col-span-6 xl:col-span-4 glass rounded-xl p-4 card-hover">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2"><StatusDot tone={sp.tone}/><span className="text-sm font-semibold">{sp.name}</span></div>
+                <div className="flex items-center gap-2"><StatusDot tone={(sp.tone === "accent" ? "info" : sp.tone) as never}/><span className="text-sm font-semibold">{sp.name}</span></div>
                 <Pill tone="muted">{sp.pages} pages</Pill>
               </div>
               <div className="mt-3 text-[11px] text-muted-foreground">Owner: @{sp.owner}</div>
