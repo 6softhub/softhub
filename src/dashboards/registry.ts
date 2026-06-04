@@ -15,7 +15,8 @@ import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } fro
 void [_CRMlegacy, _SPlegacy, _Blegacy, _Suplegacy, _CSlegacy, _Onblegacy];
 import { HR, Payroll } from "./people";
 import { Projects, Workflows, Knowledge as _KnowLegacy, Files as _FilesLegacy, BrowserWS, DesignSystem, Broadcast as _BcastLegacy } from "./workspace";
-import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
+import { Analytics as _AnalyticsLegacy, Reporting as _ReportingLegacy, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Franchise, Inventory, SupplyChain, Procurement, Social as _SocialLegacy, Marketing as _MarketingLegacy, SEO as _SEOLegacy, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
+void [_AnalyticsLegacy, _ReportingLegacy, _SocialLegacy, _MarketingLegacy, _SEOLegacy];
 import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwin, KnowledgeGraph } from "./category-01-core";
 import { ValaAI as _ValaLegacy, AIApi as _ApiLegacy, AIRecovery as _RecLegacy, AIIntelligence as _IntelLegacy } from "./category-04-ai";
 import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai-premium";
