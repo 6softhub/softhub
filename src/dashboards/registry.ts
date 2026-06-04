@@ -24,7 +24,9 @@ void [_ValaLegacy, _ApiLegacy, _RecLegacy, _IntelLegacy, _CommsLegacy, _AlertsLe
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
-import { AnalyticsPremium, ReportingPremium, SEOPremium, SocialPremium, MarketingPremium, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
+import { AnalyticsPremium as _AP, ReportingPremium as _RP, SEOPremium as _SP, SocialPremium as _SoP, MarketingPremium as _MP2, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
+import { Analytics, Reporting, SEO, Marketing, Social } from "./category-05-analytics-premium";
+void [_AP, _RP, _SP, _SoP, _MP2];
 import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium as _IP, UserRolesPremium as _URP, BiometricPremium as _BP, MDMPremium as _MP, RemoteAccessPremium as _RAP } from "./category-09-security";
 void [_IP, _URP, _BP, _MP, _RAP];
 import { Leads, DocumentFactory, DisasterRecovery, Compliance, Revenue } from "./category-missing";
