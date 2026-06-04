@@ -15,7 +15,8 @@ import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } fro
 void [_CRMlegacy, _SPlegacy, _Blegacy, _Suplegacy, _CSlegacy, _Onblegacy];
 import { HR, Payroll } from "./people";
 import { Projects, Workflows, Knowledge as _KnowLegacy, Files as _FilesLegacy, BrowserWS, DesignSystem, Broadcast as _BcastLegacy } from "./workspace";
-import { Analytics, Reporting, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Franchise, Inventory, SupplyChain, Procurement, Social, Marketing, SEO, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
+import { Analytics as _AnalyticsLegacy, Reporting as _ReportingLegacy, DevOps, Repos, APIHub, AppBuilder, DataLake, Governance, Franchise, Inventory, SupplyChain, Procurement, Social as _SocialLegacy, Marketing as _MarketingLegacy, SEO as _SEOLegacy, IoTDrones, SmartCity, Energy, Satellite, Robotics, Healthcare, Education, Legal, Quantum, Sandbox, Metaverse, Blockchain } from "./extras";
+void [_AnalyticsLegacy, _ReportingLegacy, _SocialLegacy, _MarketingLegacy, _SEOLegacy];
 import { WarRoom, MasterControl, AICopilot, OSControl, SearchPalette, DigitalTwin, KnowledgeGraph } from "./category-01-core";
 import { ValaAI as _ValaLegacy, AIApi as _ApiLegacy, AIRecovery as _RecLegacy, AIIntelligence as _IntelLegacy } from "./category-04-ai";
 import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai-premium";
@@ -24,7 +25,9 @@ void [_ValaLegacy, _ApiLegacy, _RecLegacy, _IntelLegacy, _CommsLegacy, _AlertsLe
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
 import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
-import { AnalyticsPremium, ReportingPremium, SEOPremium, SocialPremium, MarketingPremium, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
+import { AnalyticsPremium as _AP, ReportingPremium as _RP, SEOPremium as _SP, SocialPremium as _SoP, MarketingPremium as _MP2, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
+import { Analytics, Reporting, SEO, Marketing, Social } from "./category-05-analytics-premium";
+void [_AP, _RP, _SP, _SoP, _MP2];
 import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium as _IP, UserRolesPremium as _URP, BiometricPremium as _BP, MDMPremium as _MP, RemoteAccessPremium as _RAP } from "./category-09-security";
 void [_IP, _URP, _BP, _MP, _RAP];
 import { Leads, DocumentFactory, DisasterRecovery, Compliance, Revenue } from "./category-missing";
@@ -85,8 +88,8 @@ export const REGISTRY: Record<string, Comp> = {
   "product-manager": ProductManager, "gallery": Gallery, "reviews": Reviews,
   "subscriptions-system": SubscriptionsSystem, "downloads": Downloads, "activation": Activation,
   "supply-chain": SupplyChain, "procurement": Procurement,
-  "social": SocialPremium, "marketing": MarketingPremium, "seo": SEOPremium,
-  "analytics": AnalyticsPremium, "reporting": ReportingPremium,
+  "social": Social, "marketing": Marketing, "seo": SEO,
+  "analytics": Analytics, "reporting": Reporting,
   "leads": Leads, "document-factory": DocumentFactory,
   "disaster-recovery": DisasterRecovery, "compliance": Compliance, "revenue": Revenue,
   "iot-drones": IoTDrones, "smart-city": SmartCity, "energy": Energy,
