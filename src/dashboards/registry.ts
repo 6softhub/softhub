@@ -9,7 +9,8 @@ import { SOC as _SOC, Fraud as _Fraud, Forensics as _Forensics } from "./securit
 import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-identity-premium";
 void [_IAMlegacy, _URlegacy, _Biolegacy, _MDMlegacy, _RAlegacy, _SOC, _Fraud, _Forensics];
 import { Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
-import { Comms as _CommsLegacy, VoiceAI, Gamification } from "./customer";
+import { Comms as _CommsLegacy, VoiceAI, Gamification as _GamiLegacy } from "./customer";
+void _GamiLegacy;
 import { CRM as _CRMlegacy, SalesPipeline as _SPlegacy, Billing as _Blegacy, Support as _Suplegacy, CustomerSuccess as _CSlegacy, Onboarding as _Onblegacy } from "./category-03-revenue";
 import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue-premium";
 void [_CRMlegacy, _SPlegacy, _Blegacy, _Suplegacy, _CSlegacy, _Onblegacy];
@@ -31,6 +32,7 @@ void [_AP, _RP, _SP, _SoP, _MP2];
 import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium as _IP, UserRolesPremium as _URP, BiometricPremium as _BP, MDMPremium as _MP, RemoteAccessPremium as _RAP } from "./category-09-security";
 void [_IP, _URP, _BP, _MP, _RAP];
 import { Leads, DocumentFactory, DisasterRecovery, Compliance, Revenue } from "./category-missing";
+import { Achievements } from "./category-10-achievements-premium";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
@@ -64,7 +66,8 @@ export const REGISTRY: Record<string, Comp> = {
   "support": Support,
   "comms": Comms,
   "voice-ai": VoiceAI,
-  "gamification": Gamification,
+  "gamification": Achievements,
+  "achievements": Achievements,
   "customer-success": CustomerSuccess,
   "onboarding": Onboarding,
   "hr": HR,
