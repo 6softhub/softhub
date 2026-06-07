@@ -9,7 +9,8 @@ import { SOC as _SOC, Fraud as _Fraud, Forensics as _Forensics } from "./securit
 import { IAM, UserRoles, Biometric, MDM, RemoteAccess } from "./category-02-identity-premium";
 void [_IAMlegacy, _URlegacy, _Biolegacy, _MDMlegacy, _RAlegacy, _SOC, _Fraud, _Forensics];
 import { Payments, Accounting, Subscriptions, MarketIntel } from "./revenue";
-import { Comms as _CommsLegacy, VoiceAI, Gamification } from "./customer";
+import { Comms as _CommsLegacy, VoiceAI, Gamification as _GamiLegacy } from "./customer";
+void _GamiLegacy;
 import { CRM as _CRMlegacy, SalesPipeline as _SPlegacy, Billing as _Blegacy, Support as _Suplegacy, CustomerSuccess as _CSlegacy, Onboarding as _Onblegacy } from "./category-03-revenue";
 import { CRM, SalesPipeline, Billing, Support, CustomerSuccess, Onboarding } from "./category-03-revenue-premium";
 void [_CRMlegacy, _SPlegacy, _Blegacy, _Suplegacy, _CSlegacy, _Onblegacy];
