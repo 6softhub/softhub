@@ -31,6 +31,7 @@ void [_AP, _RP, _SP, _SoP, _MP2];
 import { SOCPremium, FraudPremium, ForensicsPremium, IAMPremium as _IP, UserRolesPremium as _URP, BiometricPremium as _BP, MDMPremium as _MP, RemoteAccessPremium as _RAP } from "./category-09-security";
 void [_IP, _URP, _BP, _MP, _RAP];
 import { Leads, DocumentFactory, DisasterRecovery, Compliance, Revenue } from "./category-missing";
+import { Achievements } from "./category-10-achievements-premium";
 
 type Comp = ComponentType<{ d: DashSpec }>;
 
