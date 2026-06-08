@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
 import {
-  Pill, Donut, Bars, LineSeries, Heatmap, Spark,
+  Pill, Bars, LineSeries, Heatmap, Spark,
   DataTable, ProgressBar, Avatar, StatusDot, WorldMap, Timeline,
 } from "./_primitives";
 import {
@@ -119,8 +119,248 @@ type Tab =
   | "badges-rewards"
   | "certificates"
   | "leaderboards"
+  | "hall-of-fame"
   | "challenges-missions"
   | "engine";
+
+/* ---------- Tab: Hall of Fame (11, 24) ---------- */
+const HOF_CATS = [
+  "Top Developers", "Top Vendors", "Top Resellers", "Top Franchises",
+  "Top Customers", "Top Territories", "Top Revenue",
+] as const;
+type HofCat = typeof HOF_CATS[number];
+
+const HOF_RANKS = ["All Ranks", "Champion", "Diamond", "Platinum", "Gold", "Silver"] as const;
+type HofRank = typeof HOF_RANKS[number];
+
+const HOF_DATA: Record<HofCat, { n: string; meta: string; v: string; rank: HofRank; delta: string; icon: string; region: string }[]> = {
+  "Top Developers": [
+    { n: "Sofia Garcia", meta: "Core Platform · Madrid", v: "1.24M XP", rank: "Champion", delta: "+12.4%", icon: "Code2", region: "EU" },
+    { n: "Mateo Rossi", meta: "AI Infra · Milan", v: "984k XP", rank: "Diamond", delta: "+8.1%", icon: "Code2", region: "EU" },
+    { n: "Yuki Sato", meta: "Payments · Tokyo", v: "812k XP", rank: "Diamond", delta: "+5.6%", icon: "Code2", region: "APAC" },
+    { n: "Noah Becker", meta: "Security · Berlin", v: "742k XP", rank: "Platinum", delta: "+4.2%", icon: "Code2", region: "EU" },
+    { n: "Linh Pham", meta: "Mobile · Saigon", v: "648k XP", rank: "Platinum", delta: "+9.3%", icon: "Code2", region: "APAC" },
+    { n: "Ravi Kumar", meta: "Data · Bengaluru", v: "612k XP", rank: "Gold", delta: "+3.1%", icon: "Code2", region: "APAC" },
+  ],
+  "Top Vendors": [
+    { n: "Kenji Tanaka", meta: "Vala Studio · Osaka", v: "$48.2M GMV", rank: "Champion", delta: "+22.8%", icon: "Store", region: "APAC" },
+    { n: "Amara Okafor", meta: "Aurora Goods · Lagos", v: "$31.4M GMV", rank: "Diamond", delta: "+18.2%", icon: "Store", region: "AFR" },
+    { n: "Lucia Romano", meta: "Tessera · Rome", v: "$24.8M GMV", rank: "Diamond", delta: "+12.0%", icon: "Store", region: "EU" },
+    { n: "Jin Park", meta: "Hanok Mart · Seoul", v: "$19.2M GMV", rank: "Platinum", delta: "+9.8%", icon: "Store", region: "APAC" },
+    { n: "Diego Alvarez", meta: "Andes Co. · Lima", v: "$14.6M GMV", rank: "Gold", delta: "+6.4%", icon: "Store", region: "LATAM" },
+  ],
+  "Top Resellers": [
+    { n: "Aarav Mehta", meta: "Mehta Partners · Mumbai", v: "$28.4M rev", rank: "Champion", delta: "+34.1%", icon: "Briefcase", region: "APAC" },
+    { n: "Olivia Brown", meta: "Northwind · London", v: "$22.1M rev", rank: "Diamond", delta: "+19.4%", icon: "Briefcase", region: "EU" },
+    { n: "Chen Wei", meta: "Pacific Link · Shanghai", v: "$18.9M rev", rank: "Diamond", delta: "+15.0%", icon: "Briefcase", region: "APAC" },
+    { n: "Hannah Klein", meta: "Vossberg · Munich", v: "$12.6M rev", rank: "Platinum", delta: "+8.2%", icon: "Briefcase", region: "EU" },
+    { n: "Marco Silva", meta: "Atlantica · Lisbon", v: "$9.4M rev", rank: "Gold", delta: "+5.7%", icon: "Briefcase", region: "EU" },
+  ],
+  "Top Franchises": [
+    { n: "Lagos Hub", meta: "West Africa Region", v: "+218% growth", rank: "Champion", delta: "+218%", icon: "Building2", region: "AFR" },
+    { n: "Mumbai Central", meta: "South Asia Region", v: "+184% growth", rank: "Diamond", delta: "+184%", icon: "Building2", region: "APAC" },
+    { n: "São Paulo Sur", meta: "LATAM Region", v: "+142% growth", rank: "Diamond", delta: "+142%", icon: "Building2", region: "LATAM" },
+    { n: "Berlin Mitte", meta: "EU Region", v: "+108% growth", rank: "Platinum", delta: "+108%", icon: "Building2", region: "EU" },
+    { n: "Dubai Marina", meta: "MENA Region", v: "+96% growth", rank: "Gold", delta: "+96%", icon: "Building2", region: "MENA" },
+  ],
+  "Top Customers": [
+    { n: "Priya Shah", meta: "Vala+ · Member since 2021", v: "412 referrals", rank: "Champion", delta: "+62", icon: "User", region: "APAC" },
+    { n: "Daniel Müller", meta: "Vala+ · Berlin", v: "318 referrals", rank: "Diamond", delta: "+44", icon: "User", region: "EU" },
+    { n: "Aisha Karim", meta: "Vala · Dubai", v: "264 referrals", rank: "Diamond", delta: "+38", icon: "User", region: "MENA" },
+    { n: "Camille Dubois", meta: "Vala · Paris", v: "198 referrals", rank: "Platinum", delta: "+22", icon: "User", region: "EU" },
+    { n: "Tom Wilson", meta: "Vala · Sydney", v: "146 referrals", rank: "Gold", delta: "+18", icon: "User", region: "APAC" },
+  ],
+  "Top Territories": [
+    { n: "Bangalore Tech Corridor", meta: "IN · APAC", v: "$84.2M rev", rank: "Champion", delta: "+28%", icon: "MapPin", region: "APAC" },
+    { n: "Greater Tokyo", meta: "JP · APAC", v: "$72.8M rev", rank: "Diamond", delta: "+18%", icon: "MapPin", region: "APAC" },
+    { n: "Rhine-Ruhr", meta: "DE · EU", v: "$58.4M rev", rank: "Diamond", delta: "+14%", icon: "MapPin", region: "EU" },
+    { n: "Bay Area", meta: "US · NA", v: "$52.1M rev", rank: "Platinum", delta: "+11%", icon: "MapPin", region: "NA" },
+    { n: "Greater São Paulo", meta: "BR · LATAM", v: "$38.6M rev", rank: "Gold", delta: "+9%", icon: "MapPin", region: "LATAM" },
+  ],
+  "Top Revenue": [
+    { n: "Aarav Mehta", meta: "Reseller · Mumbai", v: "$28.4M", rank: "Champion", delta: "+34%", icon: "TrendingUp", region: "APAC" },
+    { n: "Kenji Tanaka", meta: "Vendor · Osaka", v: "$48.2M", rank: "Champion", delta: "+22%", icon: "TrendingUp", region: "APAC" },
+    { n: "Lagos Hub", meta: "Franchise · NG", v: "$36.8M", rank: "Diamond", delta: "+218%", icon: "TrendingUp", region: "AFR" },
+    { n: "Amara Okafor", meta: "Vendor · Lagos", v: "$31.4M", rank: "Diamond", delta: "+18%", icon: "TrendingUp", region: "AFR" },
+    { n: "Olivia Brown", meta: "Reseller · London", v: "$22.1M", rank: "Diamond", delta: "+19%", icon: "TrendingUp", region: "EU" },
+  ],
+};
+
+function TabHallOfFame({ filter }: { filter: string }) {
+  const [cat, setCat] = useState<HofCat>("Top Developers");
+  const [rank, setRank] = useState<HofRank>("All Ranks");
+  const [region, setRegion] = useState<string>("All Regions");
+
+  const regions = ["All Regions", "APAC", "EU", "NA", "LATAM", "AFR", "MENA"];
+  const all = HOF_DATA[cat];
+  const f = filter.trim().toLowerCase();
+  const rows = all.filter((r) =>
+    (rank === "All Ranks" || r.rank === rank) &&
+    (region === "All Regions" || r.region === region) &&
+    (!f || r.n.toLowerCase().includes(f) || r.meta.toLowerCase().includes(f))
+  );
+
+  const podiumColors = ["from-warning/40 to-warning/5 border-warning/40", "from-muted to-transparent border-border", "from-accent/30 to-transparent border-accent/30"];
+  const medals = ["🥇", "🥈", "🥉"];
+
+  return (
+    <div className="space-y-4">
+      {/* Category strip */}
+      <div className="glass rounded-xl p-3 flex flex-wrap items-center gap-2">
+        <span className="text-[10px] uppercase tracking-widest text-muted-foreground mr-1">Category</span>
+        {HOF_CATS.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCat(c)}
+            className={`px-3 py-1.5 rounded-md text-[11px] border transition-colors ${cat === c ? "bg-primary/15 text-primary border-primary/40" : "bg-muted border-border text-muted-foreground hover:text-foreground"}`}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+
+      {/* Filters */}
+      <div className="glass rounded-xl p-3 flex flex-wrap items-center gap-3 text-[11px]">
+        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Filters</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-muted-foreground">Rank</span>
+          <select value={rank} onChange={(e) => setRank(e.target.value as HofRank)} className="bg-muted border border-border rounded-md px-2 py-1">
+            {HOF_RANKS.map((r) => <option key={r}>{r}</option>)}
+          </select>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-muted-foreground">Region</span>
+          <select value={region} onChange={(e) => setRegion(e.target.value)} className="bg-muted border border-border rounded-md px-2 py-1">
+            {regions.map((r) => <option key={r}>{r}</option>)}
+          </select>
+        </div>
+        <span className="ml-auto text-muted-foreground">{rows.length} of {all.length} legends shown</span>
+      </div>
+
+      {/* KPI strip for selected category */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { l: "Inductees", v: String(all.length), t: "info" },
+          { l: "Champions", v: String(all.filter((r) => r.rank === "Champion").length), t: "success" },
+          { l: "This Quarter", v: "+12", t: "success" },
+          { l: "Avg Δ", v: "+18.4%", t: "success" },
+        ].map((k, i) => (
+          <div key={i} className="glass rounded-xl p-3">
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{k.l}</div>
+            <div className="mt-1 text-xl font-semibold tabular-nums">{k.v}</div>
+            <Spark seed={i + 41} height={20} />
+          </div>
+        ))}
+      </div>
+
+      {/* Podium */}
+      {rows.length >= 3 && (
+        <div className={grid}>
+          {[1, 0, 2].map((podiumIdx, pos) => {
+            const r = rows[podiumIdx];
+            const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[r.icon] || Icons.Trophy;
+            const isFirst = podiumIdx === 0;
+            return (
+              <div key={pos} className={`col-span-12 md:col-span-4 ${isFirst ? "md:order-2" : pos === 0 ? "md:order-1" : "md:order-3"}`}>
+                <div className={`rounded-xl border bg-gradient-to-b ${podiumColors[podiumIdx]} p-5 text-center relative overflow-hidden ${isFirst ? "shadow-[0_0_32px_-12px_var(--color-warning)]" : ""}`}>
+                  <div className="text-3xl mb-2">{medals[podiumIdx]}</div>
+                  <div className="mx-auto w-14 h-14 rounded-full bg-card border border-border grid place-items-center mb-2">
+                    <Icon className="w-6 h-6 text-accent" />
+                  </div>
+                  <div className="text-sm font-semibold truncate">{r.n}</div>
+                  <div className="text-[10px] text-muted-foreground truncate">{r.meta}</div>
+                  <div className="mt-2 text-lg font-bold tabular-nums">{r.v}</div>
+                  <div className="mt-1 inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-card/60 border border-border">
+                    <Icons.Crown className="w-3 h-3 text-warning" /> {r.rank}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <div className={grid}>
+        <ChartCard
+          title={`Hall of Fame · ${cat}`}
+          subtitle={`Rank: ${rank} · Region: ${region}`}
+          className="col-span-12 lg:col-span-8"
+        >
+          {rows.length === 0 ? (
+            <EmptyState icon="Trophy" title="No legends match" hint="Adjust rank or region filters" />
+          ) : (
+            <DataTable
+              columns={["#", "Inductee", "Meta", "Score", "Rank", "Δ"]}
+              rows={rows.map((r, i) => [
+                String(i + 1),
+                r.n,
+                r.meta,
+                r.v,
+                r.rank,
+                r.delta,
+              ])}
+            />
+          )}
+        </ChartCard>
+
+        <ChartCard title="Rank Distribution" subtitle="across category" className="col-span-12 lg:col-span-4">
+          <div className="space-y-2">
+            {HOF_RANKS.slice(1).map((rk, i) => {
+              const count = all.filter((r) => r.rank === rk).length;
+              const pct = Math.round((count / Math.max(all.length, 1)) * 100);
+              const colors = ["var(--color-warning)", "var(--color-accent)", "var(--color-primary)", "var(--color-info)", "var(--color-success)"];
+              return (
+                <div key={rk} className="text-[11px]">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-muted-foreground">{rk}</span>
+                    <span className="tabular-nums">{count} · {pct}%</span>
+                  </div>
+                  <ProgressBar value={pct} color={colors[i]} />
+                </div>
+              );
+            })}
+          </div>
+        </ChartCard>
+
+        <ChartCard title="Recognition · Of The Month" subtitle="across categories" className="col-span-12 lg:col-span-6">
+          <ul className="space-y-2 text-xs">
+            {[
+              { r: "Developer", n: "Sofia Garcia", i: "Code2" },
+              { r: "Vendor", n: "Kenji Tanaka", i: "Store" },
+              { r: "Reseller", n: "Aarav Mehta", i: "Briefcase" },
+              { r: "Franchise", n: "Lagos Hub", i: "Building2" },
+              { r: "Customer", n: "Priya Shah", i: "User" },
+              { r: "Territory", n: "Bangalore Tech Corridor", i: "MapPin" },
+            ].map((x, i) => {
+              const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[x.i] || Icons.Star;
+              return (
+                <li key={i} className="flex items-center gap-2 rounded-md border border-border bg-card/40 p-2">
+                  <Icon className="w-4 h-4 text-accent" />
+                  <span className="flex-1 font-medium">{x.n}</span>
+                  <span className="text-[10px] text-muted-foreground">{x.r} of Month</span>
+                  <Icons.Medal className="w-4 h-4 text-warning" />
+                </li>
+              );
+            })}
+          </ul>
+        </ChartCard>
+
+        <ChartCard title="Induction Timeline" subtitle="recent legends" className="col-span-12 lg:col-span-6">
+          <Timeline
+            items={[
+              { time: "2h ago", title: `${rows[0]?.n ?? "—"} inducted`, meta: `${cat} · ${rows[0]?.rank ?? ""}`, tone: "success" },
+              { time: "Yesterday", title: "Lagos Hub crowned Champion Franchise", meta: "+218% YoY growth", tone: "success" },
+              { time: "2d ago", title: "Sofia Garcia reaches 1.24M XP", meta: "Top Developer · Champion", tone: "info" },
+              { time: "5d ago", title: "Bangalore Tech Corridor #1 Territory", meta: "$84.2M revenue", tone: "info" },
+              { time: "1w ago", title: "Priya Shah · 412 referrals", meta: "Top Customer · Champion", tone: "muted" },
+            ]}
+          />
+        </ChartCard>
+
+      </div>
+    </div>
+  );
+}
 
 /* ---------- Tab: Command (01, 16, 22) ---------- */
 function TabCommand() {
@@ -921,6 +1161,7 @@ export function Achievements({ d }: { d: DashSpec }) {
           { id: "badges-rewards", label: "Badges & Rewards", icon: "BadgeCheck" },
           { id: "certificates", label: "Certificates", icon: "Award", badge: 412 },
           { id: "leaderboards", label: "Leaderboards", icon: "BarChart3" },
+          { id: "hall-of-fame", label: "Hall of Fame", icon: "Trophy", badge: 7 },
           { id: "challenges-missions", label: "Challenges & Missions", icon: "Target", badge: 18 },
           { id: "engine", label: "Engine & AI", icon: "Cpu" },
         ]}
@@ -935,9 +1176,11 @@ export function Achievements({ d }: { d: DashSpec }) {
         {tab === "badges-rewards" && <TabBadgesRewards />}
         {tab === "certificates" && <TabCertificates />}
         {tab === "leaderboards" && <TabLeaderboards />}
+        {tab === "hall-of-fame" && <TabHallOfFame filter={s.filter} />}
         {tab === "challenges-missions" && <TabChallengesMissions />}
         {tab === "engine" && <TabEngine />}
       </div>
+
 
       <Modal
         open={createOpen}
