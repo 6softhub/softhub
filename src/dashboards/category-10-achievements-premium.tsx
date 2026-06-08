@@ -304,13 +304,22 @@ function TabHallOfFame({ filter }: { filter: string }) {
         </ChartCard>
 
         <ChartCard title="Rank Distribution" subtitle="across category" className="col-span-12 lg:col-span-4">
-          <Donut
-            data={HOF_RANKS.slice(1).map((rk, i) => ({
-              label: rk,
-              value: all.filter((r) => r.rank === rk).length || 1,
-              color: ["var(--color-warning)", "var(--color-accent)", "var(--color-primary)", "var(--color-info)", "var(--color-success)"][i],
-            }))}
-          />
+          <div className="space-y-2">
+            {HOF_RANKS.slice(1).map((rk, i) => {
+              const count = all.filter((r) => r.rank === rk).length;
+              const pct = Math.round((count / Math.max(all.length, 1)) * 100);
+              const colors = ["var(--color-warning)", "var(--color-accent)", "var(--color-primary)", "var(--color-info)", "var(--color-success)"];
+              return (
+                <div key={rk} className="text-[11px]">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-muted-foreground">{rk}</span>
+                    <span className="tabular-nums">{count} · {pct}%</span>
+                  </div>
+                  <ProgressBar value={pct} color={colors[i]} />
+                </div>
+              );
+            })}
+          </div>
         </ChartCard>
 
         <ChartCard title="Recognition · Of The Month" subtitle="across categories" className="col-span-12 lg:col-span-6">
@@ -339,14 +348,15 @@ function TabHallOfFame({ filter }: { filter: string }) {
         <ChartCard title="Induction Timeline" subtitle="recent legends" className="col-span-12 lg:col-span-6">
           <Timeline
             items={[
-              { time: "2h ago", title: `${rows[0]?.n ?? "—"} inducted`, desc: `${cat} · ${rows[0]?.rank ?? ""}` },
-              { time: "Yesterday", title: "Lagos Hub crowned Champion Franchise", desc: "+218% YoY growth" },
-              { time: "2d ago", title: "Sofia Garcia reaches 1.24M XP", desc: "Top Developer · Champion" },
-              { time: "5d ago", title: "Bangalore Tech Corridor #1 Territory", desc: "$84.2M revenue" },
-              { time: "1w ago", title: "Priya Shah · 412 referrals", desc: "Top Customer · Champion" },
+              { time: "2h ago", title: `${rows[0]?.n ?? "—"} inducted`, meta: `${cat} · ${rows[0]?.rank ?? ""}`, tone: "success" },
+              { time: "Yesterday", title: "Lagos Hub crowned Champion Franchise", meta: "+218% YoY growth", tone: "success" },
+              { time: "2d ago", title: "Sofia Garcia reaches 1.24M XP", meta: "Top Developer · Champion", tone: "info" },
+              { time: "5d ago", title: "Bangalore Tech Corridor #1 Territory", meta: "$84.2M revenue", tone: "info" },
+              { time: "1w ago", title: "Priya Shah · 412 referrals", meta: "Top Customer · Champion", tone: "muted" },
             ]}
           />
         </ChartCard>
+
       </div>
     </div>
   );
