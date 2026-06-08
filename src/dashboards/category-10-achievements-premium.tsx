@@ -1161,6 +1161,7 @@ export function Achievements({ d }: { d: DashSpec }) {
           { id: "badges-rewards", label: "Badges & Rewards", icon: "BadgeCheck" },
           { id: "certificates", label: "Certificates", icon: "Award", badge: 412 },
           { id: "leaderboards", label: "Leaderboards", icon: "BarChart3" },
+          { id: "hall-of-fame", label: "Hall of Fame", icon: "Trophy", badge: 7 },
           { id: "challenges-missions", label: "Challenges & Missions", icon: "Target", badge: 18 },
           { id: "engine", label: "Engine & AI", icon: "Cpu" },
         ]}
@@ -1175,9 +1176,11 @@ export function Achievements({ d }: { d: DashSpec }) {
         {tab === "badges-rewards" && <TabBadgesRewards />}
         {tab === "certificates" && <TabCertificates />}
         {tab === "leaderboards" && <TabLeaderboards />}
+        {tab === "hall-of-fame" && <TabHallOfFame filter={s.filter} />}
         {tab === "challenges-missions" && <TabChallengesMissions />}
         {tab === "engine" && <TabEngine />}
       </div>
+
 
       <Modal
         open={createOpen}
