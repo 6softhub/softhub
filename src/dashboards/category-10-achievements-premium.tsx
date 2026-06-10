@@ -687,9 +687,18 @@ function TabHallOfFame({ filter }: { filter: string }) {
               </span>
             )}
             {compareList.length > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-accent/15 text-accent border border-accent/30 inline-flex items-center gap-1">
+              <button
+                onClick={() => compareList.length >= 2 && setCompareOpen(true)}
+                className={`px-2 py-0.5 rounded-full border inline-flex items-center gap-1 text-[11px] transition-colors ${
+                  compareList.length >= 2
+                    ? "bg-accent/15 text-accent border-accent/30 hover:bg-accent/25"
+                    : "bg-muted text-muted-foreground border-border cursor-not-allowed"
+                }`}
+                disabled={compareList.length < 2}
+                title={compareList.length < 2 ? "Add at least 2 inductees to compare" : "Open compare view"}
+              >
                 <Icons.GitCompare className="w-3 h-3" /> {compareList.length} to compare
-              </span>
+              </button>
             )}
           </span>
         )}
