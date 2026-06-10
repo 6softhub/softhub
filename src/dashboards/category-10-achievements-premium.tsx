@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import * as Icons from "lucide-react";
 import type { DashSpec } from "@/data/dashboards";
 import {
@@ -186,10 +187,233 @@ const HOF_DATA: Record<HofCat, { n: string; meta: string; v: string; rank: HofRa
   ],
 };
 
+type HofRow = typeof HOF_DATA[HofCat][number] & { cat: HofCat };
+
+/* ---------- Inductee Detail Drawer ---------- */
+function InducteeDrawer({
+  inductee, open, onClose, followed, onToggleFollow, compareList, onToggleCompare,
+}: {
+  inductee: HofRow | null;
+  open: boolean;
+  onClose: () => void;
+  followed: Set<string>;
+  onToggleFollow: (name: string) => void;
+  compareList: string[];
+  onToggleCompare: (name: string) => void;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
+  }, [open, onClose]);
+
+  if (!open || !inductee || typeof document === "undefined") return null;
+  const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[inductee.icon] || Icons.Trophy;
+  const isFollowed = followed.has(inductee.n);
+  const isCompared = compareList.includes(inductee.n);
+
+  // Synthesized profile / contribution data from row signals
+  const seed = inductee.n.length;
+  const xpBreakdown = [
+    { l: "Quests & Missions", pct: 38 + (seed % 6), c: "var(--color-primary)" },
+    { l: "Achievements", pct: 24 + (seed % 5), c: "var(--color-accent)" },
+    { l: "Referrals", pct: 16 + (seed % 4), c: "var(--color-success)" },
+    { l: "Community", pct: 12 + (seed % 3), c: "var(--color-info)" },
+    { l: "Bonus / Events", pct: 8 + (seed % 3), c: "var(--color-warning)" },
+  ];
+  const awards = [
+    { y: "2026 Q2", t: `${inductee.cat.replace("Top ", "")} of the Quarter`, k: inductee.rank },
+    { y: "2026 Q1", t: "Champion Tier Promotion", k: "Diamond → Champion" },
+    { y: "2025 Q4", t: "Top 10 Global Inductee", k: inductee.region },
+    { y: "2025 Q3", t: "100k XP Milestone", k: "Level Up" },
+    { y: "2025 Q2", t: "First Induction", k: "Gold tier" },
+  ];
+  const badges = [
+    { n: "Centurion", i: "Shield", tone: "text-accent" },
+    { n: "Trailblazer", i: "Flame", tone: "text-warning" },
+    { n: "Mentor", i: "GraduationCap", tone: "text-primary" },
+    { n: "Streak 30", i: "Zap", tone: "text-success" },
+    { n: "Global", i: "Globe2", tone: "text-info" },
+    { n: "Verified", i: "BadgeCheck", tone: "text-accent" },
+  ];
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex animate-fade-up">
+      <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" onClick={onClose} />
+      <aside
+        role="dialog"
+        aria-label={`${inductee.n} — Inductee profile`}
+        className="relative ml-auto h-full w-full sm:max-w-md md:max-w-lg glass border-l border-border shadow-2xl flex flex-col"
+      >
+        {/* Header */}
+        <header className="p-5 border-b border-border">
+          <div className="flex items-start gap-3">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/40 via-primary/20 to-warning/20 border border-border grid place-items-center shrink-0">
+              <Icon className="w-7 h-7 text-accent" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{inductee.cat}</div>
+              <h3 className="text-base font-semibold truncate">{inductee.n}</h3>
+              <div className="text-[11px] text-muted-foreground truncate">{inductee.meta}</div>
+              <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
+                <span className="px-2 py-0.5 rounded-full bg-warning/15 text-warning border border-warning/30 inline-flex items-center gap-1">
+                  <Icons.Crown className="w-3 h-3" /> {inductee.rank}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30">{inductee.region}</span>
+                <span className="px-2 py-0.5 rounded-full bg-success/15 text-success border border-success/30 inline-flex items-center gap-1">
+                  <Icons.TrendingUp className="w-3 h-3" /> {inductee.delta}
+                </span>
+              </div>
+            </div>
+            <button onClick={onClose} aria-label="Close" className="w-8 h-8 grid place-items-center rounded hover:bg-muted">
+              <Icons.X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Headline metric */}
+          <div className="mt-4 rounded-lg border border-border bg-card/40 p-3 flex items-center justify-between">
+            <div>
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Score</div>
+              <div className="text-xl font-bold tabular-nums">{inductee.v}</div>
+            </div>
+            <Spark seed={seed + 3} height={32} />
+          </div>
+        </header>
+
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+          {/* Profile facts */}
+          <section>
+            <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Profile</h4>
+            <dl className="grid grid-cols-2 gap-2 text-[11px]">
+              {[
+                ["Member since", "Mar 2021"],
+                ["Total XP", inductee.v.includes("XP") ? inductee.v : "1.04M XP"],
+                ["Level", `${42 + (seed % 18)}`],
+                ["Streak", `${21 + (seed % 60)} days`],
+                ["Tier history", "Gold → Plat → Diamond → Champion"],
+                ["Next milestone", "Legendary (+248k XP)"],
+              ].map(([k, v]) => (
+                <div key={k} className="rounded-md border border-border bg-card/40 p-2">
+                  <dt className="text-muted-foreground text-[10px]">{k}</dt>
+                  <dd className="font-medium truncate">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          {/* XP Contribution */}
+          <section>
+            <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">XP Contribution</h4>
+            <div className="space-y-2">
+              {xpBreakdown.map((x) => (
+                <div key={x.l} className="text-[11px]">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-muted-foreground">{x.l}</span>
+                    <span className="tabular-nums">{x.pct}%</span>
+                  </div>
+                  <ProgressBar value={x.pct} color={x.c} />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Badges */}
+          <section>
+            <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Badges</h4>
+            <div className="grid grid-cols-3 gap-2">
+              {badges.map((b) => {
+                const BI = (Icons as never as Record<string, Icons.LucideIcon>)[b.i] || Icons.Award;
+                return (
+                  <div key={b.n} className="rounded-lg border border-border bg-card/40 p-2.5 text-center">
+                    <BI className={`w-5 h-5 mx-auto mb-1 ${b.tone}`} />
+                    <div className="text-[10px] font-medium truncate">{b.n}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Awards History */}
+          <section>
+            <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Awards History</h4>
+            <ul className="space-y-1.5">
+              {awards.map((a, i) => (
+                <li key={i} className="flex items-start gap-2 rounded-md border border-border bg-card/40 p-2 text-[11px]">
+                  <Icons.Trophy className="w-3.5 h-3.5 mt-0.5 text-warning shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium truncate">{a.t}</div>
+                    <div className="text-[10px] text-muted-foreground">{a.k}</div>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">{a.y}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        {/* Footer actions */}
+        <footer className="p-4 border-t border-border flex items-center gap-2">
+          <button
+            onClick={() => onToggleFollow(inductee.n)}
+            aria-pressed={isFollowed}
+            className={`flex-1 px-3 py-2 rounded-md text-xs font-medium inline-flex items-center justify-center gap-1.5 border transition-colors focus-ring ${
+              isFollowed
+                ? "bg-success/15 text-success border-success/40 hover:bg-success/25"
+                : "bg-primary/10 text-primary border-primary/30 hover:bg-primary/20"
+            }`}
+          >
+            {isFollowed ? <Icons.Check className="w-3.5 h-3.5" /> : <Icons.UserPlus className="w-3.5 h-3.5" />}
+            {isFollowed ? "Following" : "Follow"}
+          </button>
+          <button
+            onClick={() => onToggleCompare(inductee.n)}
+            aria-pressed={isCompared}
+            className={`flex-1 px-3 py-2 rounded-md text-xs font-medium inline-flex items-center justify-center gap-1.5 border transition-colors focus-ring ${
+              isCompared
+                ? "bg-accent/15 text-accent border-accent/40 hover:bg-accent/25"
+                : "bg-muted text-foreground border-border hover:bg-muted/70"
+            }`}
+          >
+            <Icons.GitCompare className="w-3.5 h-3.5" />
+            {isCompared ? "In Compare" : "Compare"}
+          </button>
+          <button
+            onClick={onClose}
+            className="px-3 py-2 rounded-md text-xs font-medium border border-border bg-card hover:bg-muted"
+          >
+            Close
+          </button>
+        </footer>
+      </aside>
+    </div>,
+    document.body,
+  );
+}
+
 function TabHallOfFame({ filter }: { filter: string }) {
   const [cat, setCat] = useState<HofCat>("Top Developers");
   const [rank, setRank] = useState<HofRank>("All Ranks");
   const [region, setRegion] = useState<string>("All Regions");
+  const [selected, setSelected] = useState<HofRow | null>(null);
+  const [followed, setFollowed] = useState<Set<string>>(new Set());
+  const [compareList, setCompareList] = useState<string[]>([]);
+
+  const openInductee = (r: typeof HOF_DATA[HofCat][number]) =>
+    setSelected({ ...r, cat });
+  const toggleFollow = (name: string) =>
+    setFollowed((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name); else next.add(name);
+      return next;
+    });
+  const toggleCompare = (name: string) =>
+    setCompareList((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : prev.length >= 4 ? [...prev.slice(1), name] : [...prev, name]
+    );
 
   const regions = ["All Regions", "APAC", "EU", "NA", "LATAM", "AFR", "MENA"];
   const all = HOF_DATA[cat];
@@ -235,6 +459,20 @@ function TabHallOfFame({ filter }: { filter: string }) {
           </select>
         </div>
         <span className="ml-auto text-muted-foreground">{rows.length} of {all.length} legends shown</span>
+        {(followed.size > 0 || compareList.length > 0) && (
+          <span className="inline-flex items-center gap-2">
+            {followed.size > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-success/15 text-success border border-success/30 inline-flex items-center gap-1">
+                <Icons.UserCheck className="w-3 h-3" /> {followed.size} following
+              </span>
+            )}
+            {compareList.length > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-accent/15 text-accent border border-accent/30 inline-flex items-center gap-1">
+                <Icons.GitCompare className="w-3 h-3" /> {compareList.length} to compare
+              </span>
+            )}
+          </span>
+        )}
       </div>
 
       {/* KPI strip for selected category */}
@@ -262,7 +500,10 @@ function TabHallOfFame({ filter }: { filter: string }) {
             const isFirst = podiumIdx === 0;
             return (
               <div key={pos} className={`col-span-12 md:col-span-4 ${isFirst ? "md:order-2" : pos === 0 ? "md:order-1" : "md:order-3"}`}>
-                <div className={`rounded-xl border bg-gradient-to-b ${podiumColors[podiumIdx]} p-5 text-center relative overflow-hidden ${isFirst ? "shadow-[0_0_32px_-12px_var(--color-warning)]" : ""}`}>
+                <button
+                  onClick={() => openInductee(r)}
+                  className={`w-full text-left rounded-xl border bg-gradient-to-b ${podiumColors[podiumIdx]} p-5 text-center relative overflow-hidden transition-transform hover:-translate-y-0.5 hover:shadow-xl focus-ring ${isFirst ? "shadow-[0_0_32px_-12px_var(--color-warning)]" : ""}`}
+                >
                   <div className="text-3xl mb-2">{medals[podiumIdx]}</div>
                   <div className="mx-auto w-14 h-14 rounded-full bg-card border border-border grid place-items-center mb-2">
                     <Icon className="w-6 h-6 text-accent" />
@@ -273,7 +514,7 @@ function TabHallOfFame({ filter }: { filter: string }) {
                   <div className="mt-1 inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-card/60 border border-border">
                     <Icons.Crown className="w-3 h-3 text-warning" /> {r.rank}
                   </div>
-                </div>
+                </button>
               </div>
             );
           })}
@@ -290,7 +531,7 @@ function TabHallOfFame({ filter }: { filter: string }) {
             <EmptyState icon="Trophy" title="No legends match" hint="Adjust rank or region filters" />
           ) : (
             <DataTable
-              columns={["#", "Inductee", "Meta", "Score", "Rank", "Δ"]}
+              columns={["#", "Inductee", "Meta", "Score", "Rank", "Δ", ""]}
               rows={rows.map((r, i) => [
                 String(i + 1),
                 r.n,
@@ -298,6 +539,13 @@ function TabHallOfFame({ filter }: { filter: string }) {
                 r.v,
                 r.rank,
                 r.delta,
+                <button
+                  key={r.n}
+                  onClick={() => openInductee(r)}
+                  className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 inline-flex items-center gap-1"
+                >
+                  <Icons.Eye className="w-3 h-3" /> View
+                </button>,
               ])}
             />
           )}
@@ -358,9 +606,20 @@ function TabHallOfFame({ filter }: { filter: string }) {
         </ChartCard>
 
       </div>
+
+      <InducteeDrawer
+        inductee={selected}
+        open={!!selected}
+        onClose={() => setSelected(null)}
+        followed={followed}
+        onToggleFollow={toggleFollow}
+        compareList={compareList}
+        onToggleCompare={toggleCompare}
+      />
     </div>
   );
 }
+
 
 /* ---------- Tab: Command (01, 16, 22) ---------- */
 function TabCommand() {
