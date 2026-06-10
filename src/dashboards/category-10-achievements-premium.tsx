@@ -394,6 +394,219 @@ function InducteeDrawer({
   );
 }
 
+/* ---------- Compare Drawer ---------- */
+function findInductee(name: string): HofRow | undefined {
+  for (const cat of HOF_CATS) {
+    const row = HOF_DATA[cat].find((r) => r.n === name);
+    if (row) return { ...row, cat };
+  }
+  return undefined;
+}
+
+function CompareDrawer({
+  left, right, open, onClose, followed, onToggleFollow, compareList, onToggleCompare,
+}: {
+  left: HofRow; right: HofRow; open: boolean; onClose: () => void;
+  followed: Set<string>; onToggleFollow: (name: string) => void;
+  compareList: string[]; onToggleCompare: (name: string) => void;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
+  }, [open, onClose]);
+
+  if (!open || typeof document === "undefined") return null;
+
+  const cols = [left, right] as const;
+
+  const getProfile = (inductee: HofRow) => {
+    const seed = inductee.n.length;
+    return {
+      xpBreakdown: [
+        { l: "Quests & Missions", pct: 38 + (seed % 6), c: "var(--color-primary)" },
+        { l: "Achievements", pct: 24 + (seed % 5), c: "var(--color-accent)" },
+        { l: "Referrals", pct: 16 + (seed % 4), c: "var(--color-success)" },
+        { l: "Community", pct: 12 + (seed % 3), c: "var(--color-info)" },
+        { l: "Bonus / Events", pct: 8 + (seed % 3), c: "var(--color-warning)" },
+      ],
+      awards: [
+        { y: "2026 Q2", t: `${inductee.cat.replace("Top ", "")} of the Quarter`, k: inductee.rank },
+        { y: "2026 Q1", t: "Champion Tier Promotion", k: "Diamond → Champion" },
+        { y: "2025 Q4", t: "Top 10 Global Inductee", k: inductee.region },
+        { y: "2025 Q3", t: "100k XP Milestone", k: "Level Up" },
+        { y: "2025 Q2", t: "First Induction", k: "Gold tier" },
+      ],
+      badges: [
+        { n: "Centurion", i: "Shield", tone: "text-accent" },
+        { n: "Trailblazer", i: "Flame", tone: "text-warning" },
+        { n: "Mentor", i: "GraduationCap", tone: "text-primary" },
+        { n: "Streak 30", i: "Zap", tone: "text-success" },
+        { n: "Global", i: "Globe2", tone: "text-info" },
+        { n: "Verified", i: "BadgeCheck", tone: "text-accent" },
+      ],
+    };
+  };
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex animate-fade-up">
+      <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" onClick={onClose} />
+      <aside
+        role="dialog"
+        aria-label="Compare inductees"
+        className="relative mx-auto my-6 h-[calc(100vh-3rem)] w-full max-w-5xl glass border border-border shadow-2xl flex flex-col rounded-xl overflow-hidden"
+      >
+        {/* Header */}
+        <header className="px-5 py-4 border-b border-border flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2">
+            <Icons.GitCompare className="w-5 h-5 text-accent" />
+            <h3 className="text-sm font-semibold tracking-tight">Compare Inductees</h3>
+          </div>
+          <button onClick={onClose} aria-label="Close" className="w-8 h-8 grid place-items-center rounded hover:bg-muted">
+            <Icons.X className="w-4 h-4" />
+          </button>
+        </header>
+
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto p-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {cols.map((inductee) => {
+              const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[inductee.icon] || Icons.Trophy;
+              const seed = inductee.n.length;
+              const profile = getProfile(inductee);
+              const isFollowed = followed.has(inductee.n);
+              const isCompared = compareList.includes(inductee.n);
+              return (
+                <div key={inductee.n} className="space-y-5">
+                  {/* Profile card */}
+                  <div className="rounded-xl border border-border bg-card/40 p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/40 via-primary/20 to-warning/20 border border-border grid place-items-center shrink-0">
+                        <Icon className="w-6 h-6 text-accent" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{inductee.cat}</div>
+                        <h4 className="text-sm font-semibold truncate">{inductee.n}</h4>
+                        <div className="text-[11px] text-muted-foreground truncate">{inductee.meta}</div>
+                        <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
+                          <span className="px-2 py-0.5 rounded-full bg-warning/15 text-warning border border-warning/30 inline-flex items-center gap-1">
+                            <Icons.Crown className="w-3 h-3" /> {inductee.rank}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30">{inductee.region}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex items-center justify-between rounded-lg border border-border bg-card/60 p-2.5">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Score</div>
+                        <div className="text-lg font-bold tabular-nums">{inductee.v}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Delta</div>
+                        <div className="text-sm font-medium text-success">{inductee.delta}</div>
+                      </div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+                      {[
+                        ["Member since", "Mar 2021"],
+                        ["Total XP", inductee.v.includes("XP") ? inductee.v : "1.04M XP"],
+                        ["Level", `${42 + (seed % 18)}`],
+                        ["Streak", `${21 + (seed % 60)} days`],
+                      ].map(([k, v]) => (
+                        <div key={k} className="rounded-md border border-border bg-card/40 p-2">
+                          <dt className="text-muted-foreground text-[10px]">{k}</dt>
+                          <dd className="font-medium truncate">{v}</dd>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-3 flex items-center gap-2">
+                      <button
+                        onClick={() => onToggleFollow(inductee.n)}
+                        className={`flex-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium inline-flex items-center justify-center gap-1 border transition-colors ${
+                          isFollowed
+                            ? "bg-success/15 text-success border-success/40 hover:bg-success/25"
+                            : "bg-primary/10 text-primary border-primary/30 hover:bg-primary/20"
+                        }`}
+                      >
+                        {isFollowed ? <Icons.Check className="w-3 h-3" /> : <Icons.UserPlus className="w-3 h-3" />}
+                        {isFollowed ? "Following" : "Follow"}
+                      </button>
+                      <button
+                        onClick={() => onToggleCompare(inductee.n)}
+                        className={`flex-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium inline-flex items-center justify-center gap-1 border transition-colors ${
+                          isCompared
+                            ? "bg-accent/15 text-accent border-accent/40 hover:bg-accent/25"
+                            : "bg-muted text-foreground border-border hover:bg-muted/70"
+                        }`}
+                      >
+                        <Icons.GitCompare className="w-3 h-3" />
+                        {isCompared ? "In Compare" : "Compare"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* XP Contribution */}
+                  <div className="rounded-xl border border-border bg-card/40 p-4">
+                    <h5 className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">XP Contribution</h5>
+                    <div className="space-y-2">
+                      {profile.xpBreakdown.map((x) => (
+                        <div key={x.l} className="text-[11px]">
+                          <div className="flex justify-between mb-1">
+                            <span className="text-muted-foreground">{x.l}</span>
+                            <span className="tabular-nums">{x.pct}%</span>
+                          </div>
+                          <ProgressBar value={x.pct} color={x.c} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="rounded-xl border border-border bg-card/40 p-4">
+                    <h5 className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Badges</h5>
+                    <div className="grid grid-cols-3 gap-2">
+                      {profile.badges.map((b) => {
+                        const BI = (Icons as never as Record<string, Icons.LucideIcon>)[b.i] || Icons.Award;
+                        return (
+                          <div key={b.n} className="rounded-lg border border-border bg-card/40 p-2 text-center">
+                            <BI className={`w-4 h-4 mx-auto mb-1 ${b.tone}`} />
+                            <div className="text-[10px] font-medium truncate">{b.n}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Awards */}
+                  <div className="rounded-xl border border-border bg-card/40 p-4">
+                    <h5 className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">Awards History</h5>
+                    <ul className="space-y-1.5">
+                      {profile.awards.map((a, i) => (
+                        <li key={i} className="flex items-start gap-2 rounded-md border border-border bg-card/40 p-2 text-[11px]">
+                          <Icons.Trophy className="w-3.5 h-3.5 mt-0.5 text-warning shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <div className="font-medium truncate">{a.t}</div>
+                            <div className="text-[10px] text-muted-foreground">{a.k}</div>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">{a.y}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </aside>
+    </div>,
+    document.body,
+  );
+}
+
 function TabHallOfFame({ filter }: { filter: string }) {
   const [cat, setCat] = useState<HofCat>("Top Developers");
   const [rank, setRank] = useState<HofRank>("All Ranks");
@@ -401,6 +614,7 @@ function TabHallOfFame({ filter }: { filter: string }) {
   const [selected, setSelected] = useState<HofRow | null>(null);
   const [followed, setFollowed] = useState<Set<string>>(new Set());
   const [compareList, setCompareList] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
 
   const openInductee = (r: typeof HOF_DATA[HofCat][number]) =>
     setSelected({ ...r, cat });
@@ -414,6 +628,12 @@ function TabHallOfFame({ filter }: { filter: string }) {
     setCompareList((prev) =>
       prev.includes(name) ? prev.filter((n) => n !== name) : prev.length >= 4 ? [...prev.slice(1), name] : [...prev, name]
     );
+  const comparePair = useMemo(() => {
+    if (compareList.length < 2) return null;
+    const a = findInductee(compareList[0]);
+    const b = findInductee(compareList[1]);
+    return a && b ? { left: a, right: b } : null;
+  }, [compareList]);
 
   const regions = ["All Regions", "APAC", "EU", "NA", "LATAM", "AFR", "MENA"];
   const all = HOF_DATA[cat];
