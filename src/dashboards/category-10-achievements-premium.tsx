@@ -845,6 +845,19 @@ function TabHallOfFame({ filter }: { filter: string }) {
         compareList={compareList}
         onToggleCompare={toggleCompare}
       />
+
+      {comparePair && (
+        <CompareDrawer
+          left={comparePair.left}
+          right={comparePair.right}
+          open={compareOpen}
+          onClose={() => setCompareOpen(false)}
+          followed={followed}
+          onToggleFollow={toggleFollow}
+          compareList={compareList}
+          onToggleCompare={toggleCompare}
+        />
+      )}
     </div>
   );
 }
