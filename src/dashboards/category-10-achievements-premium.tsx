@@ -1892,7 +1892,7 @@ export function Achievements({ d }: { d: DashSpec }) {
         right={<FilterBar value={s.filter} onChange={s.setFilter} placeholder="Filter achievements, users, rewards…" />}
       />
 
-      <div className="pt-2">
+      <div id="ams-tab-content" className="pt-2 scroll-mt-24">
         {tab === "source-map" && <TabSourceMap filter={s.filter} onOpenTab={setTab} />}
         {tab === "command" && <TabCommand />}
         {tab === "library" && <TabLibrary filter={s.filter} />}
