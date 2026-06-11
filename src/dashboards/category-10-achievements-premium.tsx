@@ -113,6 +113,7 @@ const RANKS = [
    TABS
    ==================================================================== */
 type Tab =
+  | "source-map"
   | "command"
   | "library"
   | "xp-levels"
@@ -123,6 +124,45 @@ type Tab =
   | "hall-of-fame"
   | "challenges-missions"
   | "engine";
+
+const SPEC_ROLES = [
+  "Boss", "CEO", "Admin", "Developer", "Author", "Vendor", "Vendor Manager", "Reseller",
+  "Reseller Manager", "Franchise", "Franchise Manager", "Affiliate", "Support", "Marketing", "Finance", "Customer",
+];
+
+const SPEC_TABLES = [
+  "achievements", "achievement_categories", "achievement_rules", "achievement_logs", "xp_transactions", "levels",
+  "ranks", "badges", "trophies", "reward_store", "reward_transactions", "leaderboards", "missions",
+  "challenges", "certificates", "celebrations", "achievement_audit_logs",
+];
+
+const SPEC_MODULES = [
+  { no: "01", title: "Achievement Command Center", tab: "Command", icon: "Activity", status: "UI connected", items: ["Total Achievements", "Unlocked Today", "Pending Rewards", "Top Achievers", "Leaderboard Status", "Global Ranking"] },
+  { no: "02", title: "Achievement Library", tab: "Library", icon: "Library", status: "UI connected", items: ["Create", "Edit", "Delete", "Clone", "Archive"] },
+  { no: "03", title: "XP Management", tab: "XP & Levels", icon: "Zap", status: "UI connected", items: ["Revenue XP", "Sales XP", "Support XP", "Development XP", "Training XP", "Customer XP", "Renewal XP", "Marketplace XP"] },
+  { no: "04", title: "Level Management", tab: "XP & Levels", icon: "ChevronsUp", status: "UI connected", items: ["Level 1", "Level 1000+", "Custom XP Rules", "Level Rewards", "Level Benefits"] },
+  { no: "05", title: "Rank Management", tab: "Ranks & Trophies", icon: "Crown", status: "UI connected", items: ["Starter", "Bronze", "Silver", "Gold", "Platinum", "Diamond", "Titan", "Legend", "Champion", "Global Champion", "Role Specific Ranks"] },
+  { no: "06", title: "Trophy Management", tab: "Ranks & Trophies", icon: "Trophy", status: "UI connected", items: ["First Login", "First Customer", "First Sale", "First Revenue", "First Renewal", "Top Seller", "Top Developer", "Top Vendor", "Top Reseller", "Top Franchise", "Global Champion"] },
+  { no: "07", title: "Badge Management", tab: "Badges & Rewards", icon: "BadgeCheck", status: "UI connected", items: ["Achievement", "Revenue", "Support", "Developer", "Customer", "Training", "Leadership"] },
+  { no: "08", title: "Reward Management", tab: "Badges & Rewards", icon: "Gift", status: "UI connected", items: ["Points", "Wallet Credit", "Commission Bonus", "Discount Coupons", "Premium Access", "Feature Unlocks", "Priority Leads", "Special Permissions"] },
+  { no: "09", title: "Certificate Management", tab: "Certificates", icon: "Award", status: "UI connected", items: ["Training", "Developer", "Vendor", "Reseller", "Franchise", "Champion"] },
+  { no: "10", title: "Leaderboard Center", tab: "Leaderboards", icon: "BarChart3", status: "UI connected", items: ["Global", "Country", "State", "City", "Territory", "Department", "Role Based"] },
+  { no: "11", title: "Hall of Fame", tab: "Hall of Fame", icon: "Trophy", status: "UI connected", items: ["Top Developers", "Top Vendors", "Top Resellers", "Top Franchises", "Top Customers", "Top Territories", "Top Revenue"] },
+  { no: "12", title: "Challenge Center", tab: "Challenges & Missions", icon: "Target", status: "UI connected", items: ["Daily", "Weekly", "Monthly", "Quarterly", "Yearly"] },
+  { no: "13", title: "Mission Center", tab: "Challenges & Missions", icon: "Rocket", status: "UI connected", items: ["Sales", "Revenue", "Training", "Support", "Development", "Growth"] },
+  { no: "14", title: "Reward Store", tab: "Badges & Rewards", icon: "ShoppingBag", status: "UI connected", items: ["Redeem XP", "Redeem Points", "Unlock Features", "Unlock Themes", "Unlock Frames", "Unlock Effects"] },
+  { no: "15", title: "Profile Customization", tab: "Badges & Rewards", icon: "Frame", status: "UI connected", items: ["Champion Frame", "Diamond Frame", "Legend Frame", "Titan Frame", "Country Frame", "Territory Frame"] },
+  { no: "16", title: "Celebration Engine", tab: "Command", icon: "PartyPopper", status: "UI connected", items: ["Achievement Unlock", "Level Up", "Rank Up", "Revenue Milestone", "Champion Status", "Global Champion"] },
+  { no: "17", title: "Animation Management", tab: "Engine & AI", icon: "Clapperboard", status: "UI connected", items: ["Trophy", "Badge", "Rank", "XP", "Reward", "Celebration"] },
+  { no: "18", title: "Sound Management", tab: "Engine & AI", icon: "Volume2", status: "UI connected", items: ["Off by default", "Achievement", "Trophy", "Rank Up", "Champion", "Reward"] },
+  { no: "19", title: "Role Reward Rules", tab: "Engine & AI", icon: "UserCog", status: "UI connected", items: ["Developer", "Reseller", "Vendor", "Franchise", "Customer"] },
+  { no: "20", title: "AI Achievement Engine", tab: "Engine & AI", icon: "Brain", status: "UI connected", items: ["Suggest Achievements", "Detect Milestones", "Predict Champions", "Recommend Rewards", "Generate Challenges"] },
+  { no: "21", title: "Trophy Room", tab: "Ranks & Trophies", icon: "Sparkles", status: "UI connected", items: ["3D Gallery", "Glass Showcase", "Animated Rotation", "Achievement Timeline"] },
+  { no: "22", title: "Achievement Timeline", tab: "Command", icon: "Clock3", status: "UI connected", items: ["Achievement Earned", "Reward Earned", "Level Increased", "Rank Increased", "Certificate Earned"] },
+  { no: "23", title: "Global Leaderboard Map", tab: "Leaderboards", icon: "Map", status: "UI connected", items: ["Top Countries", "Top States", "Top Cities", "Top Territories", "Top Users"] },
+  { no: "24", title: "Recognition Center", tab: "Hall of Fame", icon: "Medal", status: "UI connected", items: ["Employee Of Month", "Developer Of Month", "Reseller Of Month", "Vendor Of Month", "Franchise Of Month", "Customer Of Month"] },
+  { no: "25", title: "Audit Center", tab: "Library", icon: "ShieldCheck", status: "UI connected", items: ["Who Earned", "When Earned", "Why Earned", "Reward Issued", "Reward Redeemed"] },
+];
 
 /* ---------- Tab: Hall of Fame (11, 24) ---------- */
 const HOF_CATS = [
