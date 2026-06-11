@@ -318,7 +318,9 @@ function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: 
                   </div>
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <span className="text-[10px] text-success inline-flex items-center gap-1"><Icons.CheckCircle2 className="w-3 h-3" /> {m.status}</span>
-                    <button onClick={() => onOpenTab(tabLookup[m.tab])} className="px-2 py-1 rounded-md bg-primary/15 text-primary border border-primary/30 text-[11px] hover:bg-primary/25">
+                    <button onClick={() => jump(m.tab)} className="px-2 py-1 rounded-md bg-primary/15 text-primary border border-primary/30 text-[11px] hover:bg-primary/25 inline-flex items-center gap-1">
+                      <Icons.ArrowRight className="w-3 h-3" />
+
                       Open {m.tab}
                     </button>
                   </div>
