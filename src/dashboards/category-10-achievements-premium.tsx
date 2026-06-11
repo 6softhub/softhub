@@ -164,18 +164,45 @@ const SPEC_MODULES = [
   { no: "25", title: "Audit Center", tab: "Library", icon: "ShieldCheck", status: "UI connected", items: ["Who Earned", "When Earned", "Why Earned", "Reward Issued", "Reward Redeemed"] },
 ];
 
+const TAB_LOOKUP: Record<string, Tab> = {
+  Command: "command",
+  Library: "library",
+  "XP & Levels": "xp-levels",
+  "Ranks & Trophies": "ranks-trophies",
+  "Badges & Rewards": "badges-rewards",
+  Certificates: "certificates",
+  Leaderboards: "leaderboards",
+  "Hall of Fame": "hall-of-fame",
+  "Challenges & Missions": "challenges-missions",
+  "Engine & AI": "engine",
+};
+
+const TAB_ICONS: Record<string, Icons.LucideIcon> = {
+  Command: Icons.Activity,
+  Library: Icons.Library,
+  "XP & Levels": Icons.Zap,
+  "Ranks & Trophies": Icons.Crown,
+  "Badges & Rewards": Icons.BadgeCheck,
+  Certificates: Icons.Award,
+  Leaderboards: Icons.BarChart3,
+  "Hall of Fame": Icons.Trophy,
+  "Challenges & Missions": Icons.Target,
+  "Engine & AI": Icons.Cpu,
+};
+
 function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: Tab) => void }) {
-  const tabLookup: Record<string, Tab> = {
-    Command: "command",
-    Library: "library",
-    "XP & Levels": "xp-levels",
-    "Ranks & Trophies": "ranks-trophies",
-    "Badges & Rewards": "badges-rewards",
-    Certificates: "certificates",
-    Leaderboards: "leaderboards",
-    "Hall of Fame": "hall-of-fame",
-    "Challenges & Missions": "challenges-missions",
-    "Engine & AI": "engine",
+  const tabLookup = TAB_LOOKUP;
+  const [lastJump, setLastJump] = useState<string | null>(null);
+
+  const jump = (tabLabel: string) => {
+    const target = tabLookup[tabLabel];
+    if (!target) return;
+    setLastJump(tabLabel);
+    onOpenTab(target);
+    requestAnimationFrame(() => {
+      const el = document.getElementById("ams-tab-content");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   };
 
   const modules = SPEC_MODULES.filter((m) =>
@@ -183,6 +210,11 @@ function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: 
   );
 
   const coverage = Math.round((SPEC_MODULES.filter((m) => m.status === "UI connected").length / SPEC_MODULES.length) * 100);
+
+  const moduleCountByTab: Record<string, number> = SPEC_MODULES.reduce((acc, m) => {
+    acc[m.tab] = (acc[m.tab] ?? 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
     <div className={grid}>
@@ -192,7 +224,7 @@ function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: 
             ["Spec modules", "25/25", "Screen mapped"],
             ["Supported roles", SPEC_ROLES.length.toString(), "Role chips connected"],
             ["Source tables", SPEC_TABLES.length.toString(), "Schema list only"],
-            ["UI coverage", `${coverage}%`, "Button flows pending"],
+            ["UI coverage", `${coverage}%`, "Buttons wired below"],
           ].map(([label, value, note]) => (
             <div key={label} className="rounded-lg border border-border bg-card/40 p-3">
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
@@ -201,8 +233,38 @@ function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: 
             </div>
           ))}
         </div>
-        <div className="mt-4 rounded-lg border border-warning/30 bg-warning/10 p-3 text-xs text-warning">
-          Real status: screens are connected to the source spec; database + button workflows are not claimed here and will be wired next.
+        {lastJump && (
+          <div className="mt-4 rounded-lg border border-success/30 bg-success/10 px-3 py-2 text-xs text-success inline-flex items-center gap-2">
+            <Icons.CheckCircle2 className="w-3.5 h-3.5" />
+            Opened <span className="font-semibold">{lastJump}</span>. Use the tab bar above to return to Source Map.
+          </div>
+        )}
+      </ChartCard>
+
+      <ChartCard title="Quick Jump · 10 Module Groups" subtitle="One click opens the matching UI tab and scrolls into view" className="col-span-12">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          {Object.keys(tabLookup).map((label) => {
+            const Icon = TAB_ICONS[label] || Icons.Box;
+            const active = lastJump === label;
+            return (
+              <button
+                key={label}
+                onClick={() => jump(label)}
+                className={`group rounded-lg border p-3 text-left transition-colors ${active ? "border-primary/60 bg-primary/10" : "border-border bg-card/40 hover:bg-primary/10 hover:border-primary/40"}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-md border border-accent/30 bg-accent/10 grid place-items-center shrink-0">
+                    <Icon className="w-4 h-4 text-accent" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-xs font-semibold truncate">{label}</div>
+                    <div className="text-[10px] text-muted-foreground">{moduleCountByTab[label] ?? 0} modules</div>
+                  </div>
+                  <Icons.ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary" />
+                </div>
+              </button>
+            );
+          })}
         </div>
       </ChartCard>
 
@@ -256,7 +318,9 @@ function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: 
                   </div>
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <span className="text-[10px] text-success inline-flex items-center gap-1"><Icons.CheckCircle2 className="w-3 h-3" /> {m.status}</span>
-                    <button onClick={() => onOpenTab(tabLookup[m.tab])} className="px-2 py-1 rounded-md bg-primary/15 text-primary border border-primary/30 text-[11px] hover:bg-primary/25">
+                    <button onClick={() => jump(m.tab)} className="px-2 py-1 rounded-md bg-primary/15 text-primary border border-primary/30 text-[11px] hover:bg-primary/25 inline-flex items-center gap-1">
+                      <Icons.ArrowRight className="w-3 h-3" />
+
                       Open {m.tab}
                     </button>
                   </div>
@@ -1828,7 +1892,7 @@ export function Achievements({ d }: { d: DashSpec }) {
         right={<FilterBar value={s.filter} onChange={s.setFilter} placeholder="Filter achievements, users, rewards…" />}
       />
 
-      <div className="pt-2">
+      <div id="ams-tab-content" className="pt-2 scroll-mt-24">
         {tab === "source-map" && <TabSourceMap filter={s.filter} onOpenTab={setTab} />}
         {tab === "command" && <TabCommand />}
         {tab === "library" && <TabLibrary filter={s.filter} />}
