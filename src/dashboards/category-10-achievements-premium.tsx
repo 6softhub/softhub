@@ -1727,12 +1727,12 @@ function TabEngine() {
       <ChartCard title="Role Reward Rules" subtitle="Per-role scoring weights" className="col-span-12 lg:col-span-7">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
-            { r: "Developer", rules: ["Code Quality", "Features Delivered", "Bugs Fixed"], i: "Code2" },
-            { r: "Reseller", rules: ["Revenue", "Sales", "Renewals"], i: "Briefcase" },
-            { r: "Vendor", rules: ["Products", "Revenue", "Ratings"], i: "Store" },
-            { r: "Franchise", rules: ["Territory Growth", "Revenue", "Network Growth"], i: "Building2" },
-            { r: "Customer", rules: ["Purchases", "Referrals", "Reviews"], i: "User" },
-            { r: "Support", rules: ["FRT", "CSAT", "Resolved"], i: "LifeBuoy" },
+            { r: "Developer", rules: ["Code Quality", "Features Delivered", "Bugs Fixed"], weights: [1.82, 1.54, 1.36], i: "Code2" },
+            { r: "Reseller", rules: ["Revenue", "Sales", "Renewals"], weights: [1.95, 1.62, 1.48], i: "Briefcase" },
+            { r: "Vendor", rules: ["Products", "Revenue", "Ratings"], weights: [1.42, 1.86, 1.34], i: "Store" },
+            { r: "Franchise", rules: ["Territory Growth", "Revenue", "Network Growth"], weights: [1.74, 1.66, 1.58], i: "Building2" },
+            { r: "Customer", rules: ["Purchases", "Referrals", "Reviews"], weights: [1.28, 1.72, 1.22], i: "User" },
+            { r: "Support", rules: ["FRT", "CSAT", "Resolved"], weights: [1.18, 1.46, 1.38], i: "LifeBuoy" },
           ].map((g) => {
             const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[g.i] || Icons.UserCog;
             return (
@@ -1742,10 +1742,10 @@ function TabEngine() {
                   <div className="text-xs font-semibold">{g.r}</div>
                 </div>
                 <ul className="mt-2 space-y-1">
-                  {g.rules.map((r) => (
+                  {g.rules.map((r, i) => (
                     <li key={r} className="flex items-center justify-between text-[11px]">
                       <span>{r}</span>
-                      <span className="text-muted-foreground tabular-nums">×{(1 + Math.random()).toFixed(2)}</span>
+                      <span className="text-muted-foreground tabular-nums">×{g.weights[i].toFixed(2)}</span>
                     </li>
                   ))}
                 </ul>
