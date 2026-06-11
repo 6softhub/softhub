@@ -164,6 +164,124 @@ const SPEC_MODULES = [
   { no: "25", title: "Audit Center", tab: "Library", icon: "ShieldCheck", status: "UI connected", items: ["Who Earned", "When Earned", "Why Earned", "Reward Issued", "Reward Redeemed"] },
 ];
 
+function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: Tab) => void }) {
+  const tabLookup: Record<string, Tab> = {
+    Command: "command",
+    Library: "library",
+    "XP & Levels": "xp-levels",
+    "Ranks & Trophies": "ranks-trophies",
+    "Badges & Rewards": "badges-rewards",
+    Certificates: "certificates",
+    Leaderboards: "leaderboards",
+    "Hall of Fame": "hall-of-fame",
+    "Challenges & Missions": "challenges-missions",
+    "Engine & AI": "engine",
+  };
+
+  const modules = SPEC_MODULES.filter((m) =>
+    [m.no, m.title, m.tab, m.status, ...m.items].join(" ").toLowerCase().includes(filter.toLowerCase()),
+  );
+
+  const coverage = Math.round((SPEC_MODULES.filter((m) => m.status === "UI connected").length / SPEC_MODULES.length) * 100);
+
+  return (
+    <div className={grid}>
+      <ChartCard title="Source Code → AMS UI Connection" subtitle="Real mapping from your Figma copy-code/spec" className="col-span-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            ["Spec modules", "25/25", "Screen mapped"],
+            ["Supported roles", SPEC_ROLES.length.toString(), "Role chips connected"],
+            ["Source tables", SPEC_TABLES.length.toString(), "Schema list only"],
+            ["UI coverage", `${coverage}%`, "Button flows pending"],
+          ].map(([label, value, note]) => (
+            <div key={label} className="rounded-lg border border-border bg-card/40 p-3">
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+              <div className="mt-1 text-2xl font-semibold tabular-nums">{value}</div>
+              <div className="mt-1 text-[11px] text-muted-foreground">{note}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 rounded-lg border border-warning/30 bg-warning/10 p-3 text-xs text-warning">
+          Real status: screens are connected to the source spec; database + button workflows are not claimed here and will be wired next.
+        </div>
+      </ChartCard>
+
+      <ChartCard title="Universal Rule" subtitle="Any module · any role · any activity can trigger the gamification chain" className="col-span-12 lg:col-span-7">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {["Any Module", "Any Role", "Any Activity", "Achievement", "XP", "Level", "Rank", "Reward", "Badge", "Trophy"].map((r, i) => {
+            const Icon = [Icons.LayoutGrid, Icons.Users, Icons.Activity, Icons.Target, Icons.Zap, Icons.ChevronsUp, Icons.Crown, Icons.Gift, Icons.BadgeCheck, Icons.Trophy][i] || Icons.Circle;
+            return (
+              <div key={r} className="rounded-md border border-border bg-card/40 p-2.5 flex items-center gap-2">
+                <Icon className="w-4 h-4 text-accent" />
+                <span className="text-xs font-medium">{r}</span>
+              </div>
+            );
+          })}
+        </div>
+      </ChartCard>
+
+      <ChartCard title="Supported Roles" subtitle="Complete role list from the source spec" className="col-span-12 lg:col-span-5">
+        <div className="flex flex-wrap gap-1.5">
+          {SPEC_ROLES.map((role) => (
+            <span key={role} className="px-2 py-1 rounded-md border border-border bg-muted/50 text-[11px]">{role}</span>
+          ))}
+        </div>
+      </ChartCard>
+
+      <ChartCard title="25 Module Coverage Map" subtitle="Click Open to jump to the connected UI tab" className="col-span-12 lg:col-span-8">
+        {modules.length === 0 ? (
+          <EmptyState icon="SearchX" title="No source modules match this filter" hint="Clear the filter to see all 25 AMS modules." />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {modules.map((m) => {
+              const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[m.icon] || Icons.Box;
+              return (
+                <div key={m.no} className="rounded-lg border border-border bg-card/40 p-3">
+                  <div className="flex items-start gap-2">
+                    <div className="w-9 h-9 rounded-md border border-accent/30 bg-accent/10 grid place-items-center shrink-0">
+                      <Icon className="w-4 h-4 text-accent" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] text-muted-foreground">{m.no}</span>
+                        <h3 className="text-xs font-semibold truncate">{m.title}</h3>
+                      </div>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {m.items.slice(0, 5).map((it) => (
+                          <span key={it} className="px-1.5 py-0.5 rounded bg-muted text-[10px] text-muted-foreground">{it}</span>
+                        ))}
+                        {m.items.length > 5 && <span className="px-1.5 py-0.5 rounded bg-muted text-[10px] text-muted-foreground">+{m.items.length - 5}</span>}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-success inline-flex items-center gap-1"><Icons.CheckCircle2 className="w-3 h-3" /> {m.status}</span>
+                    <button onClick={() => onOpenTab(tabLookup[m.tab])} className="px-2 py-1 rounded-md bg-primary/15 text-primary border border-primary/30 text-[11px] hover:bg-primary/25">
+                      Open {m.tab}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </ChartCard>
+
+      <ChartCard title="Database Tables From Source" subtitle="Listed from spec; backend connection is still pending" className="col-span-12 lg:col-span-4">
+        <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1">
+          {SPEC_TABLES.map((table) => (
+            <div key={table} className="flex items-center gap-2 rounded-md border border-border bg-card/40 p-2">
+              <Icons.Database className="w-3.5 h-3.5 text-info" />
+              <code className="text-[11px] text-info flex-1">{table}</code>
+              <span className="text-[10px] text-warning">pending</span>
+            </div>
+          ))}
+        </div>
+      </ChartCard>
+    </div>
+  );
+}
+
 /* ---------- Tab: Hall of Fame (11, 24) ---------- */
 const HOF_CATS = [
   "Top Developers", "Top Vendors", "Top Resellers", "Top Franchises",
