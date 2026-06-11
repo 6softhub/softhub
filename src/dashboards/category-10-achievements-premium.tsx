@@ -1772,7 +1772,7 @@ function TabEngine() {
    ==================================================================== */
 export function Achievements({ d }: { d: DashSpec }) {
   const s = useDashboardState();
-  const { tab, setTab } = useTabs<Tab>("command");
+  const { tab, setTab } = useTabs<Tab>("source-map");
   const [createOpen, setCreateOpen] = useState(false);
 
   const kpis: Kpi[] = [
@@ -1813,6 +1813,7 @@ export function Achievements({ d }: { d: DashSpec }) {
         value={tab}
         onChange={setTab}
         tabs={[
+          { id: "source-map", label: "Source Map", icon: "ClipboardList", badge: 25 },
           { id: "command", label: "Command", icon: "Activity", badge: 6 },
           { id: "library", label: "Library", icon: "Library", badge: "4.8k" },
           { id: "xp-levels", label: "XP & Levels", icon: "Zap" },
@@ -1828,6 +1829,7 @@ export function Achievements({ d }: { d: DashSpec }) {
       />
 
       <div className="pt-2">
+        {tab === "source-map" && <TabSourceMap filter={s.filter} onOpenTab={setTab} />}
         {tab === "command" && <TabCommand />}
         {tab === "library" && <TabLibrary filter={s.filter} />}
         {tab === "xp-levels" && <TabXpLevels />}
