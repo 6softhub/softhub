@@ -113,6 +113,7 @@ const RANKS = [
    TABS
    ==================================================================== */
 type Tab =
+  | "source-map"
   | "command"
   | "library"
   | "xp-levels"
@@ -123,6 +124,163 @@ type Tab =
   | "hall-of-fame"
   | "challenges-missions"
   | "engine";
+
+const SPEC_ROLES = [
+  "Boss", "CEO", "Admin", "Developer", "Author", "Vendor", "Vendor Manager", "Reseller",
+  "Reseller Manager", "Franchise", "Franchise Manager", "Affiliate", "Support", "Marketing", "Finance", "Customer",
+];
+
+const SPEC_TABLES = [
+  "achievements", "achievement_categories", "achievement_rules", "achievement_logs", "xp_transactions", "levels",
+  "ranks", "badges", "trophies", "reward_store", "reward_transactions", "leaderboards", "missions",
+  "challenges", "certificates", "celebrations", "achievement_audit_logs",
+];
+
+const SPEC_MODULES = [
+  { no: "01", title: "Achievement Command Center", tab: "Command", icon: "Activity", status: "UI connected", items: ["Total Achievements", "Unlocked Today", "Pending Rewards", "Top Achievers", "Leaderboard Status", "Global Ranking"] },
+  { no: "02", title: "Achievement Library", tab: "Library", icon: "Library", status: "UI connected", items: ["Create", "Edit", "Delete", "Clone", "Archive"] },
+  { no: "03", title: "XP Management", tab: "XP & Levels", icon: "Zap", status: "UI connected", items: ["Revenue XP", "Sales XP", "Support XP", "Development XP", "Training XP", "Customer XP", "Renewal XP", "Marketplace XP"] },
+  { no: "04", title: "Level Management", tab: "XP & Levels", icon: "ChevronsUp", status: "UI connected", items: ["Level 1", "Level 1000+", "Custom XP Rules", "Level Rewards", "Level Benefits"] },
+  { no: "05", title: "Rank Management", tab: "Ranks & Trophies", icon: "Crown", status: "UI connected", items: ["Starter", "Bronze", "Silver", "Gold", "Platinum", "Diamond", "Titan", "Legend", "Champion", "Global Champion", "Role Specific Ranks"] },
+  { no: "06", title: "Trophy Management", tab: "Ranks & Trophies", icon: "Trophy", status: "UI connected", items: ["First Login", "First Customer", "First Sale", "First Revenue", "First Renewal", "Top Seller", "Top Developer", "Top Vendor", "Top Reseller", "Top Franchise", "Global Champion"] },
+  { no: "07", title: "Badge Management", tab: "Badges & Rewards", icon: "BadgeCheck", status: "UI connected", items: ["Achievement", "Revenue", "Support", "Developer", "Customer", "Training", "Leadership"] },
+  { no: "08", title: "Reward Management", tab: "Badges & Rewards", icon: "Gift", status: "UI connected", items: ["Points", "Wallet Credit", "Commission Bonus", "Discount Coupons", "Premium Access", "Feature Unlocks", "Priority Leads", "Special Permissions"] },
+  { no: "09", title: "Certificate Management", tab: "Certificates", icon: "Award", status: "UI connected", items: ["Training", "Developer", "Vendor", "Reseller", "Franchise", "Champion"] },
+  { no: "10", title: "Leaderboard Center", tab: "Leaderboards", icon: "BarChart3", status: "UI connected", items: ["Global", "Country", "State", "City", "Territory", "Department", "Role Based"] },
+  { no: "11", title: "Hall of Fame", tab: "Hall of Fame", icon: "Trophy", status: "UI connected", items: ["Top Developers", "Top Vendors", "Top Resellers", "Top Franchises", "Top Customers", "Top Territories", "Top Revenue"] },
+  { no: "12", title: "Challenge Center", tab: "Challenges & Missions", icon: "Target", status: "UI connected", items: ["Daily", "Weekly", "Monthly", "Quarterly", "Yearly"] },
+  { no: "13", title: "Mission Center", tab: "Challenges & Missions", icon: "Rocket", status: "UI connected", items: ["Sales", "Revenue", "Training", "Support", "Development", "Growth"] },
+  { no: "14", title: "Reward Store", tab: "Badges & Rewards", icon: "ShoppingBag", status: "UI connected", items: ["Redeem XP", "Redeem Points", "Unlock Features", "Unlock Themes", "Unlock Frames", "Unlock Effects"] },
+  { no: "15", title: "Profile Customization", tab: "Badges & Rewards", icon: "Frame", status: "UI connected", items: ["Champion Frame", "Diamond Frame", "Legend Frame", "Titan Frame", "Country Frame", "Territory Frame"] },
+  { no: "16", title: "Celebration Engine", tab: "Command", icon: "PartyPopper", status: "UI connected", items: ["Achievement Unlock", "Level Up", "Rank Up", "Revenue Milestone", "Champion Status", "Global Champion"] },
+  { no: "17", title: "Animation Management", tab: "Engine & AI", icon: "Clapperboard", status: "UI connected", items: ["Trophy", "Badge", "Rank", "XP", "Reward", "Celebration"] },
+  { no: "18", title: "Sound Management", tab: "Engine & AI", icon: "Volume2", status: "UI connected", items: ["Off by default", "Achievement", "Trophy", "Rank Up", "Champion", "Reward"] },
+  { no: "19", title: "Role Reward Rules", tab: "Engine & AI", icon: "UserCog", status: "UI connected", items: ["Developer", "Reseller", "Vendor", "Franchise", "Customer"] },
+  { no: "20", title: "AI Achievement Engine", tab: "Engine & AI", icon: "Brain", status: "UI connected", items: ["Suggest Achievements", "Detect Milestones", "Predict Champions", "Recommend Rewards", "Generate Challenges"] },
+  { no: "21", title: "Trophy Room", tab: "Ranks & Trophies", icon: "Sparkles", status: "UI connected", items: ["3D Gallery", "Glass Showcase", "Animated Rotation", "Achievement Timeline"] },
+  { no: "22", title: "Achievement Timeline", tab: "Command", icon: "Clock3", status: "UI connected", items: ["Achievement Earned", "Reward Earned", "Level Increased", "Rank Increased", "Certificate Earned"] },
+  { no: "23", title: "Global Leaderboard Map", tab: "Leaderboards", icon: "Map", status: "UI connected", items: ["Top Countries", "Top States", "Top Cities", "Top Territories", "Top Users"] },
+  { no: "24", title: "Recognition Center", tab: "Hall of Fame", icon: "Medal", status: "UI connected", items: ["Employee Of Month", "Developer Of Month", "Reseller Of Month", "Vendor Of Month", "Franchise Of Month", "Customer Of Month"] },
+  { no: "25", title: "Audit Center", tab: "Library", icon: "ShieldCheck", status: "UI connected", items: ["Who Earned", "When Earned", "Why Earned", "Reward Issued", "Reward Redeemed"] },
+];
+
+function TabSourceMap({ filter, onOpenTab }: { filter: string; onOpenTab: (tab: Tab) => void }) {
+  const tabLookup: Record<string, Tab> = {
+    Command: "command",
+    Library: "library",
+    "XP & Levels": "xp-levels",
+    "Ranks & Trophies": "ranks-trophies",
+    "Badges & Rewards": "badges-rewards",
+    Certificates: "certificates",
+    Leaderboards: "leaderboards",
+    "Hall of Fame": "hall-of-fame",
+    "Challenges & Missions": "challenges-missions",
+    "Engine & AI": "engine",
+  };
+
+  const modules = SPEC_MODULES.filter((m) =>
+    [m.no, m.title, m.tab, m.status, ...m.items].join(" ").toLowerCase().includes(filter.toLowerCase()),
+  );
+
+  const coverage = Math.round((SPEC_MODULES.filter((m) => m.status === "UI connected").length / SPEC_MODULES.length) * 100);
+
+  return (
+    <div className={grid}>
+      <ChartCard title="Source Code → AMS UI Connection" subtitle="Real mapping from your Figma copy-code/spec" className="col-span-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            ["Spec modules", "25/25", "Screen mapped"],
+            ["Supported roles", SPEC_ROLES.length.toString(), "Role chips connected"],
+            ["Source tables", SPEC_TABLES.length.toString(), "Schema list only"],
+            ["UI coverage", `${coverage}%`, "Button flows pending"],
+          ].map(([label, value, note]) => (
+            <div key={label} className="rounded-lg border border-border bg-card/40 p-3">
+              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>
+              <div className="mt-1 text-2xl font-semibold tabular-nums">{value}</div>
+              <div className="mt-1 text-[11px] text-muted-foreground">{note}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 rounded-lg border border-warning/30 bg-warning/10 p-3 text-xs text-warning">
+          Real status: screens are connected to the source spec; database + button workflows are not claimed here and will be wired next.
+        </div>
+      </ChartCard>
+
+      <ChartCard title="Universal Rule" subtitle="Any module · any role · any activity can trigger the gamification chain" className="col-span-12 lg:col-span-7">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {["Any Module", "Any Role", "Any Activity", "Achievement", "XP", "Level", "Rank", "Reward", "Badge", "Trophy"].map((r, i) => {
+            const Icon = [Icons.LayoutGrid, Icons.Users, Icons.Activity, Icons.Target, Icons.Zap, Icons.ChevronsUp, Icons.Crown, Icons.Gift, Icons.BadgeCheck, Icons.Trophy][i] || Icons.Circle;
+            return (
+              <div key={r} className="rounded-md border border-border bg-card/40 p-2.5 flex items-center gap-2">
+                <Icon className="w-4 h-4 text-accent" />
+                <span className="text-xs font-medium">{r}</span>
+              </div>
+            );
+          })}
+        </div>
+      </ChartCard>
+
+      <ChartCard title="Supported Roles" subtitle="Complete role list from the source spec" className="col-span-12 lg:col-span-5">
+        <div className="flex flex-wrap gap-1.5">
+          {SPEC_ROLES.map((role) => (
+            <span key={role} className="px-2 py-1 rounded-md border border-border bg-muted/50 text-[11px]">{role}</span>
+          ))}
+        </div>
+      </ChartCard>
+
+      <ChartCard title="25 Module Coverage Map" subtitle="Click Open to jump to the connected UI tab" className="col-span-12 lg:col-span-8">
+        {modules.length === 0 ? (
+          <EmptyState icon="SearchX" title="No source modules match this filter" hint="Clear the filter to see all 25 AMS modules." />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {modules.map((m) => {
+              const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[m.icon] || Icons.Box;
+              return (
+                <div key={m.no} className="rounded-lg border border-border bg-card/40 p-3">
+                  <div className="flex items-start gap-2">
+                    <div className="w-9 h-9 rounded-md border border-accent/30 bg-accent/10 grid place-items-center shrink-0">
+                      <Icon className="w-4 h-4 text-accent" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] text-muted-foreground">{m.no}</span>
+                        <h3 className="text-xs font-semibold truncate">{m.title}</h3>
+                      </div>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {m.items.slice(0, 5).map((it) => (
+                          <span key={it} className="px-1.5 py-0.5 rounded bg-muted text-[10px] text-muted-foreground">{it}</span>
+                        ))}
+                        {m.items.length > 5 && <span className="px-1.5 py-0.5 rounded bg-muted text-[10px] text-muted-foreground">+{m.items.length - 5}</span>}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-success inline-flex items-center gap-1"><Icons.CheckCircle2 className="w-3 h-3" /> {m.status}</span>
+                    <button onClick={() => onOpenTab(tabLookup[m.tab])} className="px-2 py-1 rounded-md bg-primary/15 text-primary border border-primary/30 text-[11px] hover:bg-primary/25">
+                      Open {m.tab}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </ChartCard>
+
+      <ChartCard title="Database Tables From Source" subtitle="Listed from spec; backend connection is still pending" className="col-span-12 lg:col-span-4">
+        <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1">
+          {SPEC_TABLES.map((table) => (
+            <div key={table} className="flex items-center gap-2 rounded-md border border-border bg-card/40 p-2">
+              <Icons.Database className="w-3.5 h-3.5 text-info" />
+              <code className="text-[11px] text-info flex-1">{table}</code>
+              <span className="text-[10px] text-warning">pending</span>
+            </div>
+          ))}
+        </div>
+      </ChartCard>
+    </div>
+  );
+}
 
 /* ---------- Tab: Hall of Fame (11, 24) ---------- */
 const HOF_CATS = [
@@ -1569,12 +1727,12 @@ function TabEngine() {
       <ChartCard title="Role Reward Rules" subtitle="Per-role scoring weights" className="col-span-12 lg:col-span-7">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
-            { r: "Developer", rules: ["Code Quality", "Features Delivered", "Bugs Fixed"], i: "Code2" },
-            { r: "Reseller", rules: ["Revenue", "Sales", "Renewals"], i: "Briefcase" },
-            { r: "Vendor", rules: ["Products", "Revenue", "Ratings"], i: "Store" },
-            { r: "Franchise", rules: ["Territory Growth", "Revenue", "Network Growth"], i: "Building2" },
-            { r: "Customer", rules: ["Purchases", "Referrals", "Reviews"], i: "User" },
-            { r: "Support", rules: ["FRT", "CSAT", "Resolved"], i: "LifeBuoy" },
+            { r: "Developer", rules: ["Code Quality", "Features Delivered", "Bugs Fixed"], weights: [1.82, 1.54, 1.36], i: "Code2" },
+            { r: "Reseller", rules: ["Revenue", "Sales", "Renewals"], weights: [1.95, 1.62, 1.48], i: "Briefcase" },
+            { r: "Vendor", rules: ["Products", "Revenue", "Ratings"], weights: [1.42, 1.86, 1.34], i: "Store" },
+            { r: "Franchise", rules: ["Territory Growth", "Revenue", "Network Growth"], weights: [1.74, 1.66, 1.58], i: "Building2" },
+            { r: "Customer", rules: ["Purchases", "Referrals", "Reviews"], weights: [1.28, 1.72, 1.22], i: "User" },
+            { r: "Support", rules: ["FRT", "CSAT", "Resolved"], weights: [1.18, 1.46, 1.38], i: "LifeBuoy" },
           ].map((g) => {
             const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[g.i] || Icons.UserCog;
             return (
@@ -1584,10 +1742,10 @@ function TabEngine() {
                   <div className="text-xs font-semibold">{g.r}</div>
                 </div>
                 <ul className="mt-2 space-y-1">
-                  {g.rules.map((r) => (
+                  {g.rules.map((r, i) => (
                     <li key={r} className="flex items-center justify-between text-[11px]">
                       <span>{r}</span>
-                      <span className="text-muted-foreground tabular-nums">×{(1 + Math.random()).toFixed(2)}</span>
+                      <span className="text-muted-foreground tabular-nums">×{g.weights[i].toFixed(2)}</span>
                     </li>
                   ))}
                 </ul>
@@ -1614,7 +1772,7 @@ function TabEngine() {
    ==================================================================== */
 export function Achievements({ d }: { d: DashSpec }) {
   const s = useDashboardState();
-  const { tab, setTab } = useTabs<Tab>("command");
+  const { tab, setTab } = useTabs<Tab>("source-map");
   const [createOpen, setCreateOpen] = useState(false);
 
   const kpis: Kpi[] = [
@@ -1655,6 +1813,7 @@ export function Achievements({ d }: { d: DashSpec }) {
         value={tab}
         onChange={setTab}
         tabs={[
+          { id: "source-map", label: "Source Map", icon: "ClipboardList", badge: 25 },
           { id: "command", label: "Command", icon: "Activity", badge: 6 },
           { id: "library", label: "Library", icon: "Library", badge: "4.8k" },
           { id: "xp-levels", label: "XP & Levels", icon: "Zap" },
@@ -1670,6 +1829,7 @@ export function Achievements({ d }: { d: DashSpec }) {
       />
 
       <div className="pt-2">
+        {tab === "source-map" && <TabSourceMap filter={s.filter} onOpenTab={setTab} />}
         {tab === "command" && <TabCommand />}
         {tab === "library" && <TabLibrary filter={s.filter} />}
         {tab === "xp-levels" && <TabXpLevels />}
