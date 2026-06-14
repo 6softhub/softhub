@@ -116,3 +116,23 @@ export const DASHBOARDS: DashSpec[] = [
   { slug: "document-factory", title: "Document Factory", clone: "DocuSign CLM", category: "Commerce", icon: "FileStack", accent: "info", metrics:[{label:"Templates",value:"812"},{label:"Docs/d",value:"12,402"},{label:"E-sign",value:"96%"},{label:"Avg Cycle",value:"2.1d"}], sections:["Templates","Generate","Sign","Archive"], tags:["CLM","E-sign","Merge","Vault"] },
   { slug: "iot-control", title: "IoT Control Hub", clone: "AWS IoT Core", category: "Field", icon: "Cpu", accent: "info", metrics:[{label:"Devices",value:"482k"},{label:"Msgs/s",value:"148k"},{label:"Online",value:"98.2%"},{label:"Shadows",value:"412k"}], sections:["Devices","Topics","Rules","Shadows"], tags:["MQTT","LWM2M","Greengrass","Sitewise"] },
 ];
+
+const NEXUS_75_SLUGS = [
+  "command-center", "iam", "user-roles", "crm", "sales-pipeline", "support", "comms", "alerts",
+  "hr", "payroll", "projects", "workflows", "knowledge", "files", "analytics", "reporting",
+  "ai-copilot", "devops", "repos", "api-hub", "app-builder", "data-lake", "governance", "observability",
+  "geo-monitoring", "noc", "soc", "fraud", "forensics", "backup", "licenses", "mdm", "remote-access",
+  "infra", "cloud", "digital-twin", "knowledge-graph", "search", "war-room", "master-control", "billing",
+  "payments", "accounting", "subscriptions", "marketplace", "franchise", "inventory", "supply-chain",
+  "procurement", "printing", "browser", "design-system", "broadcast", "voice-ai", "gamification",
+  "customer-success", "onboarding", "social", "marketing", "seo", "iot-drones", "smart-city", "energy",
+  "satellite", "robotics", "biometric", "healthcare", "education", "legal", "research-quantum", "sandbox",
+  "metaverse", "blockchain", "market-intel", "os-control",
+] as const;
+
+const dashboardsBySlug = new Map(DASHBOARDS.map((dashboard) => [dashboard.slug, dashboard]));
+
+export const NEXUS_75: DashSpec[] = NEXUS_75_SLUGS.flatMap((slug) => {
+  const dashboard = dashboardsBySlug.get(slug);
+  return dashboard ? [dashboard] : [];
+});
