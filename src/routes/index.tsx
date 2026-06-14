@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import * as Icons from "lucide-react";
-import { DASHBOARDS } from "@/data/dashboards";
+import { NEXUS_75 } from "@/data/dashboards";
 
 export const Route = createFileRoute("/")({ component: Index });
 
 function Index() {
-  const cats = Array.from(new Set(DASHBOARDS.map((d) => d.category)));
+  const cats = Array.from(new Set(NEXUS_75.map((d) => d.category)));
   return (
     <div className="p-6 max-w-[1600px] mx-auto space-y-8">
       <header className="rounded-2xl glass p-8 relative overflow-hidden">
@@ -34,10 +34,10 @@ function Index() {
         <section key={c}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm uppercase tracking-widest text-muted-foreground">{c}</h2>
-            <div className="text-xs text-muted-foreground">{DASHBOARDS.filter(d=>d.category===c).length} modules</div>
+            <div className="text-xs text-muted-foreground">{NEXUS_75.filter(d=>d.category===c).length} modules</div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-            {DASHBOARDS.filter((d) => d.category === c).map((d) => {
+            {NEXUS_75.filter((d) => d.category === c).map((d) => {
               const Icon = (Icons as never as Record<string, Icons.LucideIcon>)[d.icon] || Icons.Square;
               return (
                 <Link

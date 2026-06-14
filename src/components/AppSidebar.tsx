@@ -1,18 +1,18 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import * as Icons from "lucide-react";
-import { DASHBOARDS } from "@/data/dashboards";
+import { NEXUS_75 } from "@/data/dashboards";
 
 const MASTER_GROUPS: ReadonlyArray<readonly [string, readonly string[]]> = [
   ["01 · Command Core", ["command-center", "war-room", "master-control", "os-control"]],
   ["02 · AI Systems", ["vala-ai", "ai-copilot", "ai-api", "ai-recovery", "ai-intelligence"]],
-  ["03 · User + Access", ["licenses"]],
+  ["03 · User + Access", ["iam", "user-roles", "biometric", "mdm", "remote-access", "licenses"]],
   ["04 · CRM + Sales", ["crm", "leads", "sales-pipeline", "customer-success", "support", "voice-ai", "onboarding"]],
   ["05 · Product + Marketplace", ["marketplace", "product-manager", "gallery", "reviews", "subscriptions", "subscriptions-system", "downloads", "activation"]],
   ["06 · Reseller + Franchise", ["reseller", "franchise", "affiliate", "influencer"]],
   ["07 · Development + DevOps", ["app-builder", "repos", "git-mgmt", "deployment", "cicd", "devops", "api-hub", "infra", "observability", "geo-monitoring", "noc", "sandbox"]],
   ["08 · Analytics + SEO", ["analytics", "reporting", "exec-reports", "seo", "marketing", "social", "market-intel"]],
-  ["09 · Security + Risk", ["soc", "fraud", "forensics", "iam", "user-roles", "biometric", "mdm", "remote-access", "governance", "backup"]],
+  ["09 · Security + Risk", ["soc", "fraud", "forensics", "governance", "backup"]],
   ["10 · Finance + Billing", ["revenue", "billing", "payments", "accounting", "financial-ops"]],
   ["11 · Assets + Storage", ["asset-manager", "files", "document-factory", "procurement", "inventory", "supply-chain", "knowledge", "knowledge-graph", "data-lake", "design-system", "broadcast", "projects", "workflows", "browser", "search", "hr", "payroll", "comms", "gamification", "digital-twin", "alerts", "printing"]],
   ["12 · Future Tech", ["iot-control", "iot-drones", "smart-city", "robotics", "satellite", "research-quantum", "metaverse", "blockchain", "energy", "healthcare", "education", "legal", "cloud"]],
@@ -36,7 +36,7 @@ export function AppSidebar({
 
   const grouped = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const filtered = DASHBOARDS.filter(
+    const filtered = NEXUS_75.filter(
       (d) =>
         !needle ||
         d.title.toLowerCase().includes(needle) ||
@@ -44,15 +44,15 @@ export function AppSidebar({
         d.category.toLowerCase().includes(needle),
     );
     const bySlug = new Map(filtered.map((d) => [d.slug, d] as const));
-    const result: Array<[string, typeof DASHBOARDS]> = [];
+    const result: Array<[string, typeof NEXUS_75]> = [];
     for (const [groupName, slugs] of MASTER_GROUPS) {
-      const list = slugs.map((s) => bySlug.get(s)).filter(Boolean) as typeof DASHBOARDS;
+      const list = slugs.map((s) => bySlug.get(s)).filter(Boolean) as typeof NEXUS_75;
       if (list.length) {
         result.push([groupName, list]);
         list.forEach((d) => bySlug.delete(d.slug));
       }
     }
-    if (bySlug.size) result.push(["Extras", Array.from(bySlug.values()) as typeof DASHBOARDS]);
+    if (bySlug.size) result.push(["Core Modules", Array.from(bySlug.values()) as typeof NEXUS_75]);
     return result;
   }, [q]);
 
@@ -84,7 +84,7 @@ export function AppSidebar({
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder={`Search ${DASHBOARDS.length} modules…`}
+            placeholder={`Search ${NEXUS_75.length} modules…`}
             className="w-full bg-sidebar-accent text-sm rounded-md pl-8 pr-7 py-2 outline-none focus:ring-1 focus:ring-ring"
           />
           {q && (
