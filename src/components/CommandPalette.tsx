@@ -49,7 +49,7 @@ export function CommandPalette() {
   useEffect(() => { setOpen(false); }, [path]);
 
   const grouped = useMemo(() => {
-    const map = new Map<string, typeof DASHBOARDS>();
+    const map = new Map<string, typeof NEXUS_75>();
     for (const d of NEXUS_75) {
       if (!map.has(d.category)) map.set(d.category, [] as never);
       (map.get(d.category) as typeof NEXUS_75).push(d);
