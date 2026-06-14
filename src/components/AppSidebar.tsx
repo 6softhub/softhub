@@ -3,20 +3,11 @@ import { useEffect, useMemo, useState } from "react";
 import * as Icons from "lucide-react";
 import { NEXUS_75 } from "@/data/dashboards";
 
-const MASTER_GROUPS: ReadonlyArray<readonly [string, readonly string[]]> = [
-  ["01 · Command Core", ["command-center", "war-room", "master-control", "os-control"]],
-  ["02 · AI Systems", ["vala-ai", "ai-copilot", "ai-api", "ai-recovery", "ai-intelligence"]],
-  ["03 · User + Access", ["iam", "user-roles", "biometric", "mdm", "remote-access", "licenses"]],
-  ["04 · CRM + Sales", ["crm", "leads", "sales-pipeline", "customer-success", "support", "voice-ai", "onboarding"]],
-  ["05 · Product + Marketplace", ["marketplace", "product-manager", "gallery", "reviews", "subscriptions", "subscriptions-system", "downloads", "activation"]],
-  ["06 · Reseller + Franchise", ["reseller", "franchise", "affiliate", "influencer"]],
-  ["07 · Development + DevOps", ["app-builder", "repos", "git-mgmt", "deployment", "cicd", "devops", "api-hub", "infra", "observability", "geo-monitoring", "noc", "sandbox"]],
-  ["08 · Analytics + SEO", ["analytics", "reporting", "exec-reports", "seo", "marketing", "social", "market-intel"]],
-  ["09 · Security + Risk", ["soc", "fraud", "forensics", "governance", "backup"]],
-  ["10 · Finance + Billing", ["revenue", "billing", "payments", "accounting", "financial-ops"]],
-  ["11 · Assets + Storage", ["asset-manager", "files", "document-factory", "procurement", "inventory", "supply-chain", "knowledge", "knowledge-graph", "data-lake", "design-system", "broadcast", "projects", "workflows", "browser", "search", "hr", "payroll", "comms", "gamification", "digital-twin", "alerts", "printing"]],
-  ["12 · Future Tech", ["iot-control", "iot-drones", "smart-city", "robotics", "satellite", "research-quantum", "metaverse", "blockchain", "energy", "healthcare", "education", "legal", "cloud"]],
-];
+const MODULE_RANGES = Array.from({ length: 8 }, (_, range) => {
+  const start = range * 10;
+  const end = Math.min(start + 10, NEXUS_75.length);
+  return [`${String(start + 1).padStart(2, "0")}–${String(end).padStart(2, "0")}`, start, end] as const;
+});
 
 export function AppSidebar({
   mobileOpen,
@@ -36,23 +27,16 @@ export function AppSidebar({
 
   const grouped = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const filtered = NEXUS_75.filter(
-      (d) =>
+    const result: Array<[string, typeof NEXUS_75]> = [];
+    for (const [label, start, end] of MODULE_RANGES) {
+      const list = NEXUS_75.slice(start, end).filter((d) =>
         !needle ||
         d.title.toLowerCase().includes(needle) ||
         d.clone.toLowerCase().includes(needle) ||
         d.category.toLowerCase().includes(needle),
-    );
-    const bySlug = new Map(filtered.map((d) => [d.slug, d] as const));
-    const result: Array<[string, typeof NEXUS_75]> = [];
-    for (const [groupName, slugs] of MASTER_GROUPS) {
-      const list = slugs.map((s) => bySlug.get(s)).filter(Boolean) as typeof NEXUS_75;
-      if (list.length) {
-        result.push([groupName, list]);
-        list.forEach((d) => bySlug.delete(d.slug));
-      }
+      );
+      if (list.length) result.push([`Modules ${label}`, list]);
     }
-    if (bySlug.size) result.push(["Core Modules", Array.from(bySlug.values()) as typeof NEXUS_75]);
     return result;
   }, [q]);
 
@@ -115,6 +99,7 @@ export function AppSidebar({
                 const Icon =
                   (Icons as never as Record<string, Icons.LucideIcon>)[d.icon] || Icons.Square;
                 const active = path === `/d/${d.slug}`;
+                const moduleNumber = NEXUS_75.findIndex((module) => module.slug === d.slug) + 1;
                 return (
                   <Link
                     key={d.slug}
@@ -127,6 +112,7 @@ export function AppSidebar({
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5 shrink-0" />
+                    <span className="w-5 shrink-0 text-[10px] tabular-nums text-muted-foreground">{String(moduleNumber).padStart(2, "0")}</span>
                     <span className="truncate">{d.title}</span>
                   </Link>
                 );
