@@ -74,6 +74,721 @@ export type Database = {
         }
         Relationships: []
       }
+      marketplace_product_analytics: {
+        Row: {
+          clicks: number | null
+          day: string
+          id: string
+          product_id: string
+          revenue: number | null
+          sales: number | null
+          views: number | null
+        }
+        Insert: {
+          clicks?: number | null
+          day?: string
+          id?: string
+          product_id: string
+          revenue?: number | null
+          sales?: number | null
+          views?: number | null
+        }
+        Update: {
+          clicks?: number | null
+          day?: string
+          id?: string
+          product_id?: string
+          revenue?: number | null
+          sales?: number | null
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_analytics_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_changelog: {
+        Row: {
+          change_type: string | null
+          description: string | null
+          entry_date: string | null
+          id: string
+          product_id: string
+          title: string
+        }
+        Insert: {
+          change_type?: string | null
+          description?: string | null
+          entry_date?: string | null
+          id?: string
+          product_id: string
+          title: string
+        }
+        Update: {
+          change_type?: string | null
+          description?: string | null
+          entry_date?: string | null
+          id?: string
+          product_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_changelog_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_commission: {
+        Row: {
+          affiliate_pct: number | null
+          franchise_pct: number | null
+          franchise_price: number | null
+          product_id: string
+          reseller_pct: number | null
+          reseller_price: number | null
+          updated_at: string
+          vendor_pct: number | null
+          vendor_price: number | null
+        }
+        Insert: {
+          affiliate_pct?: number | null
+          franchise_pct?: number | null
+          franchise_price?: number | null
+          product_id: string
+          reseller_pct?: number | null
+          reseller_price?: number | null
+          updated_at?: string
+          vendor_pct?: number | null
+          vendor_price?: number | null
+        }
+        Update: {
+          affiliate_pct?: number | null
+          franchise_pct?: number | null
+          franchise_price?: number | null
+          product_id?: string
+          reseller_pct?: number | null
+          reseller_price?: number | null
+          updated_at?: string
+          vendor_pct?: number | null
+          vendor_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_commission_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_documentation: {
+        Row: {
+          content: string | null
+          created_at: string
+          id: string
+          product_id: string
+          sort_order: number | null
+          title: string
+          url: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          product_id: string
+          sort_order?: number | null
+          title: string
+          url?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          id?: string
+          product_id?: string
+          sort_order?: number | null
+          title?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_documentation_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_downloads: {
+        Row: {
+          created_at: string
+          file_size: number | null
+          id: string
+          label: string
+          product_id: string
+          url: string
+          version: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_size?: number | null
+          id?: string
+          label: string
+          product_id: string
+          url: string
+          version?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_size?: number | null
+          id?: string
+          label?: string
+          product_id?: string
+          url?: string
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_downloads_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_features: {
+        Row: {
+          description: string | null
+          icon: string | null
+          id: string
+          product_id: string
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          product_id: string
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          product_id?: string
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_features_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_hashtags: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          product_id: string
+          tag: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          product_id: string
+          tag: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          product_id?: string
+          tag?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_hashtags_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_modules: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+          product_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          name: string
+          product_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+          product_id?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_modules_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_pricing_plans: {
+        Row: {
+          billing_period: string | null
+          cost_price: number | null
+          created_at: string
+          features: Json | null
+          id: string
+          plan_name: string
+          product_id: string
+          selling_price: number | null
+          sort_order: number | null
+        }
+        Insert: {
+          billing_period?: string | null
+          cost_price?: number | null
+          created_at?: string
+          features?: Json | null
+          id?: string
+          plan_name: string
+          product_id: string
+          selling_price?: number | null
+          sort_order?: number | null
+        }
+        Update: {
+          billing_period?: string | null
+          cost_price?: number | null
+          created_at?: string
+          features?: Json | null
+          id?: string
+          plan_name?: string
+          product_id?: string
+          selling_price?: number | null
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_pricing_plans_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_profit: {
+        Row: {
+          cost_price: number | null
+          estimated_profit: number | null
+          product_id: string
+          profit_margin_pct: number | null
+          selling_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          cost_price?: number | null
+          estimated_profit?: number | null
+          product_id: string
+          profit_margin_pct?: number | null
+          selling_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          cost_price?: number | null
+          estimated_profit?: number | null
+          product_id?: string
+          profit_margin_pct?: number | null
+          selling_price?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_profit_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_related: {
+        Row: {
+          id: string
+          product_id: string
+          related_product_id: string
+          relation_kind: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          related_product_id: string
+          relation_kind?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          related_product_id?: string
+          relation_kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_related_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_product_related_related_product_id_fkey"
+            columns: ["related_product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_screenshots: {
+        Row: {
+          caption: string | null
+          id: string
+          product_id: string
+          sort_order: number | null
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          id?: string
+          product_id: string
+          sort_order?: number | null
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          id?: string
+          product_id?: string
+          sort_order?: number | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_screenshots_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_seo: {
+        Row: {
+          breadcrumb_schema: Json | null
+          canonical_url: string | null
+          created_at: string
+          focus_keywords: string[] | null
+          index_status: string | null
+          json_ld: Json | null
+          meta_description: string | null
+          meta_title: string | null
+          og_description: string | null
+          og_image: string | null
+          og_title: string | null
+          product_id: string
+          robots_meta: string | null
+          schema_software_app: Json | null
+          secondary_keywords: string[] | null
+          seo_slug: string | null
+          seo_title: string | null
+          sitemap_included: boolean | null
+          twitter_card: string | null
+          twitter_description: string | null
+          twitter_title: string | null
+          updated_at: string
+        }
+        Insert: {
+          breadcrumb_schema?: Json | null
+          canonical_url?: string | null
+          created_at?: string
+          focus_keywords?: string[] | null
+          index_status?: string | null
+          json_ld?: Json | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          product_id: string
+          robots_meta?: string | null
+          schema_software_app?: Json | null
+          secondary_keywords?: string[] | null
+          seo_slug?: string | null
+          seo_title?: string | null
+          sitemap_included?: boolean | null
+          twitter_card?: string | null
+          twitter_description?: string | null
+          twitter_title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          breadcrumb_schema?: Json | null
+          canonical_url?: string | null
+          created_at?: string
+          focus_keywords?: string[] | null
+          index_status?: string | null
+          json_ld?: Json | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          product_id?: string
+          robots_meta?: string | null
+          schema_software_app?: Json | null
+          secondary_keywords?: string[] | null
+          seo_slug?: string | null
+          seo_title?: string | null
+          sitemap_included?: boolean | null
+          twitter_card?: string | null
+          twitter_description?: string | null
+          twitter_title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_seo_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_technology: {
+        Row: {
+          category: string | null
+          id: string
+          name: string
+          product_id: string
+          version: string | null
+        }
+        Insert: {
+          category?: string | null
+          id?: string
+          name: string
+          product_id: string
+          version?: string | null
+        }
+        Update: {
+          category?: string | null
+          id?: string
+          name?: string
+          product_id?: string
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_technology_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_product_versions: {
+        Row: {
+          id: string
+          is_current: boolean | null
+          notes: string | null
+          product_id: string
+          released_at: string | null
+          version: string
+        }
+        Insert: {
+          id?: string
+          is_current?: boolean | null
+          notes?: string | null
+          product_id: string
+          released_at?: string | null
+          version: string
+        }
+        Update: {
+          id?: string
+          is_current?: boolean | null
+          notes?: string | null
+          product_id?: string
+          released_at?: string | null
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_product_versions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_products: {
+        Row: {
+          attachments: Json | null
+          banner_url: string | null
+          business_category: string | null
+          cost_price: number | null
+          coupons: Json | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          demo_url: string | null
+          deployment: string | null
+          description: string | null
+          discount_rules: Json | null
+          gallery: Json | null
+          git_url: string | null
+          icon_url: string | null
+          id: string
+          industry: string | null
+          is_published: boolean
+          license: string | null
+          live_url: string | null
+          metadata: Json | null
+          name: string
+          product_manager: string | null
+          product_owner: string | null
+          selling_price: number | null
+          slug: string
+          software_type: string | null
+          status: string
+          stock_available: boolean | null
+          stock_quantity: number | null
+          sub_category: string | null
+          tagline: string | null
+          target_audience: string | null
+          thumbnail_url: string | null
+          timeline_end: string | null
+          timeline_start: string | null
+          updated_at: string
+          version: string | null
+          videos: Json | null
+        }
+        Insert: {
+          attachments?: Json | null
+          banner_url?: string | null
+          business_category?: string | null
+          cost_price?: number | null
+          coupons?: Json | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          demo_url?: string | null
+          deployment?: string | null
+          description?: string | null
+          discount_rules?: Json | null
+          gallery?: Json | null
+          git_url?: string | null
+          icon_url?: string | null
+          id?: string
+          industry?: string | null
+          is_published?: boolean
+          license?: string | null
+          live_url?: string | null
+          metadata?: Json | null
+          name: string
+          product_manager?: string | null
+          product_owner?: string | null
+          selling_price?: number | null
+          slug: string
+          software_type?: string | null
+          status?: string
+          stock_available?: boolean | null
+          stock_quantity?: number | null
+          sub_category?: string | null
+          tagline?: string | null
+          target_audience?: string | null
+          thumbnail_url?: string | null
+          timeline_end?: string | null
+          timeline_start?: string | null
+          updated_at?: string
+          version?: string | null
+          videos?: Json | null
+        }
+        Update: {
+          attachments?: Json | null
+          banner_url?: string | null
+          business_category?: string | null
+          cost_price?: number | null
+          coupons?: Json | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          demo_url?: string | null
+          deployment?: string | null
+          description?: string | null
+          discount_rules?: Json | null
+          gallery?: Json | null
+          git_url?: string | null
+          icon_url?: string | null
+          id?: string
+          industry?: string | null
+          is_published?: boolean
+          license?: string | null
+          live_url?: string | null
+          metadata?: Json | null
+          name?: string
+          product_manager?: string | null
+          product_owner?: string | null
+          selling_price?: number | null
+          slug?: string
+          software_type?: string | null
+          status?: string
+          stock_available?: boolean | null
+          stock_quantity?: number | null
+          sub_category?: string | null
+          tagline?: string | null
+          target_audience?: string | null
+          thumbnail_url?: string | null
+          timeline_end?: string | null
+          timeline_start?: string | null
+          updated_at?: string
+          version?: string | null
+          videos?: Json | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           body: string | null
