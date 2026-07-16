@@ -1,0 +1,15 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "retry": "Retry",
+    "notFound": "Module not found.",
+    "commandCenter": "Command Center",
+    "live": "Live",
+    "notifications": "Notifications",
+    "account": "Account"
+  },
+  "nav": {
+    "masterGrid": "Master Grid",
+    "module": "Module"
+  }
+}
