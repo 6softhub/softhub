@@ -822,6 +822,200 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_commissions: {
+        Row: {
+          created_at: string
+          currency: string
+          effective_from: string
+          id: string
+          model: string
+          partner_id: string
+          rate_pct: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          effective_from?: string
+          id?: string
+          model?: string
+          partner_id: string
+          rate_pct?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          effective_from?: string
+          id?: string
+          model?: string
+          partner_id?: string
+          rate_pct?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_commissions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          partner_id: string | null
+          payload: Json
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          partner_id?: string | null
+          payload?: Json
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          partner_id?: string | null
+          payload?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_events_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_members: {
+        Row: {
+          created_at: string
+          id: string
+          partner_id: string
+          role: string
+          status: Database["public"]["Enums"]["partner_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          partner_id: string
+          role?: string
+          status?: Database["public"]["Enums"]["partner_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          partner_id?: string
+          role?: string
+          status?: Database["public"]["Enums"]["partner_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_members_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_organizations: {
+        Row: {
+          contact_email: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          name: string
+          owner_user_id: string | null
+          status: Database["public"]["Enums"]["partner_status"]
+          tier: string | null
+          type: Database["public"]["Enums"]["partner_type"]
+          updated_at: string
+        }
+        Insert: {
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name: string
+          owner_user_id?: string | null
+          status?: Database["public"]["Enums"]["partner_status"]
+          tier?: string | null
+          type: Database["public"]["Enums"]["partner_type"]
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          name?: string
+          owner_user_id?: string | null
+          status?: Database["public"]["Enums"]["partner_status"]
+          tier?: string | null
+          type?: Database["public"]["Enums"]["partner_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      partner_payouts: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          partner_id: string
+          period_end: string | null
+          period_start: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          partner_id: string
+          period_end?: string | null
+          period_start?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          partner_id?: string
+          period_end?: string | null
+          period_start?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_payouts_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -885,6 +1079,14 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      partner_status: "pending" | "active" | "suspended" | "terminated"
+      partner_type:
+        | "vendor"
+        | "reseller"
+        | "affiliate"
+        | "franchise"
+        | "influencer"
+        | "partner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1013,6 +1215,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      partner_status: ["pending", "active", "suspended", "terminated"],
+      partner_type: [
+        "vendor",
+        "reseller",
+        "affiliate",
+        "franchise",
+        "influencer",
+        "partner",
+      ],
     },
   },
 } as const
