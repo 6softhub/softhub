@@ -1,0 +1,15 @@
+{
+  "common": {
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "notFound": "Module introuvable.",
+    "commandCenter": "Centre de commande",
+    "live": "En direct",
+    "notifications": "Notifications",
+    "account": "Compte"
+  },
+  "nav": {
+    "masterGrid": "Grille principale",
+    "module": "Module"
+  }
+}

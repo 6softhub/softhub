@@ -1,0 +1,15 @@
+{
+  "common": {
+    "loading": "Cargando…",
+    "retry": "Reintentar",
+    "notFound": "Módulo no encontrado.",
+    "commandCenter": "Centro de Comando",
+    "live": "En vivo",
+    "notifications": "Notificaciones",
+    "account": "Cuenta"
+  },
+  "nav": {
+    "masterGrid": "Cuadrícula principal",
+    "module": "Módulo"
+  }
+}
