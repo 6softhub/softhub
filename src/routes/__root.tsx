@@ -131,29 +131,35 @@ function RootComponent() {
   const path = useRouterState({ select: (r) => r.location.pathname });
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Auth-style routes render full-bleed (no chrome)
-  const isFullBleed = path === "/login";
+  // Auth-style + marketplace home render full-bleed (no Nexus chrome)
+  const isFullBleed = path === "/login" || path === "/";
 
   if (isFullBleed) {
     return (
       <QueryClientProvider client={queryClient}>
-        <Outlet />
+        <CartProvider>
+          <Outlet />
+          <Toaster theme="dark" position="bottom-right" richColors />
+        </CartProvider>
       </QueryClientProvider>
     );
   }
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen w-full">
-        <AppSidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
-        <div className="flex-1 min-w-0 flex flex-col">
-          <Topbar onMenu={() => setMobileOpen(true)} />
-          <main className="flex-1 min-w-0">
-            <Outlet />
-          </main>
+      <CartProvider>
+        <div className="flex min-h-screen w-full">
+          <AppSidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
+          <div className="flex-1 min-w-0 flex flex-col">
+            <Topbar onMenu={() => setMobileOpen(true)} />
+            <main className="flex-1 min-w-0">
+              <Outlet />
+            </main>
+          </div>
+          <CommandPalette />
+          <Toaster theme="dark" position="bottom-right" richColors />
         </div>
-        <CommandPalette />
-      </div>
+      </CartProvider>
     </QueryClientProvider>
   );
 }
