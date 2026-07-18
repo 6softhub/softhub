@@ -277,3 +277,32 @@
   pointer-events: none;
   animation: particle-burst 0.7s ease-out forwards;
 }
+
+/* ============ Backcompat utilities used by Nexus dashboards ============ */
+@theme inline {
+  --color-neon: var(--neon);
+}
+:root {
+  --neon: oklch(0.85 0.22 140);
+}
+@layer base {
+  .glass {
+    background: color-mix(in oklab, var(--color-card) 70%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .card-hover { transition: border-color .2s, transform .2s, box-shadow .2s; }
+  .card-hover:hover { border-color: color-mix(in oklab, var(--color-primary) 40%, var(--color-border)); }
+  .focus-ring { outline: none; }
+  .focus-ring:focus-visible { box-shadow: 0 0 0 2px var(--color-ring); }
+}
+@keyframes fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shimmer-nexus { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+.animate-fade-up { animation: fade-up .35s ease-out both; }
+.skeleton { background: linear-gradient(90deg, var(--color-muted) 0, color-mix(in oklab, var(--color-muted) 60%, var(--color-foreground) 8%) 40px, var(--color-muted) 80px); background-size: 600px 100%; animation: shimmer-nexus 1.4s linear infinite; }
