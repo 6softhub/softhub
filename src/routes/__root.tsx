@@ -4,10 +4,13 @@ import {
 } from "@tanstack/react-router";
 import { useState } from "react";
 import * as Icons from "lucide-react";
+import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { AppSidebar } from "@/components/AppSidebar";
 import { CommandPalette } from "@/components/CommandPalette";
+import { CartProvider } from "@/hooks/use-cart";
 import { DASHBOARDS } from "@/data/dashboards";
+
 
 function NotFoundComponent() {
   return (
