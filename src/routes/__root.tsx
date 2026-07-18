@@ -40,10 +40,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Nexus 75 — Enterprise Master Control" },
-      { name: "description", content: "75 enterprise dashboards in one unified UI." },
+      { title: "Software Vala — The Premium Enterprise Marketplace" },
+      { name: "description", content: "1,284 enterprise products across 12 industries — vetted, licensed and supported." },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
