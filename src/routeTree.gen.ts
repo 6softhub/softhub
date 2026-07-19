@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as MasterRouteImport } from './routes/master'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRoleRouteImport } from './routes/dashboard.$role'
 import { Route as DSlugRouteImport } from './routes/d.$slug'
 
 const MasterRoute = MasterRouteImport.update({
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoleRoute = DashboardRoleRouteImport.update({
+  id: '/dashboard/$role',
+  path: '/dashboard/$role',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DSlugRoute = DSlugRouteImport.update({
   id: '/d/$slug',
   path: '/d/$slug',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/master': typeof MasterRoute
   '/d/$slug': typeof DSlugRoute
+  '/dashboard/$role': typeof DashboardRoleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/master': typeof MasterRoute
   '/d/$slug': typeof DSlugRoute
+  '/dashboard/$role': typeof DashboardRoleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/master': typeof MasterRoute
   '/d/$slug': typeof DSlugRoute
+  '/dashboard/$role': typeof DashboardRoleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/master' | '/d/$slug'
+  fullPaths: '/' | '/login' | '/master' | '/d/$slug' | '/dashboard/$role'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/master' | '/d/$slug'
-  id: '__root__' | '/' | '/login' | '/master' | '/d/$slug'
+  to: '/' | '/login' | '/master' | '/d/$slug' | '/dashboard/$role'
+  id: '__root__' | '/' | '/login' | '/master' | '/d/$slug' | '/dashboard/$role'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MasterRoute: typeof MasterRoute
   DSlugRoute: typeof DSlugRoute
+  DashboardRoleRoute: typeof DashboardRoleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/$role': {
+      id: '/dashboard/$role'
+      path: '/dashboard/$role'
+      fullPath: '/dashboard/$role'
+      preLoaderRoute: typeof DashboardRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/d/$slug': {
       id: '/d/$slug'
       path: '/d/$slug'
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MasterRoute: MasterRoute,
   DSlugRoute: DSlugRoute,
+  DashboardRoleRoute: DashboardRoleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
