@@ -132,7 +132,7 @@ function RootComponent() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // Auth-style + marketplace home render full-bleed (no Nexus chrome)
-  const isFullBleed = path === "/login" || path === "/";
+  const isFullBleed = path === "/login" || path === "/" || path.startsWith("/dashboard/");
 
   if (isFullBleed) {
     return (
