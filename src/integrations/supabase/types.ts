@@ -1018,6 +1018,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          active_role: Database["public"]["Enums"]["app_role"] | null
           avatar_url: string | null
           bio: string | null
           created_at: string
@@ -1026,6 +1027,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          active_role?: Database["public"]["Enums"]["app_role"] | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -1034,6 +1036,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          active_role?: Database["public"]["Enums"]["app_role"] | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -1078,7 +1081,17 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role:
+        | "admin"
+        | "moderator"
+        | "user"
+        | "author"
+        | "vendor"
+        | "reseller"
+        | "affiliate"
+        | "influencer"
+        | "franchise"
+        | "seo"
       partner_status: "pending" | "active" | "suspended" | "terminated"
       partner_type:
         | "vendor"
@@ -1214,7 +1227,18 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: [
+        "admin",
+        "moderator",
+        "user",
+        "author",
+        "vendor",
+        "reseller",
+        "affiliate",
+        "influencer",
+        "franchise",
+        "seo",
+      ],
       partner_status: ["pending", "active", "suspended", "terminated"],
       partner_type: [
         "vendor",

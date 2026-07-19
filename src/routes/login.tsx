@@ -1,25 +1,82 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Icons from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { devSetRole } from "@/lib/auth-bridge";
+import { ROLES, ROLE_ORDER, type RoleKey } from "@/lib/roles";
 
-export const Route = createFileRoute("/login")({ component: LoginPage });
+export const Route = createFileRoute("/login")({
+  ssr: false,
+  head: () => ({ meta: [{ title: "Sign in — Nexus" }] }),
+  component: LoginPage,
+});
 
 function LoginPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [email, setEmail] = useState("operator@nexus.io");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState<RoleKey>("admin");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  // If already signed in, jump to the role dashboard.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.auth.getUser();
+      if (cancelled || !data.user) return;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("active_role")
+        .eq("id", data.user.id)
+        .maybeSingle();
+      const active = (profile as { active_role?: string | null } | null)?.active_role;
+      const target = (ROLE_ORDER as readonly string[]).includes(active ?? "")
+        ? (active as RoleKey)
+        : "admin";
+      navigate({ to: "/dashboard/$role", params: { role: target }, replace: true });
+    })();
+    return () => { cancelled = true; };
+  }, [navigate]);
+
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    try {
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/login`,
+            data: { display_name: name || email.split("@")[0] },
+          },
+        });
+        if (error) throw error;
+        if (data.user) {
+          await supabase.from("profiles").update({ active_role: role }).eq("id", data.user.id);
+          // Grant that role.
+          await supabase.from("user_roles").insert({ user_id: data.user.id, role });
+        }
+        toast.success("Account created — signing you in…");
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        if (data.user) {
+          await supabase.from("profiles").update({ active_role: role }).eq("id", data.user.id);
+        }
+      }
+      devSetRole(role);
+      navigate({ to: "/dashboard/$role", params: { role }, replace: true });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Authentication failed");
+    } finally {
       setLoading(false);
-      navigate({ to: "/" });
-    }, 700);
-  };
+    }
+  }
 
   return (
     <div className="min-h-screen w-full grid lg:grid-cols-[1.1fr_1fr] bg-background relative overflow-hidden">
@@ -40,38 +97,17 @@ function LoginPage() {
         </div>
 
         <div className="relative space-y-6 max-w-lg">
-          <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Authenticated Access</div>
+          <div className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Role-Based Access</div>
           <h1 className="text-4xl font-semibold leading-tight tracking-tight">
             <span className="bg-gradient-to-r from-foreground via-primary to-accent bg-clip-text text-transparent">
-              75 Enterprise Dashboards.
+              8 Role Dashboards.
             </span>
-            <br />One Brain. One Login.
+            <br />One Enterprise Brain.
           </h1>
           <p className="text-sm text-muted-foreground">
-            Datadog · Okta · Salesforce · Stripe · Palantir · GitHub · Snowflake · Bloomberg —
-            unified into a single command surface protected by zero-trust SSO.
+            Author · Vendor · Reseller · Affiliate · Influencer · Franchise · SEO · Admin —
+            every workspace routed automatically after sign-in.
           </p>
-
-          <div className="grid grid-cols-3 gap-3 pt-4">
-            {[
-              { k: "Modules", v: "75/75", tone: "text-success" },
-              { k: "MFA", v: "96%", tone: "text-info" },
-              { k: "Latency", v: "42ms", tone: "text-accent" },
-            ].map((s) => (
-              <div key={s.k} className="glass rounded-xl p-3">
-                <div className={`text-lg font-semibold ${s.tone}`}>{s.v}</div>
-                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{s.k}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="glass rounded-xl p-4 text-xs text-muted-foreground flex items-start gap-3">
-            <Icons.ShieldCheck className="w-4 h-4 text-success shrink-0 mt-0.5" />
-            <div>
-              <div className="text-foreground font-medium">SOC2 · ISO27001 · HIPAA · GDPR</div>
-              All sessions are encrypted end-to-end. Sign-ins are evaluated by behavioral AI in 38ms.
-            </div>
-          </div>
         </div>
 
         <div className="relative flex items-center gap-4 text-[10px] text-muted-foreground">
@@ -95,6 +131,7 @@ function LoginPage() {
             {(["signin", "signup"] as const).map((m) => (
               <button
                 key={m}
+                type="button"
                 onClick={() => setMode(m)}
                 className={`px-4 py-1.5 rounded-md transition-colors ${mode === m ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
               >
@@ -108,35 +145,17 @@ function LoginPage() {
               {mode === "signin" ? "Welcome back, Operator" : "Provision a new operator"}
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
-              {mode === "signin" ? "Use your enterprise credentials to enter the command center." : "Request access — your tenant admin will approve."}
+              {mode === "signin" ? "Enter your credentials to load your role workspace." : "Pick a role — you'll land on that dashboard."}
             </p>
-          </div>
-
-          {/* SSO providers */}
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { n: "Google", i: Icons.Chrome },
-              { n: "Microsoft", i: Icons.Square },
-              { n: "Okta SSO", i: Icons.ShieldCheck },
-              { n: "GitHub", i: Icons.Github },
-            ].map((p) => (
-              <button key={p.n} className="inline-flex items-center justify-center gap-2 h-10 rounded-md border border-border bg-card hover:bg-muted text-xs font-medium transition-colors">
-                <p.i className="w-3.5 h-3.5" /> {p.n}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-muted-foreground">
-            <span className="h-px flex-1 bg-border" /> or with email <span className="h-px flex-1 bg-border" />
           </div>
 
           <form onSubmit={submit} className="space-y-4">
             {mode === "signup" && (
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground">Full name</label>
+                <label className="text-xs font-medium text-muted-foreground">Display name</label>
                 <div className="relative">
                   <Icons.User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <input className="w-full h-10 pl-9 pr-3 rounded-md bg-card border border-border focus:border-primary outline-none text-sm" placeholder="Tony Stark" />
+                  <input value={name} onChange={(e) => setName(e.target.value)} className="w-full h-10 pl-9 pr-3 rounded-md bg-card border border-border focus:border-primary outline-none text-sm" placeholder="Tony Stark" />
                 </div>
               </div>
             )}
@@ -145,46 +164,36 @@ function LoginPage() {
               <label className="text-xs font-medium text-muted-foreground">Work email</label>
               <div className="relative">
                 <Icons.Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="email"
-                  className="w-full h-10 pl-9 pr-3 rounded-md bg-card border border-border focus:border-primary outline-none text-sm"
-                  placeholder="you@company.com"
-                />
+                <input value={email} onChange={(e) => setEmail(e.target.value)} required type="email" className="w-full h-10 pl-9 pr-3 rounded-md bg-card border border-border focus:border-primary outline-none text-sm" placeholder="you@company.com" />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-xs font-medium text-muted-foreground">Password</label>
-                {mode === "signin" && (
-                  <button type="button" className="text-[11px] text-primary hover:underline">Forgot password?</button>
-                )}
-              </div>
+              <label className="text-xs font-medium text-muted-foreground">Password</label>
               <div className="relative">
                 <Icons.Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  type={showPw ? "text" : "password"}
-                  className="w-full h-10 pl-9 pr-10 rounded-md bg-card border border-border focus:border-primary outline-none text-sm"
-                  placeholder="••••••••••"
-                />
+                <input value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} type={showPw ? "text" : "password"} className="w-full h-10 pl-9 pr-10 rounded-md bg-card border border-border focus:border-primary outline-none text-sm" placeholder="••••••••••" />
                 <button type="button" onClick={() => setShowPw((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                   {showPw ? <Icons.EyeOff className="w-4 h-4" /> : <Icons.Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs">
-              <label className="inline-flex items-center gap-2 text-muted-foreground">
-                <input type="checkbox" defaultChecked className="accent-[var(--color-primary)]" />
-                Trust this device for 30 days
-              </label>
-              <span className="inline-flex items-center gap-1.5 text-success">
-                <Icons.ShieldCheck className="w-3.5 h-3.5" /> MFA armed
-              </span>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">Active role · lands you on the matching dashboard</label>
+              <div className="grid grid-cols-4 gap-1.5">
+                {ROLE_ORDER.map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    onClick={() => setRole(k)}
+                    className={`rounded-lg px-2 py-2 text-[11px] font-medium transition border ${role === k ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:bg-muted"}`}
+                    title={ROLES[k].title}
+                  >
+                    {ROLES[k].name.split(" ")[0]}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <button
@@ -195,15 +204,14 @@ function LoginPage() {
               {loading ? (
                 <><Icons.Loader2 className="w-4 h-4 animate-spin" /> Authenticating…</>
               ) : (
-                <>{mode === "signin" ? "Enter Command Center" : "Request access"} <Icons.ArrowRight className="w-4 h-4" /></>
+                <>{mode === "signin" ? "Enter Command Center" : "Create account"} <Icons.ArrowRight className="w-4 h-4" /></>
               )}
             </button>
-          </form>
 
-          <div className="text-[11px] text-center text-muted-foreground">
-            By continuing you agree to the <a className="underline">MSA</a> and <a className="underline">DPA</a>.
-            Need help? <Link to="/" className="text-primary hover:underline">Skip to dashboards →</Link>
-          </div>
+            <div className="text-center text-[11px] text-muted-foreground">
+              <Link to="/" className="hover:text-foreground">← Back to marketplace</Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>
