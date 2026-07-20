@@ -89,7 +89,7 @@ export const REGISTRY: Record<string, Comp> = {
   "git-mgmt": GitMgmt, "deployment": Deployment, "cicd": Cicd,
   "data-lake": DataLakePremium, "governance": GovernancePremium, "knowledge-graph": KnowledgeGraph,
   "marketplace": Marketplace, "franchise": FranchiseMgr, "inventory": Inventory,
-  "reseller": Reseller, "affiliate": Affiliate, "influencer": Influencer,
+  "reseller": Reseller, "affiliate": Affiliate, "influencer": InfluencerPremium,
   "product-manager": ProductManager, "gallery": Gallery, "reviews": Reviews,
   "subscriptions-system": SubscriptionsSystem, "downloads": Downloads, "activation": Activation,
   "supply-chain": SupplyChain, "procurement": Procurement,
