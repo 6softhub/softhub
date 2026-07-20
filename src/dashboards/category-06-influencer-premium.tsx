@@ -265,7 +265,7 @@ export function InfluencerPremium({ d }: { d: DashSpec }) {
             <ul className="space-y-2 text-xs">
               {["Brief","Content","Approved","Published","Closed"].map((s2,i)=>(
                 <li key={s2}><div className="flex justify-between text-[11px] mb-1"><span>{s2}</span><span className="tabular-nums text-muted-foreground">{[42,28,18,54,88][i]}</span></div>
-                  <ProgressBar value={[35,55,68,82,96][i]} tone={i===3?"success":i===2?"info":"warning"}/>
+                  <ProgressBar value={[35,55,68,82,96][i]} color={`var(--color-${i===3?"success":i===2?"info":"warning"})`}/>
                 </li>
               ))}
             </ul>
