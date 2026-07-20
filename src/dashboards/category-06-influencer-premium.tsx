@@ -581,7 +581,7 @@ export function InfluencerPremium({ d }: { d: DashSpec }) {
         {creatorOpen && (
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="col-span-2 flex items-center gap-3">
-              <Avatar name={creatorOpen.name.replace("@","")} color="var(--color-accent)" size={40}/>
+              <Avatar name={creatorOpen.name.replace("@","")} color="var(--color-accent)"/>
               <div>
                 <div className="text-sm font-semibold">{creatorOpen.name}</div>
                 <div className="text-muted-foreground">{creatorOpen.plat} · {creatorOpen.followers} followers · ER {creatorOpen.er}%</div>
