@@ -24,7 +24,9 @@ import { ValaAI, AIApi, AIRecovery, AIIntelligence } from "./category-04-ai-prem
 import { Comms, Alerts, Knowledge, Files, Broadcast } from "./category-04-comms-premium";
 void [_ValaLegacy, _ApiLegacy, _RecLegacy, _IntelLegacy, _CommsLegacy, _AlertsLegacy, _KnowLegacy, _FilesLegacy, _BcastLegacy];
 import { Marketplace, ProductManager, Gallery, Reviews, SubscriptionsSystem, Downloads, Activation } from "./category-05-marketplace";
-import { Reseller, FranchiseMgr, Affiliate, Influencer } from "./category-06-partners";
+import { Reseller, FranchiseMgr, Affiliate, Influencer as _InfluencerLegacy } from "./category-06-partners";
+import { InfluencerPremium } from "./category-06-influencer-premium";
+void _InfluencerLegacy;
 import { ReposDev, GitMgmt, Deployment, Cicd, ApiHubPremium, DevOpsPremium, InfraPremium, ObservabilityPremium } from "./category-07-devops";
 import { AnalyticsPremium as _AP, ReportingPremium as _RP, SEOPremium as _SP, SocialPremium as _SoP, MarketingPremium as _MP2, MarketIntelPremium, DataLakePremium, GovernancePremium } from "./category-08-analytics";
 import { Analytics, Reporting, SEO, Marketing, Social } from "./category-05-analytics-premium";
