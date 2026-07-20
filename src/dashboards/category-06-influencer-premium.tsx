@@ -178,7 +178,7 @@ export function InfluencerPremium({ d }: { d: DashSpec }) {
                       <span className="font-medium truncate">{c.name}</span>
                       <span className="tabular-nums text-success">${(c.emv/1000).toFixed(0)}k</span>
                     </div>
-                    <ProgressBar value={Math.min(100, c.emv/10000)} tone="success"/>
+                    <ProgressBar value={Math.min(100, c.emv/10000)} color="var(--color-success)"/>
                   </div>
                 </li>
               ))}
@@ -423,7 +423,7 @@ export function InfluencerPremium({ d }: { d: DashSpec }) {
               ].map(a=>(
                 <li key={a.label}>
                   <div className="flex justify-between text-[11px]"><span>{a.label}</span><span className="tabular-nums text-muted-foreground">{a.pct}%</span></div>
-                  <ProgressBar value={a.pct} tone={a.tone}/>
+                  <ProgressBar value={a.pct} color={`var(--color-${a.tone})`}/>
                 </li>
               ))}
             </ul>
